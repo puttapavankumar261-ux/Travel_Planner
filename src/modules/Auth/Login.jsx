@@ -1,6 +1,6 @@
 import { useState } from "react";
-import "../assets/styles/Login.css";
-import loginBg from "../assets/images/login-bg.jpg";
+import "../../assets/styles/Login.css";
+import loginBg from "../../assets/images/login-bg.jpg";
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);

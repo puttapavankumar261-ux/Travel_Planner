@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Login from "../pages/Login";
-import Dashboard from "../pages/Dashboard";
-import Role from "../pages/Role";
-import User from "../pages/User";
-import NotFound from "../pages/NotFound";
+import Login from "../modules/Auth/Login";
+import Dashboard from "../modules/admin/Dashboard/Dashboard";
+import Users from "../modules/admin/Users/Users";
+// import Role from "../modules/admin/Role";   // Remove this
+// import NotFound from "../modules/public/NotFound"; // Remove if not created
 
 function AppRoutes() {
   return (
@@ -12,9 +12,7 @@ function AppRoutes() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/roles" element={<Role />} />
-        <Route path="/users" element={<User />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="/users" element={<Users />} />
       </Routes>
     </BrowserRouter>
   );
