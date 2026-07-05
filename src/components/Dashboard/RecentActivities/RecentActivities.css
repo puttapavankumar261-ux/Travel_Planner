@@ -1,0 +1,35 @@
+.recent-activities{
+
+    min-height:420px;
+
+    border-radius:24px;
+
+    padding:30px;
+
+}
+
+.recent-activities h3{
+
+    color:white;
+
+    margin-bottom:30px;
+
+}
+
+.recent-activities ul{
+
+    list-style:none;
+
+    padding:0;
+
+}
+
+.recent-activities li{
+
+    padding:18px 0;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+    color:#D1D5DB;
+
+}

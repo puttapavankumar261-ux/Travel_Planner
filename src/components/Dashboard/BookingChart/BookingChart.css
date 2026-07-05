@@ -1,0 +1,60 @@
+.booking-chart{
+
+    padding:30px;
+
+    border-radius:25px;
+
+    min-height:450px;
+}
+
+.chart-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:30px;
+}
+
+.chart-header h3{
+
+    color:white;
+
+    margin-bottom:5px;
+}
+
+.chart-header p{
+
+    color:#94A3B8;
+
+    margin:0;
+}
+
+.chart-header button{
+
+    background:rgba(255,255,255,.08);
+
+    color:white;
+
+    border:none;
+
+    padding:12px 20px;
+
+    border-radius:12px;
+
+    transition:.3s;
+}
+
+.chart-header button:hover{
+
+    background:#2563EB;
+}
+
+.chart{
+
+    width:100%;
+
+    height:320px;
+}

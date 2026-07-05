@@ -12,12 +12,10 @@ body,
 #root{
     width:100%;
     height:100%;
-    overflow:hidden;
 }
 
 body{
     font-family:"Poppins",sans-serif;
-    overflow:hidden;
     background:#08121f;
 }
 

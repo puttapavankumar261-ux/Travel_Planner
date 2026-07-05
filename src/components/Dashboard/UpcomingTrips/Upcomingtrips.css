@@ -1,0 +1,49 @@
+.upcoming-trips{
+
+    padding:28px;
+
+    border-radius:22px;
+}
+
+.trip-item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:18px 0;
+
+    border-top:1px solid rgba(255,255,255,.08);
+}
+
+.trip-item:first-of-type{
+
+    border-top:none;
+}
+
+.trip-item h4{
+
+    color:white;
+
+    margin:0 0 5px;
+}
+
+.trip-item small{
+
+    color:#94A3B8;
+}
+
+.trip-item span{
+
+    background:#3B82F6;
+
+    color:white;
+
+    padding:8px 16px;
+
+    border-radius:30px;
+
+    font-size:13px;
+}
