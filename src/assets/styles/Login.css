@@ -1,0 +1,292 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap");
+
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,
+body,
+#root{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+}
+
+body{
+    font-family:"Poppins",sans-serif;
+    overflow:hidden;
+    background:#08121f;
+}
+
+/* ==================================================
+                    LOGIN PAGE
+================================================== */
+
+.login-page{
+
+    width:100%;
+    height:100vh;
+
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+
+    position:relative;
+
+    display:grid;
+
+    grid-template-columns:58% 42%;
+
+}
+.login-section{
+    position: relative;
+    z-index: 10;
+
+    display: flex;
+    justify-content: center;
+
+    /* Move it slightly downward */
+    align-items: flex-start;
+
+    padding-top: 90px;
+    padding-right: 60px;
+    padding-left: 40px;
+}
+
+.login-card{
+    width: 100%;
+    max-width: 430px;
+
+    padding: 35px;
+
+    background: rgba(255, 255, 255, 0.453);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    border: 1px solid rgba(255, 255, 255, 0.4);
+
+    border-radius: 24px;
+
+    box-shadow: 0 20px 45px rgba(0,0,0,.25);
+}
+
+.login-card{
+    padding:30px 35px;
+}
+
+.login-card h2{
+    margin-bottom:8px;
+}
+
+.subtitle{
+    margin-bottom:25px;
+}
+
+.form-group{
+    margin-bottom:18px;
+}
+/* ==================================================
+                    OVERLAY
+================================================== */
+
+.overlay{
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+        linear-gradient(
+            rgba(5,15,30,.72),
+            rgba(5,15,30,.72)
+        );
+
+    backdrop-filter:blur(2px);
+
+}
+
+/* ==================================================
+                    HERO
+================================================== */
+.hero-section{
+    position: relative;
+    z-index: 5;
+
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding: 50px 60px;
+
+    color: #fff;
+}
+.brand{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:45px;
+}
+.brand i{
+    color:#3B82F6;
+    font-size:42px;
+}
+.brand h2{
+    font-size:24px;
+    font-weight:600;
+    text-transform:lowercase;
+}
+.brand p{
+    color:#d1d5db;
+    margin-top:4px;
+    font-size:16px;
+}
+.hero-section h1{
+    font-size:48px;
+    line-height:1.2;
+}
+.hero-section span{
+    color:#5B8CFF;
+}
+.hero-description{
+    margin:30px 0;
+}
+
+.feature-grid{
+    margin:35px 0;
+}
+
+.statistics{
+    margin:35px 0;
+}
+/* ==================================================
+                    FEATURE GRID
+================================================== */
+
+.feature-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+    margin:25px 0;
+}
+
+.feature-card{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    padding: 18px 20px;
+
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.18);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    border-radius: 18px;
+
+    transition: all .3s ease;
+}
+
+.feature-card:hover{
+    transform: translateY(-4px);
+    background: rgba(255,255,255,0.18);
+}
+
+.feature-card h5{
+    font-size:16px;
+}
+
+.feature-card p{
+    font-size:13px;
+}
+/* ==================================================
+                    STATISTICS
+================================================== */
+
+.statistics{
+    display:flex;
+    gap:15px;
+    margin:25px 0;
+}
+
+.stat{
+    flex: 1;
+
+    padding: 18px;
+
+    background: rgba(255,255,255,.10);
+    border: 1px solid rgba(255,255,255,.15);
+    backdrop-filter: blur(16px);
+
+    border-radius: 16px;
+
+    text-align: center;
+}
+
+.stat h3{
+    font-size:28px;
+}
+
+.stat span{
+    font-size:14px;
+}
+/* ==================================================
+                    QUOTE
+================================================== */
+
+.quote-card{
+    margin-top:25px;
+
+    padding:20px;
+
+    background:rgba(255,255,255,.10);
+
+    border-radius:18px;
+
+    border:1px solid rgba(255,255,255,.15);
+
+    backdrop-filter:blur(15px);
+}
+
+.quote-card p{
+    font-size:15px;
+}
+/* ===========================
+   Responsive
+=========================== */
+
+@media (max-width: 992px){
+
+    .login-page{
+        grid-template-columns: 1fr;
+    }
+
+    .hero-section{
+        display:none;
+    }
+
+    .login-section{
+        padding:40px 20px;
+        align-items:center;
+    }
+
+    .login-card{
+        max-width:450px;
+        width:100%;
+    }
+
+}
+@media (min-width: 1400px){
+
+    .login-section{
+        padding-top:120px;
+        padding-right:80px;
+    }
+
+}
