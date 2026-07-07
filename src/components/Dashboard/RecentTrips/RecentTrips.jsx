@@ -1,4 +1,4 @@
-import "./RecentUsers.css";
+import "./RecentTrips.css";
 
 const users = [
   {
@@ -27,7 +27,7 @@ const users = [
   },
 ];
 
-function RecentUsers() {
+function RecentTrips() {
   return (
     <div className="recent-users glass">
       <div className="section-header">
@@ -66,4 +66,4 @@ function RecentUsers() {
   );
 }
 
-export default RecentUsers;
+export default RecentTrips;

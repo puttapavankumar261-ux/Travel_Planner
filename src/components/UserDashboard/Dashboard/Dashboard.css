@@ -1,0 +1,23 @@
+.dashboard-page{
+
+    position: relative;
+
+    width:100%;
+
+    min-height:100vh;
+
+    padding:35px;
+
+    overflow:hidden;
+
+    z-index:1;
+
+}
+
+.dashboard-container{
+
+    position:relative;
+
+    z-index:2;
+
+}

@@ -1,0 +1,177 @@
+.welcome-banner{
+
+    background:rgba(12,20,35,.72);
+
+    backdrop-filter:blur(22px);
+
+    -webkit-backdrop-filter:blur(22px);
+
+    border:1px solid rgba(255,255,255,.12);
+
+    border-radius:24px;
+
+    padding:35px 40px;
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.30),
+        inset 0 1px 0 rgba(255,255,255,.08);
+
+    margin-bottom:35px;
+
+    transition:all .35s ease;
+
+}
+
+.welcome-banner:hover{
+
+    transform:translateY(-3px);
+
+    border-color:rgba(59,130,246,.30);
+
+    box-shadow:
+        0 18px 45px rgba(0,0,0,.40),
+        0 0 20px rgba(59,130,246,.12);
+
+}
+
+.welcome-content{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:40px;
+
+}
+
+.welcome-text{
+
+    flex:1;
+
+}
+
+.welcome-text h1{
+
+    color:#ffffff;
+
+    font-size:2.8rem;
+
+    font-weight:700;
+
+    margin-bottom:18px;
+
+    line-height:1.2;
+
+}
+
+.welcome-text span{
+
+    color:#3B82F6;
+
+}
+
+.welcome-text p{
+
+    color:rgba(255,255,255,.82);
+
+    line-height:1.8;
+
+    max-width:650px;
+
+    font-size:16px;
+
+}
+
+.plan-trip-btn{
+
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+
+    color:#fff;
+
+    border:none;
+
+    padding:15px 34px;
+
+    border-radius:50px;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    transition:all .35s ease;
+
+    box-shadow:
+        0 10px 25px rgba(37,99,235,.35);
+
+}
+
+.plan-trip-btn:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:
+        0 16px 35px rgba(37,99,235,.45);
+
+}
+
+.welcome-image{
+
+    flex:1;
+
+    display:flex;
+
+    justify-content:flex-end;
+
+}
+
+.welcome-image img{
+
+    width:100%;
+
+    max-width:340px;
+
+    transition:transform .6s ease;
+
+}
+
+.welcome-image img:hover{
+
+    transform:scale(1.05);
+
+}
+
+@media(max-width:992px){
+
+    .welcome-banner{
+
+        padding:30px;
+
+    }
+
+    .welcome-content{
+
+        flex-direction:column;
+
+        text-align:center;
+
+        gap:30px;
+
+    }
+
+    .welcome-text h1{
+
+        font-size:2.2rem;
+
+    }
+
+    .welcome-image{
+
+        justify-content:center;
+
+    }
+
+}

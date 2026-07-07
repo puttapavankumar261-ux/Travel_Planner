@@ -3,7 +3,7 @@ import WelcomeBanner from "../../../components/Dashboard/WelcomeBanner/WelcomeBa
 import StatCard from "../../../components/Dashboard/StatCard/StatCard";
 import BookingChart from "../../../components/Dashboard/BookingChart/BookingChart";
 import RecentActivities from "../../../components/Dashboard/RecentActivities/RecentActivities";
-import RecentUsers from "../../../components/Dashboard/RecentUsers/RecentUsers";
+import RecentTrips from "../../../components/Dashboard/RecentTrips/RecentTrips";
 import UpcomingTrips from "../../../components/Dashboard/UpcomingTrips/UpcomingTrips";
 import { Users, Plane, Calendar, IndianRupee } from "lucide-react";
 
@@ -56,7 +56,7 @@ function Dashboard() {
           <RecentActivities />
         </div>
         <div className="dashboard-grid">
-          <RecentUsers />
+          <RecentTrips />
 
           <UpcomingTrips />
         </div>

@@ -1,0 +1,73 @@
+.background-slider{
+
+    position:fixed;
+
+    inset:0;
+
+    overflow:hidden;
+
+    z-index:0;
+
+}
+
+.background-image{
+
+    position:absolute;
+
+    inset:0;
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+    filter:brightness(.72) blur(1.5px);
+
+    transform:scale(1.08);
+
+    animation:zoomBackground 18s ease-in-out infinite alternate;
+
+    transition:
+        opacity 1.5s ease,
+        transform 8s ease;
+
+}
+
+.background-overlay{
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+
+        radial-gradient(
+
+            circle at center,
+
+            rgba(255,255,255,.03) 0%,
+
+            rgba(6,13,29,.15) 45%,
+
+            rgba(6,13,29,.50) 100%
+
+        );
+
+}
+
+@keyframes zoomBackground{
+
+    0%{
+
+        transform:scale(1.08);
+
+    }
+
+    100%{
+
+        transform:scale(1.18);
+
+    }
+
+}

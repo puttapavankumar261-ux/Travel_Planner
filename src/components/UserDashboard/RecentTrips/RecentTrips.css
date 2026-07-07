@@ -1,0 +1,119 @@
+.recent-trips{
+
+    background:rgba(15,23,42,.58);
+
+backdrop-filter:blur(18px);
+
+border:1px solid rgba(255,255,255,.10);
+
+box-shadow:0 10px 25px rgba(0,0,0,.30);
+
+}
+
+.section-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:20px;
+
+}
+
+.view-all-btn{
+
+    background:transparent;
+
+    border:1px solid #3b82f6;
+
+    color:#3b82f6;
+
+    padding:8px 16px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+}
+
+.trip-card{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:18px 0;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+}
+
+.trip-card:last-child{
+
+    border:none;
+
+}
+
+.trip-info h3{
+
+    margin-bottom:8px;
+
+}
+
+.trip-info p{
+
+    color:#b8b8b8;
+
+    margin-bottom:5px;
+
+}
+
+.trip-info span{
+
+    color:#60a5fa;
+
+}
+
+.trip-right{
+
+    text-align:right;
+
+}
+
+.status{
+
+    display:inline-block;
+
+    background:#16a34a;
+
+    padding:6px 14px;
+
+    border-radius:20px;
+
+    margin-bottom:10px;
+
+    font-size:13px;
+
+}
+
+.trip-right button{
+
+    display:block;
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    padding:8px 18px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+}
