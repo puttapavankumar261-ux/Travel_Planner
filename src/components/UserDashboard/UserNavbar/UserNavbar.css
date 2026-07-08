@@ -45,20 +45,27 @@
 
     align-items:center;
 
-    gap:15px;
+    gap:18px;
 
 }
 
 .company-logo{
-    width:72px;
-    height:72px;
+
+    width:70px;
+
+    height:70px;
+
     object-fit:contain;
-    border-radius:14px;
+
+    border-radius:16px;
+
+    transition:all .35s ease;
+
 }
 
 .company-logo:hover{
 
-    transform:scale(1.08) rotate(-4deg);
+    transform:scale(1.08);
 
 }
 
@@ -73,14 +80,20 @@
 .logo-text h2{
 
     font-size:24px;
+
     font-weight:700;
+
+    color:#fff;
+
+    margin:0;
 
 }
 
 .logo-text span{
 
+    font-size:13px;
+
     color:#9CA3AF;
-    font-size:14px;
 
 }
 

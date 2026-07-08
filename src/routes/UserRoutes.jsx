@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Dashboard from "../modules/Users/Dashboard/Dashboard";
 
 // Future Imports
-// import Trips from "../modules/user/Trips/Trips";
+import Trips from "../modules/Users/Trips/Trips";
 // import Expenses from "../modules/user/Expenses/Expenses";
 // import Bookings from "../modules/user/Bookings/Bookings";
 // import Profile from "../modules/user/Profile/Profile";
@@ -15,7 +15,7 @@ const UserRoutes = () => {
 
       {/* Future Routes */}
 
-      {/* <Route path="trips" element={<Trips />} /> */}
+      <Route path="trips" element={<Trips />} />
 
       {/* <Route path="expenses" element={<Expenses />} /> */}
 

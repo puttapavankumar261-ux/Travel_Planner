@@ -20,11 +20,6 @@ const UserNavbar = () => {
           src={companyLogo}
           alt="Travel Planner Logo"
           className="company-logo"
-          style={{
-            width: "60px",
-            height: "60px",
-            border: "2px solid red",
-          }}
         />
 
         <div className="logo-text">
