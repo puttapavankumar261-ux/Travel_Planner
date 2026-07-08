@@ -1,4 +1,10 @@
 import "./RecentTrips.css";
+import {
+  FaCalendarAlt,
+  FaWallet,
+  FaChevronRight,
+  FaMapMarkerAlt,
+} from "react-icons/fa";
 
 const trips = [
   {
@@ -28,27 +34,52 @@ const RecentTrips = () => {
   return (
     <div className="recent-trips">
       <div className="section-header">
-        <h2>Recent Trips</h2>
-        <button className="view-all-btn">View All</button>
+        <div>
+          <h2>Recent Trips</h2>
+          <p>Your latest travel plans</p>
+        </div>
+
+        <button className="view-all-btn">
+          View All
+          <FaChevronRight />
+        </button>
       </div>
 
-      {trips.map((trip) => (
-        <div className="trip-card" key={trip.id}>
-          <div className="trip-info">
-            <h3>{trip.destination}</h3>
+      <div className="trip-list">
+        {trips.map((trip) => (
+          <div className="trip-card" key={trip.id}>
+            <div className="trip-left">
+              <div className="trip-icon">
+                <FaMapMarkerAlt />
+              </div>
 
-            <p>{trip.date}</p>
+              <div className="trip-info">
+                <h3>{trip.destination}</h3>
 
-            <span>{trip.budget}</span>
+                <div className="trip-meta">
+                  <span>
+                    <FaCalendarAlt />
+                    {trip.date}
+                  </span>
+
+                  <span>
+                    <FaWallet />
+                    {trip.budget}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="trip-right">
+              <span className={`status ${trip.status.toLowerCase()}`}>
+                {trip.status}
+              </span>
+
+              <button>View</button>
+            </div>
           </div>
-
-          <div className="trip-right">
-            <span className="status">{trip.status}</span>
-
-            <button>Details</button>
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };
