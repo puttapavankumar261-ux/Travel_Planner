@@ -1,6 +1,9 @@
 import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import "../../assets/styles/Login.css";
 import loginBg from "../../assets/images/login-bg.jpg";
+import Logo from "../../components/common/Logo";
+import authService from "../../services/authService";
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -8,11 +11,27 @@ function Login() {
     email: "",
     password: "",
   });
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     setLoginData({
       ...loginData,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError("");
+    try {
+      const response = await authService.login(loginData);
+      localStorage.setItem("token", response.token);
+      navigate("/user/dashboard");
+    } catch (err) {
+      setError("Login failed. Please check your credentials.");
+      console.error(err);
+    }
   };
 
   return (
@@ -30,14 +49,7 @@ function Login() {
       <div className="hero-section">
         {/* Logo */}
 
-        <div className="brand">
-          <i className="bi bi-airplane-fill"></i>
-
-          <div>
-            <h2>travel planner</h2>
-            <p>your smart travel companion</p>
-          </div>
-        </div>
+        <Logo className="brand-logo" />
 
         {/* Heading */}
 
@@ -141,17 +153,22 @@ function Login() {
         <div className="login-card">
           {/* Logo */}
 
-          <div className="login-logo">
-            <i className="bi bi-airplane-fill"></i>
-
-            <span>travel planner</span>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Logo showTagline={false} className="login-card-logo" />
           </div>
 
           <h2>welcome back</h2>
 
           <p className="subtitle">sign in to continue your journey</p>
 
-          {/* Email */}
+          <form onSubmit={handleLogin}>
+            {error && (
+              <div style={{ color: "#ef4444", marginBottom: "15px", fontSize: "14px" }}>
+                {error}
+              </div>
+            )}
+
+            {/* Email */}
 
           <label>Email Address</label>
 
@@ -203,7 +220,8 @@ function Login() {
 
           {/* Login */}
 
-          <button className="login-btn">sign in</button>
+          <button type="submit" className="login-btn">sign in</button>
+          </form>
 
           {/* Divider */}
 
@@ -222,7 +240,7 @@ function Login() {
 
           <p className="register">
             new here?
-            <a href="/"> create an account</a>
+            <Link to="/register"> create an account</Link>
           </p>
         </div>
       </div>

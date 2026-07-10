@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Login from "../modules/Auth/Login";
+import Registration from "../modules/Auth/Registration";
 
 import AdminRoutes from "./AdminRoutes";
 import UserRoutes from "./UserRoutes";
@@ -12,6 +13,7 @@ function AppRoutes() {
         {/* Authentication */}
 
         <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Registration />} />
 
         {/* Admin Module */}
 

@@ -1,24 +1,19 @@
 import { NavLink } from "react-router-dom";
 import "./Navbar.css";
+import Logo from "../common/Logo";
 
 function Navbar() {
   return (
     <header className="navbar glass">
-      <div className="logo">
-        <span className="logo-icon">✈</span>
-        <div>
-          <h2>Travel Planner</h2>
-          <small>Explore • Plan • Enjoy</small>
-        </div>
-      </div>
+      <Logo showTagline={false} />
 
       <nav className="nav-links">
-        <NavLink to="/dashboard">Dashboard</NavLink>
-        <NavLink to="/users">Users</NavLink>
-        <NavLink to="/trips">Trips</NavLink>
-        <NavLink to="/bookings">Bookings</NavLink>
-        <NavLink to="/reports">Reports</NavLink>
-        <NavLink to="/settings">Settings</NavLink>
+        <NavLink to="/admin/dashboard">Dashboard</NavLink>
+        <NavLink to="/admin/users">Users</NavLink>
+        <NavLink to="/admin/trips">Trips</NavLink>
+        <NavLink to="/admin/bookings">Bookings</NavLink>
+        <NavLink to="/admin/reports">Reports</NavLink>
+        <NavLink to="/admin/settings">Settings</NavLink>
       </nav>
 
       <div className="nav-actions">
@@ -28,7 +23,7 @@ function Navbar() {
 
         <button className="icon-btn notification">
           <i className="bi bi-bell"></i>
-          <span className="badge">5</span>
+          <span className="nav-badge">5</span>
         </button>
 
         <div className="profile">

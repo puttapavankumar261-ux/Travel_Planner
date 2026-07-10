@@ -1,0 +1,259 @@
+.trip-wizard-container {
+  padding: 40px;
+  max-width: 1000px;
+  margin: 0 auto;
+  color: white;
+  min-height: 100vh;
+}
+
+.wizard-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.wizard-header h2 {
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.wizard-header p {
+  color: #9CA3AF;
+  font-size: 16px;
+}
+
+/* Progress Bar */
+.wizard-progress {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 50px;
+  position: relative;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.wizard-progress::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  z-index: 1;
+  transform: translateY(-50%);
+}
+
+.progress-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 2px;
+  background: #3B82F6;
+  z-index: 2;
+  transform: translateY(-50%);
+  transition: width 0.4s ease;
+}
+
+.step-indicator {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #171F2E;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  position: relative;
+  z-index: 3;
+  transition: all 0.4s ease;
+  color: #9CA3AF;
+}
+
+.step-indicator.active {
+  background: #3B82F6;
+  border-color: #3B82F6;
+  color: white;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+}
+
+.step-indicator.completed {
+  background: #2563EB;
+  border-color: #2563EB;
+  color: white;
+}
+
+.wizard-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.step-title {
+  font-size: 24px;
+  margin-bottom: 30px;
+  color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 15px;
+}
+
+/* Form Fields */
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 10px;
+  color: #d1d5db;
+  font-size: 15px;
+}
+
+.form-group input, 
+.form-group select {
+  width: 100%;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  color: white;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+.form-group input[type="date"] {
+    color-scheme: dark;
+}
+
+.form-group input:focus, 
+.form-group select:focus {
+  border-color: #3B82F6;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.flex-row {
+  display: flex;
+  gap: 20px;
+}
+
+.flex-row > * {
+  flex: 1;
+}
+
+/* Selection Grids (Cards instead of checkboxes) */
+.selection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.selection-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.selection-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.selection-card.selected {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: #3B82F6;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
+}
+
+.selection-card i {
+  font-size: 24px;
+  margin-bottom: 8px;
+  display: block;
+  color: #9CA3AF;
+  transition: color 0.3s;
+}
+
+.selection-card.selected i {
+  color: #3B82F6;
+}
+
+.selection-card span {
+  font-size: 14px;
+  color: #d1d5db;
+}
+
+.selection-card.selected span {
+  color: #fff;
+  font-weight: 500;
+}
+
+/* Budget Custom Input */
+.budget-grid {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.custom-budget {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.custom-budget span {
+  font-size: 18px;
+  color: #d1d5db;
+}
+
+.custom-budget input {
+  flex: 1;
+}
+
+/* Wizard Footer */
+.wizard-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-secondary, .btn-primary {
+  padding: 12px 30px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.btn-primary {
+  background: #3B82F6;
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.btn-primary:hover {
+  background: #2563EB;
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}

@@ -1,5 +1,5 @@
 import "./TripsHeader.css";
-import { FaSearch, FaPlus } from "react-icons/fa";
+import { FaSearch, FaPlus, FaMagic } from "react-icons/fa";
 
 const TripsHeader = () => {
   return (
@@ -11,10 +11,15 @@ const TripsHeader = () => {
 
       <div className="header-right">
         <div className="search-box">
-          <FaSearch className="search-icon" />
+          <FaSearch className="header-search-icon" />
 
           <input type="text" placeholder="Search destination..." />
         </div>
+
+        <button className="recommend-btn">
+          <FaMagic />
+          Smart Recommendations
+        </button>
 
         <button className="new-trip-btn">
           <FaPlus />
