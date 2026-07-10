@@ -34,7 +34,7 @@ function Login() {
           <i className="bi bi-airplane-fill"></i>
 
           <div>
-            <h2>travel planner</h2>
+            <h2>Travel Planner</h2>
             <p>your smart travel companion</p>
           </div>
         </div>
@@ -42,9 +42,9 @@ function Login() {
         {/* Heading */}
 
         <h1>
-          plan every journey.
-          <br />
-          <span>explore without limits.</span>
+          <div>plan every journey.</div>
+         
+          <div><span>explore without limits.</span></div>
         </h1>
 
         {/* Description */}
@@ -144,7 +144,7 @@ function Login() {
           <div className="login-logo">
             <i className="bi bi-airplane-fill"></i>
 
-            <span>travel planner</span>
+            <span>Travel Planner</span>
           </div>
 
           <h2>welcome back</h2>
