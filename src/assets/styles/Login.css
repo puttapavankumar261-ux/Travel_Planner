@@ -57,20 +57,28 @@ body{
     padding: 60px 40px;
 }
 
-.login-card{
-    width: 100%;
-    max-width: 550px; /* Constrain slightly so fields aren't extremely long */
-    padding: 0;
-    
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-}
 
-.login-card h2{
-    margin-bottom:8px;
+
+.login-card{
+
+    width:100%;
+    max-width:430px;
+
+    padding:40px;
+
+    background:rgba(255,255,255,.15);
+
+    backdrop-filter:blur(25px);
+    -webkit-backdrop-filter:blur(25px);
+
+    border:1px solid rgba(255,255,255,.22);
+
+    border-radius:25px;
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.35),
+        inset 0 1px 1px rgba(255,255,255,.2);
+
 }
 
 .subtitle{
@@ -206,6 +214,23 @@ body{
     backdrop-filter:blur(2px);
 }
 
+/* .overlay{
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+    linear-gradient(
+        120deg,
+        rgba(6,18,35,.82),
+        rgba(20,55,105,.62)
+    );
+
+    backdrop-filter:blur(3px);
+
+} */
+
 /* ==================================================
                     HERO
 ================================================== */
@@ -261,6 +286,120 @@ body{
 
 .statistics{
     margin:35px 0;
+}
+
+/* .hero-section h1{
+
+    font-size:60px;
+
+    font-weight:700;
+
+    line-height:1.15;
+
+    margin-bottom:10px;
+
+} */
+
+/* .hero-description{
+
+    width:80%;
+
+    margin:30px 0;
+
+    color:#edf4ff;
+
+    font-size:18px;
+
+    line-height:30px;
+
+} */
+
+.feature-card{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:18px;
+
+    background:rgba(255,255,255,.12);
+
+    border:1px solid rgba(255,255,255,.18);
+
+    border-radius:18px;
+
+    backdrop-filter:blur(18px);
+
+    transition:.35s;
+
+}
+
+.feature-card:hover{
+
+    transform:translateY(-8px);
+
+    background:rgba(255,255,255,.18);
+
+    box-shadow:0 18px 35px rgba(0,0,0,.35);
+
+}
+
+.stat{
+
+    flex:1;
+
+    padding:22px;
+
+    border-radius:18px;
+
+    text-align:center;
+
+    background:rgba(255,255,255,.12);
+
+    border:1px solid rgba(255,255,255,.18);
+
+    backdrop-filter:blur(18px);
+
+}
+
+.stat h3{
+
+    color:#4da6ff;
+
+    font-size:34px;
+
+    font-weight:700;
+
+}
+
+.login-logo{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-bottom:25px;
+
+    color:#fff;
+
+    font-size:28px;
+
+    font-weight:700;
+
+}
+
+.login-logo i{
+
+    color:#4da6ff;
+
+    font-size:34px;
+
 }
 /* ==================================================
                     FEATURE GRID
@@ -387,3 +526,151 @@ body{
     }
 
 }
+
+/* div {
+    margin: 2px;
+    padding: 3px;
+} */
+
+/*========================
+   input-box
+=========================*/
+
+.input-box{
+
+    display:flex;
+
+    align-items:center;
+
+    margin-top:8px;
+
+    margin-bottom:18px;
+
+    padding:13px 15px;
+
+    border-radius:14px;
+
+    background:rgba(255,255,255,.18);
+
+    border:1px solid rgba(255,255,255,.20);
+
+}
+
+.input-box i{
+
+    color:white;
+
+    font-size:18px;
+
+    margin-right:12px;
+
+}
+
+.input-box input{
+
+    flex:1;
+
+    border:none;
+
+    outline:none;
+
+    background:transparent;
+
+    color:white;
+
+    font-size:15px;
+
+}
+
+.input-box input::placeholder{
+
+    color:#e6e6e6;
+
+}
+
+.login-card label{
+
+    color:white;
+
+    font-size:14px;
+
+    font-weight:500;
+
+}
+
+.eye-btn{
+
+    border:none;
+
+    background:none;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:18px;
+
+}
+
+.login-options{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin:20px 0;
+
+    color:white;
+
+    font-size:14px;
+
+}
+
+.login-options a{
+
+    color:#9fd3ff;
+
+    text-decoration:none;
+
+}
+
+.login-options a:hover{
+
+    text-decoration:underline;
+
+}
+
+.login-btn{
+
+    width:100%;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:linear-gradient(90deg,#0066ff,#00b7ff);
+
+    color:white;
+
+    font-size:17px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.35s;
+
+}
+
+.login-btn:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 15px 30px rgba(0,110,255,.4);
+
+}
+ 

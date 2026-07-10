@@ -54,9 +54,9 @@ function Login() {
         {/* Heading */}
 
         <h1>
-          plan every journey.
-          <br />
-          <span>explore without limits.</span>
+          <div>plan every journey.</div>
+         
+          <div><span>explore without limits.</span></div>
         </h1>
 
         {/* Description */}
