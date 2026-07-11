@@ -8,7 +8,130 @@
   align-items: center;
   margin-bottom: 24px;
 }
+.text-muted{
+    color:#ffffff !important;
+}
 
+.text-secondary{
+    color:#7dd3fc !important;
+}
+
+.booking-id{
+    color:#60a5fa;
+    font-weight:700;
+}
+
+.amount{
+    color:#22c55e;
+    font-weight:700;
+    font-size:16px;
+}
+
+.customer-name{
+    color:#ffffff;
+    font-weight:600;
+}
+
+.travel-date{
+    color:#facc15;   /* Bright Yellow */
+}
+/* Responsive Table */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 20px;
+}
+
+.bookings-table {
+    width: 100%;
+    min-width: 1300px;
+    border-collapse: collapse;
+    color: #fff;
+}
+
+.bookings-table th,
+.bookings-table td {
+    padding: 18px 20px;
+    text-align: left;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.bookings-table th {
+    font-size: 17px;
+    font-weight: 700;
+    color: #ffffff;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+.bookings-table td {
+    font-size: 15px;
+    color: #d1d5db;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Column Widths */
+.bookings-table th:nth-child(1),
+.bookings-table td:nth-child(1){
+    width:140px;
+}
+
+.bookings-table th:nth-child(2),
+.bookings-table td:nth-child(2){
+    width:220px;
+}
+
+.bookings-table th:nth-child(3),
+.bookings-table td:nth-child(3){
+    width:230px;
+}
+
+.bookings-table th:nth-child(4),
+.bookings-table td:nth-child(4){
+    width:170px;
+}
+
+.bookings-table th:nth-child(5),
+.bookings-table td:nth-child(5){
+    width:150px;
+}
+
+.bookings-table th:nth-child(6),
+.bookings-table td:nth-child(6){
+    width:160px;
+}
+
+.bookings-table th:nth-child(7),
+.bookings-table td:nth-child(7){
+    width:160px;
+}
+
+.bookings-table th:nth-child(8),
+.bookings-table td:nth-child(8){
+    width:170px;
+}
+
+/* Hover */
+.bookings-table tbody tr:hover{
+    background:#1b2235;
+}
+
+/* Destination */
+.destination{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+}
+
+.destination span:first-child{
+    color:#fff;
+    font-weight:600;
+}
+
+.destination span:last-child{
+    color:#9ca3af;
+    font-size:14px;
+}
 /* Summary Cards */
 .booking-summary-grid {
   display: grid;

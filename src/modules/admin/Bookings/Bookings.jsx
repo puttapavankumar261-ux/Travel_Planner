@@ -196,6 +196,9 @@ const Bookings = () => {
         </div>
 
         {/* 4. BOOKING TABLE */}
+        <div className="table-container">
+    <table className="bookings-table">
+
         <div className="glass-panel" style={{ background: 'rgba(15, 23, 42, 0.6)', backdropFilter: 'blur(20px)', borderRadius: '20px', padding: '24px', border: '1px solid rgba(255,255,255,0.1)' }}>
           <div className="table-responsive">
             <table className="admin-table">
@@ -242,6 +245,8 @@ const Bookings = () => {
             )}
           </div>
         </div>
+    </table>
+</div>
 
         {/* 5. RECENT ACTIVITIES & EXPORT */}
         <div className="flex-between" style={{ marginTop: '40px', marginBottom: '20px' }}>

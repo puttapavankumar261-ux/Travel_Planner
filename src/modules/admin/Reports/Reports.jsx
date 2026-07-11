@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+<<<<<<< HEAD
+=======
+import Navbar from "../../../components/Navbar/Navbar";
+>>>>>>> 527ee43 (Added Settings page and updated admin modules)
 import './Reports.css';
 
 // Mock Data
@@ -83,7 +87,15 @@ const Reports = () => {
   };
 
   return (
+<<<<<<< HEAD
     <div className="reports-container">
+=======
+  <div className="dashboard-page">
+    <Navbar />
+
+    <div className="dashboard-wrapper reports-wrapper">
+      <div className="reports-container">
+>>>>>>> 527ee43 (Added Settings page and updated admin modules)
       <div className="admin-header">
         <h1>Reports & Analytics</h1>
         <p>Analyze revenue, bookings, and user activity</p>
@@ -242,8 +254,16 @@ const Reports = () => {
         </div>
       </div>
 
+<<<<<<< HEAD
     </div>
   );
 };
 
+=======
+          </div>
+    </div>
+  </div>
+);
+};
+>>>>>>> 527ee43 (Added Settings page and updated admin modules)
 export default Reports;

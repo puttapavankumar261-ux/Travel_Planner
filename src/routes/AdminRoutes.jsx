@@ -9,6 +9,9 @@ import Bookings from "../modules/admin/Bookings/Bookings";
 import Reports from "../modules/admin/Reports/Reports";
 // import Settings from "../modules/admin/Settings/Settings";
 
+import Settings from "../modules/admin/Settings/Settings";
+
+
 const AdminRoutes = () => {
   return (
     <Routes>
@@ -21,7 +24,7 @@ const AdminRoutes = () => {
 
       <Route path="reports" element={<Reports />} />
 
-      {/* <Route path="settings" element={<Settings />} /> */}
+       <Route path="settings" element={<Settings />} /> 
     </Routes>
   );
 };
