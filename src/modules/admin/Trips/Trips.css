@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .trips-wrapper {
   padding-top: 100px;
 }
@@ -255,3 +256,160 @@
 .page-btn:not(.disabled):not(.active):hover {
   background: rgba(255, 255, 255, 0.1);
 }
+=======
+.trips-container {
+    padding: 30px;
+    color: white;
+    min-height: 100vh;
+    background: #0f172a;
+}
+
+.trips-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.trips-header h2 {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.add-btn {
+    background: #6d5dfc;
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.add-btn:hover {
+    background: #5847ff;
+}
+.trip-form{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+}
+
+.trip-form input{
+    padding:10px;
+    border-radius:8px;
+    border:none;
+    background:#1f2937;
+    color:white;
+    width:180px;
+}
+.search-box {
+    width: 320px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #374151;
+    background: #1e293b;
+    color: white;
+    outline: none;
+    margin-bottom: 25px;
+}
+
+.search-box::placeholder {
+    color: #9ca3af;
+}
+
+.trips-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #111827;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.trips-table thead {
+    background: #1f2937;
+}
+
+.trips-table th {
+    padding: 16px;
+    text-align: left;
+    color: white;
+}
+
+.trips-table td {
+    padding: 16px;
+    border-bottom: 1px solid #374151;
+}
+
+.trips-table tbody tr:hover {
+    background: #1e293b;
+}
+
+.status {
+    padding: 6px 14px;
+    border-radius: 20px;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.available {
+    background: #22c55e;
+}
+
+.full {
+    background: #ef4444;
+}
+
+.edit-btn {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+.edit-btn:hover {
+    background: #2563eb;
+}
+
+.delete-btn {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background: #dc2626;
+}
+
+.no-data {
+    text-align: center;
+    padding: 20px;
+    color: #9ca3af;
+}
+
+@media (max-width: 768px) {
+    .trips-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .search-box {
+        width: 100%;
+    }
+
+    .trips-table {
+        display: block;
+        overflow-x: auto;
+    }
+}
+>>>>>>> 89f0b20 (Added Trips Management module)
