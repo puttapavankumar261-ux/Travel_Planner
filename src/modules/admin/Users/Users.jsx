@@ -1,192 +1,446 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import Navbar from "../../../components/Navbar/Navbar";
-import { Search, Filter, Mail, Edit2, Trash2, ExternalLink } from "lucide-react";
+import {
+  Search,
+  Mail,
+  Edit2,
+  Trash2,
+  ExternalLink,
+  UserPlus,
+  Download,
+} from "lucide-react";
 import "./Users.css";
 
-const MOCK_USERS = [
+const initialUsers = [
   {
     id: "USR-001",
     name: "John Doe",
     email: "john@example.com",
     role: "Customer",
-    joined: "Jan 12, 2025",
+    joined: "12 Jan 2025",
     totalTrips: 4,
     totalSpent: "₹3,40,000",
-    status: "Active"
+    status: "Active",
   },
   {
     id: "USR-002",
     name: "Sarah Smith",
     email: "sarah@example.com",
-    role: "Customer",
-    joined: "Mar 05, 2025",
-    totalTrips: 1,
-    totalSpent: "₹1,20,000",
-    status: "Active"
+    role: "Premium",
+    joined: "05 Mar 2025",
+    totalTrips: 7,
+    totalSpent: "₹8,20,000",
+    status: "Active",
   },
   {
     id: "USR-003",
     name: "Raj Kumar",
     email: "raj@example.com",
-    role: "Premium",
-    joined: "May 20, 2024",
-    totalTrips: 8,
-    totalSpent: "₹9,50,000",
-    status: "Active"
-  },
-  {
-    id: "USR-004",
-    name: "Emily Chen",
-    email: "emily@example.com",
     role: "Customer",
-    joined: "Dec 02, 2025",
-    totalTrips: 2,
-    totalSpent: "₹2,10,000",
-    status: "Inactive"
-  },
-  {
-    id: "USR-005",
-    name: "Michael Brown",
-    email: "michael@example.com",
-    role: "Customer",
-    joined: "Feb 18, 2026",
+    joined: "20 Jul 2024",
     totalTrips: 3,
-    totalSpent: "₹4,00,000",
-    status: "Active"
-  }
+    totalSpent: "₹2,10,000",
+    status: "Inactive",
+  },
 ];
 
-const getStatusBadge = (status) => {
-  if (status === 'Active') return <span className="badge badge-success">Active</span>;
-  return <span className="badge badge-secondary">Inactive</span>;
-};
-
-const getRoleBadge = (role) => {
-  if (role === 'Premium') return <span className="badge badge-warning">Premium</span>;
-  return <span className="badge badge-primary">Customer</span>;
-};
-
 const Users = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [roleFilter, setRoleFilter] = useState('');
+  const [users, setUsers] = useState(initialUsers);
+  const [search, setSearch] = useState("");
+  const [role, setRole] = useState("All");
 
-  const filteredUsers = MOCK_USERS.filter(user => {
-    const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          user.id.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRole = roleFilter === '' || user.role === roleFilter;
-    return matchesSearch && matchesRole;
+  const [showForm, setShowForm] = useState(false);
+
+  const [newUser, setNewUser] = useState({
+    id: "",
+    name: "",
+    email: "",
+    role: "Customer",
+    joined: "",
+    totalTrips: 0,
+    totalSpent: "",
+    status: "Active",
   });
+
+  const filteredUsers = users.filter((user) => {
+    const matchSearch =
+      user.name.toLowerCase().includes(search.toLowerCase()) ||
+      user.email.toLowerCase().includes(search.toLowerCase()) ||
+      user.id.toLowerCase().includes(search.toLowerCase());
+
+    const matchRole =
+      role === "All" ? true : user.role === role;
+
+    return matchSearch && matchRole;
+  });
+
+  const deleteUser = (id) => {
+    if (window.confirm("Delete this user?")) {
+      setUsers(users.filter((user) => user.id !== id));
+    }
+  };
+
+  const addUser = () => {
+    if (
+      !newUser.id ||
+      !newUser.name ||
+      !newUser.email
+    ) {
+      alert("Please fill all required fields");
+      return;
+    }
+
+    setUsers([...users, newUser]);
+
+    setNewUser({
+      id: "",
+      name: "",
+      email: "",
+      role: "Customer",
+      joined: "",
+      totalTrips: 0,
+      totalSpent: "",
+      status: "Active",
+    });
+
+    setShowForm(false);
+  };
 
   return (
     <div className="dashboard-page">
       <Navbar />
-      
+
       <div className="dashboard-wrapper users-wrapper">
-        <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
+
+        <div className="users-header">
+
           <div>
-            <h1 style={{ color: 'white', fontSize: '28px', marginBottom: '8px' }}>User Management</h1>
-            <p style={{ color: '#9CA3AF' }}>Monitor customers, their spending, and travel history.</p>
+            <h2>User Management</h2>
+            <p>
+              Manage all registered customers of Travel Planner
+            </p>
           </div>
-          <button className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', background: '#3B82F6', color: 'white', border: 'none', borderRadius: '10px', cursor: 'pointer' }}>
-            <Filter size={18} /> Export CSV
-          </button>
+
+          <div className="header-buttons">
+
+            <button className="export-btn">
+              <Download size={18} />
+              Export
+            </button>
+
+            <button
+              className="add-btn"
+              onClick={() => setShowForm(true)}
+            >
+              <UserPlus size={18} />
+              Add User
+            </button>
+
+          </div>
+
         </div>
 
-        <div className="glass-panel">
-          <div className="table-controls">
-            <div className="search-bar">
-              <Search className="search-icon" size={20} />
-              <input 
-                type="text" 
-                placeholder="Search by Name, Email, or ID..." 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-            
-            <div className="filter-group">
-              <select className="filter-select" value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)}>
-                <option value="">All Roles</option>
-                <option value="Customer">Customer</option>
-                <option value="Premium">Premium</option>
-              </select>
-            </div>
+        <div className="users-stats">
+
+          <div className="stat-card">
+            <h3>{users.length}</h3>
+            <span>Total Users</span>
           </div>
 
-          <div className="table-responsive">
-            <table className="admin-table">
-              <thead>
-                <tr>
-                  <th>User ID</th>
-                  <th>Customer Profile</th>
-                  <th>Role</th>
-                  <th>Joined Date</th>
-                  <th>Total Trips</th>
-                  <th>Total Spent</th>
-                  <th>Status</th>
-                  <th>Actions</th>
+          <div className="stat-card">
+            <h3>
+              {
+                users.filter(
+                  (u) => u.status === "Active"
+                ).length
+              }
+            </h3>
+            <span>Active Users</span>
+          </div>
+
+          <div className="stat-card">
+            <h3>
+              {
+                users.filter(
+                  (u) => u.role === "Premium"
+                ).length
+              }
+            </h3>
+            <span>Premium Users</span>
+          </div>
+
+        </div>
+
+        <div className="toolbar">
+
+          <div className="search-box">
+
+            <Search size={18} />
+
+            <input
+              placeholder="Search user..."
+              value={search}
+              onChange={(e) =>
+                setSearch(e.target.value)
+              }
+            />
+
+          </div>
+
+          <select
+            value={role}
+            onChange={(e) =>
+              setRole(e.target.value)
+            }
+          >
+            <option>All</option>
+            <option>Customer</option>
+            <option>Premium</option>
+          </select>
+
+        </div>
+
+        {showForm && (
+
+          <div className="user-form">
+
+            <input
+              placeholder="User ID"
+              value={newUser.id}
+              onChange={(e) =>
+                setNewUser({
+                  ...newUser,
+                  id: e.target.value,
+                })
+              }
+            />
+
+            <input
+              placeholder="Name"
+              value={newUser.name}
+              onChange={(e) =>
+                setNewUser({
+                  ...newUser,
+                  name: e.target.value,
+                })
+              }
+            />
+
+            <input
+              placeholder="Email"
+              value={newUser.email}
+              onChange={(e) =>
+                setNewUser({
+                  ...newUser,
+                  email: e.target.value,
+                })
+              }
+            />
+
+            <select
+              value={newUser.role}
+              onChange={(e) =>
+                setNewUser({
+                  ...newUser,
+                  role: e.target.value,
+                })
+              }
+            >
+              <option>Customer</option>
+              <option>Premium</option>
+            </select>
+                        <input
+              placeholder="Joined Date"
+              value={newUser.joined}
+              onChange={(e) =>
+                setNewUser({
+                  ...newUser,
+                  joined: e.target.value,
+                })
+              }
+            />
+
+            <input
+              placeholder="Total Trips"
+              type="number"
+              value={newUser.totalTrips}
+              onChange={(e) =>
+                setNewUser({
+                  ...newUser,
+                  totalTrips: Number(e.target.value),
+                })
+              }
+            />
+
+            <input
+              placeholder="Total Spent"
+              value={newUser.totalSpent}
+              onChange={(e) =>
+                setNewUser({
+                  ...newUser,
+                  totalSpent: e.target.value,
+                })
+              }
+            />
+
+            <select
+              value={newUser.status}
+              onChange={(e) =>
+                setNewUser({
+                  ...newUser,
+                  status: e.target.value,
+                })
+              }
+            >
+              <option>Active</option>
+              <option>Inactive</option>
+            </select>
+
+            <button
+              className="save-btn"
+              onClick={addUser}
+            >
+              Save User
+            </button>
+
+          </div>
+        )}
+
+        <div className="table-container">
+
+          <table className="users-table">
+
+            <thead>
+
+              <tr>
+                <th>User</th>
+                <th>Role</th>
+                <th>Joined</th>
+                <th>Trips</th>
+                <th>Total Spent</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              {filteredUsers.map((user) => (
+
+                <tr key={user.id}>
+
+                  <td>
+
+                    <div className="profile">
+
+                      <div className="avatar">
+                        {user.name.charAt(0)}
+                      </div>
+
+                      <div>
+
+                        <h4>{user.name}</h4>
+
+                        <p>
+                          <Mail size={14} />
+                          {user.email}
+                        </p>
+
+                        <small>{user.id}</small>
+
+                      </div>
+
+                    </div>
+
+                  </td>
+
+                  <td>
+
+                    <span
+                      className={
+                        user.role === "Premium"
+                          ? "premium"
+                          : "customer"
+                      }
+                    >
+                      {user.role}
+                    </span>
+
+                  </td>
+
+                  <td>{user.joined}</td>
+
+                  <td>{user.totalTrips}</td>
+
+                  <td>{user.totalSpent}</td>
+
+                  <td>
+
+                    <span
+                      className={
+                        user.status === "Active"
+                          ? "active"
+                          : "inactive"
+                      }
+                    >
+                      {user.status}
+                    </span>
+
+                  </td>
+
+                  <td>
+
+                    <div className="actions">
+
+                      <button className="view-btn">
+                        <ExternalLink size={17} />
+                      </button>
+
+                      <button className="edit-btn">
+                        <Edit2 size={17} />
+                      </button>
+
+                      <button
+                        className="delete-btn"
+                        onClick={() =>
+                          deleteUser(user.id)
+                        }
+                      >
+                        <Trash2 size={17} />
+                      </button>
+
+                    </div>
+
+                  </td>
+
                 </tr>
-              </thead>
-              <tbody>
-                {filteredUsers.map(user => (
-                  <tr key={user.id}>
-                    <td>
-                      <span className="trip-id">{user.id}</span>
-                    </td>
-                    <td>
-                      <div className="user-cell">
-                        <div className="avatar" style={{ background: 'linear-gradient(135deg, #10B981, #059669)' }}>
-                          {user.name.charAt(0)}
-                        </div>
-                        <div>
-                          <div className="fw-500">{user.name}</div>
-                          <div className="text-muted text-sm" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                            <Mail size={12} /> {user.email}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td>{getRoleBadge(user.role)}</td>
-                    <td className="text-muted">{user.joined}</td>
-                    <td className="fw-500 text-white">{user.totalTrips} Trips</td>
-                    <td className="fw-500 text-success">{user.totalSpent}</td>
-                    <td>{getStatusBadge(user.status)}</td>
-                    <td>
-                      <div className="action-buttons">
-                        <button className="icon-btn-small" title="View Profile">
-                          <ExternalLink size={18} />
-                        </button>
-                        <button className="icon-btn-small" title="Edit User">
-                          <Edit2 size={18} />
-                        </button>
-                        <button className="icon-btn-small danger" title="Suspend User">
-                          <Trash2 size={18} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            
-            {filteredUsers.length === 0 && (
-              <div className="empty-state">
-                <p>No users found matching your search.</p>
-              </div>
-            )}
-          </div>
-          
-          <div className="pagination">
-            <span className="text-muted">Showing {filteredUsers.length} of {MOCK_USERS.length} users</span>
-            <div className="page-buttons">
-              <button className="page-btn disabled">Prev</button>
-              <button className="page-btn active">1</button>
-              <button className="page-btn">Next</button>
-            </div>
-          </div>
+
+              ))}
+
+              {filteredUsers.length === 0 && (
+
+                <tr>
+
+                  <td
+                    colSpan="7"
+                    className="no-data"
+                  >
+                    No users found
+                  </td>
+
+                </tr>
+
+              )}
+
+            </tbody>
+
+          </table>
+
         </div>
+
       </div>
+
     </div>
   );
 };

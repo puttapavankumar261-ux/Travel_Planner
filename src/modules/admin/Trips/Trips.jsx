@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import Navbar from "../../../components/Navbar/Navbar";
 import "./Trips.css";
+        {/* Your Trips page content */}
 
 function Trips() {
   const [search, setSearch] = useState("");
@@ -69,7 +71,11 @@ const [newTrip, setNewTrip] = useState({
   setTrips(trips.filter((trip) => trip.id !== id));
 };
   return (
-    <div className="trips-container">
+   <div className="dashboard-page">
+     <Navbar />
+
+      <div className="dashboard-wrapper trips-wrapper">
+      <div className="trips-container">
       <div className="trips-header">
         <h2>Trips Management</h2>
 
@@ -215,8 +221,8 @@ const [newTrip, setNewTrip] = useState({
           )}
         </tbody>
       </table>
+          </div>
     </div>
-  );
+  </div>
+);
 }
-
-export default Trips;
