@@ -4,9 +4,8 @@
 
     align-items:center;
 
-    gap:20px;
-
-    padding:25px;
+    gap:15px;
+    padding:20px 15px;
 
     border-radius:22px;
 
@@ -24,8 +23,8 @@
 
 .stat-icon{
 
-    width:70px;
-    height:70px;
+    width:60px;
+    height:60px;
 
     border-radius:18px;
 
@@ -36,8 +35,13 @@
     align-items:center;
 
     color:white;
-
     box-shadow:0 10px 30px rgba(0,0,0,.25);
+    flex-shrink: 0;
+}
+
+.stat-content{
+    min-width: 0;
+    overflow: hidden;
 }
 
 .stat-content h5{
@@ -50,20 +54,16 @@
 }
 
 .stat-content h2{
-
     color:white;
-
-    font-size:34px;
-
+    font-size:24px;
     margin-bottom:8px;
+    word-break: break-word;
 }
 
 .stat-content p{
 
     color:#22C55E;
-
-    font-size:14px;
-
+    font-size:13px;
     margin:0;
 }
 

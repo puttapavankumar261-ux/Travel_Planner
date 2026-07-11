@@ -1,0 +1,32 @@
+.users-wrapper {
+  padding-top: 100px;
+}
+
+.admin-table {
+  min-width: 1000px;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.avatar {
+  flex-shrink: 0;
+  min-width: 36px;
+}
+
+.text-success {
+  color: #10B981;
+}
+
+.badge-secondary {
+  background: rgba(148, 163, 184, 0.15);
+  color: #94A3B8;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+/* 
+Note: The rest of the table styles (admin-table, search-bar, filter-group, pagination, empty-state, etc.) 
+are inherited from the global or Admin-wide styles defined during the Trips implementation.
+This ensures a consistent look and feel across the admin dashboard. 
+*/

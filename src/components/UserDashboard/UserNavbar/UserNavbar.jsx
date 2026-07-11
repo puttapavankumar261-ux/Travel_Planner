@@ -1,6 +1,6 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "./UserNavbar.css";
-import companyLogo from "../../../assets/images/Company-logo.jpg";
+import Logo from "../../common/Logo";
 import {
   FaHome,
   FaSuitcase,
@@ -11,21 +11,13 @@ import {
 } from "react-icons/fa";
 
 const UserNavbar = () => {
+  const navigate = useNavigate();
+
   return (
     <header className="user-navbar">
       {/* Logo */}
 
-      <div className="navbar-logo">
-        <img
-          src={companyLogo}
-          alt="Travel Planner Logo"
-          className="company-logo"
-        />
-
-        <div className="logo-text">
-          <h2>Travel Planner</h2> <span>Explore • Plan • Enjoy</span>
-        </div>
-      </div>
+      <Logo />
 
       {/* Navigation */}
 
@@ -49,6 +41,14 @@ const UserNavbar = () => {
       {/* Right Section */}
 
       <div className="navbar-right">
+        <button 
+          className="create-trip-btn" 
+          onClick={() => navigate('/user/trips/new')}
+          style={{ background: '#3B82F6', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '12px', fontWeight: '500', cursor: 'pointer', marginRight: '15px' }}
+        >
+          + New Trip
+        </button>
+
         <button className="notification-btn">
           <FaBell />
           <span className="notification-dot"></span>

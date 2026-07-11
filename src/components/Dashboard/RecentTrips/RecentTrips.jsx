@@ -35,33 +35,30 @@ function RecentTrips() {
         <button>View All</button>
       </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-
-            <th>Email</th>
-
-            <th>Status</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {users.map((user) => (
-            <tr key={user.id}>
-              <td>{user.name}</td>
-
-              <td>{user.email}</td>
-
-              <td>
-                <span className={`status ${user.status.toLowerCase()}`}>
-                  {user.status}
-                </span>
-              </td>
+      <div className="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Status</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user.id}>
+                <td>{user.name}</td>
+                <td>{user.email}</td>
+                <td>
+                  <span className={`status ${user.status.toLowerCase()}`}>
+                    {user.status}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

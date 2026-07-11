@@ -4,9 +4,8 @@
 
     align-items:center;
 
-    gap:18px;
-
-    padding:22px;
+    gap:12px;
+    padding:16px 14px;
 
     background:rgba(12,20,35,.72);
 
@@ -44,9 +43,8 @@
 
 .stat-icon{
 
-    width:68px;
-
-    height:68px;
+    width:56px;
+    height:56px;
 
     border-radius:18px;
 
@@ -76,6 +74,8 @@
     justify-content:center;
 
     color:#fff;
+    min-width: 0;
+    overflow: hidden;
 
 }
 
@@ -88,8 +88,8 @@
     font-weight:700;
 
     line-height:1;
-
     color:#ffffff;
+    word-break: break-word;
 
 }
 
@@ -100,7 +100,6 @@
     font-size:15px;
 
     color:rgba(255,255,255,.75);
-
     letter-spacing:.3px;
 
 }

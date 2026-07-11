@@ -1,0 +1,64 @@
+.common-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.common-logo .logo-icon-main {
+    color: #3B82F6;
+    font-size: 32px;
+}
+
+.common-logo .logo-text-main {
+    display: flex;
+    flex-direction: column;
+}
+
+.common-logo .logo-text-main h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+    text-transform: lowercase;
+}
+
+.common-logo .logo-text-main p {
+    color: #d1d5db;
+    margin-top: 2px;
+    margin-bottom: 0;
+    font-size: 13px;
+    line-height: 1;
+}
+
+/* For main page brand variant */
+.common-logo.brand-logo {
+    gap: 15px;
+    margin-bottom: 45px;
+}
+
+.common-logo.brand-logo .logo-icon-main {
+    font-size: 42px;
+}
+
+.common-logo.brand-logo .logo-text-main h2 {
+    font-size: 24px;
+}
+
+.common-logo.brand-logo .logo-text-main p {
+    font-size: 16px;
+    margin-top: 4px;
+}
+
+/* For login section variant */
+.common-logo.login-card-logo {
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.common-logo.login-card-logo .logo-icon-main {
+    font-size: 24px;
+}
+
+.common-logo.login-card-logo .logo-text-main h2 {
+    font-size: 20px;
+}

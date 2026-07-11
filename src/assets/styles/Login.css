@@ -26,7 +26,7 @@ body{
 .login-page{
 
     width:100%;
-    height:100vh;
+    min-height:100vh;
 
     background-size:cover;
     background-position:center;
@@ -36,44 +36,37 @@ body{
 
     display:grid;
 
-    grid-template-columns:58% 42%;
+    grid-template-columns:60% 40%;
 
 }
 .login-section{
+    width: 100%;
+    height: 100vh;
+    overflow-y: auto;
     position: relative;
     z-index: 10;
+    
+    background: #0B1325; /* Solid background for the 40% side */
+    border-left: 1px solid rgba(255,255,255,0.05);
 
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
 
-    /* Move it slightly downward */
-    align-items: flex-start;
-
-    padding-top: 90px;
-    padding-right: 60px;
-    padding-left: 40px;
+    padding: 60px 40px;
 }
 
 .login-card{
     width: 100%;
-    max-width: 430px;
-
-    padding: 35px;
-
-    background: rgba(255, 255, 255, 0.453);
-
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-
-    border: 1px solid rgba(255, 255, 255, 0.4);
-
-    border-radius: 24px;
-
-    box-shadow: 0 20px 45px rgba(0,0,0,.25);
-}
-
-.login-card{
-    padding:30px 35px;
+    max-width: 550px; /* Constrain slightly so fields aren't extremely long */
+    padding: 0;
+    
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
 }
 
 .login-card h2{
@@ -87,6 +80,119 @@ body{
 .form-group{
     margin-bottom:18px;
 }
+
+/* ==================================================
+                    INPUTS
+================================================== */
+.input-box {
+    position: relative;
+    width: 100%;
+    margin-bottom: 5px;
+}
+.input-box i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9CA3AF;
+    font-size: 16px;
+}
+.input-box input, .input-box select {
+    width: 100%;
+    padding: 12px 15px 12px 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    color: white;
+    outline: none;
+    font-family: inherit;
+    transition: 0.3s;
+}
+.input-box input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+.input-box input.no-icon, .input-box select.no-icon {
+    padding-left: 15px;
+}
+.input-box input:focus, .input-box select:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #3B82F6;
+}
+.eye-btn {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #9CA3AF;
+    cursor: pointer;
+    font-size: 16px;
+}
+.eye-btn i {
+    position: static;
+    transform: none;
+}
+.login-btn {
+    width: 100%;
+    padding: 14px;
+    background: #3B82F6;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.login-btn:hover {
+    background: #2563EB;
+}
+.login-btn:disabled {
+    background: #9CA3AF;
+    cursor: not-allowed;
+}
+.google-btn {
+    width: 100%;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+.google-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+.divider {
+    text-align: center;
+    position: relative;
+    margin: 20px 0;
+}
+.divider::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.15);
+}
+.divider span {
+    background: transparent;
+    padding: 0 10px;
+    position: relative;
+    color: #9CA3AF;
+    font-size: 14px;
+}
+
 /* ==================================================
                     OVERLAY
 ================================================== */
@@ -94,17 +200,10 @@ body{
 .overlay{
 
     position:absolute;
-
     inset:0;
-
-    background:
-        linear-gradient(
-            rgba(5,15,30,.72),
-            rgba(5,15,30,.72)
-        );
-
+    width: 60%; /* Only overlay the 60% image side */
+    background: linear-gradient(rgba(5,15,30,.6), rgba(5,15,30,.8));
     backdrop-filter:blur(2px);
-
 }
 
 /* ==================================================
@@ -115,7 +214,7 @@ body{
     z-index: 5;
 
     width: 100%;
-    height: 100vh;
+    height: 100%;
 
     display: flex;
     flex-direction: column;
@@ -275,7 +374,7 @@ body{
     }
 
     .login-card{
-        max-width:450px;
+        max-width:100%;
         width:100%;
     }
 
