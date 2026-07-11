@@ -226,3 +226,4 @@ const [newTrip, setNewTrip] = useState({
   </div>
 );
 }
+export default Users;
