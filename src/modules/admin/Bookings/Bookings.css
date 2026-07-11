@@ -2,14 +2,6 @@
   padding-top: 100px;
 }
 
-.admin-table {
-  min-width: 1000px;
-}
-
-.table-responsive {
-  overflow-x: auto;
-}
-
 .top-bar {
   display: flex;
   justify-content: space-between;
