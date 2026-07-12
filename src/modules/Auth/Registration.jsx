@@ -130,7 +130,7 @@ function Registration() {
 
       {/* RIGHT SIDE REGISTRATION */}
       <div className="login-section">
-        <div className="login-card" style={{ maxHeight: '90vh', overflowY: 'auto' }}>
+        <div className="login-card" style={{ maxWidth: '550px' }}>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <Logo showTagline={false} className="login-card-logo" />
           </div>
@@ -209,9 +209,8 @@ function Registration() {
                </div>
             </div>
 
-            {/* Password & DOB */}
-            <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-              <div style={{ flex: 1 }}>
+            {/* Password (Full Width) */}
+            <div style={{ marginTop: '10px' }}>
                 <label>Password</label>
                 <div className="input-box">
                   <i className="bi bi-lock"></i>
@@ -231,7 +230,10 @@ function Registration() {
                     <i className={showPassword ? "bi bi-eye-slash" : "bi bi-eye"}></i>
                   </button>
                 </div>
-              </div>
+            </div>
+
+            {/* DOB & Gender */}
+            <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
               <div style={{ flex: 1 }}>
                 <label>Date of Birth</label>
                 <div className="input-box">
@@ -245,10 +247,6 @@ function Registration() {
                   />
                 </div>
               </div>
-            </div>
-
-            {/* Demographics */}
-            <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
                <div style={{ flex: 1 }}>
                  <label>Gender</label>
                  <div className="input-box">
@@ -264,7 +262,10 @@ function Registration() {
                    </select>
                  </div>
                </div>
-               <div style={{ flex: 1 }}>
+            </div>
+
+            {/* Country (Full Width) */}
+            <div style={{ marginTop: '10px' }}>
                  <label>Country</label>
                  <div className="input-box">
                    <i className="bi bi-globe"></i>
@@ -277,7 +278,6 @@ function Registration() {
                      required
                    />
                  </div>
-               </div>
             </div>
 
             <button type="submit" className="login-btn" style={{ marginTop: '20px' }} disabled={loading}>
