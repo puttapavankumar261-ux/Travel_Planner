@@ -62,16 +62,16 @@ const Step1Basics = ({ data, setData }) => {
         </div>
       </div>
 
-      <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '25px', justifyContent: 'flex-start' }}>
         <input 
           type="checkbox" 
           id="multipleDest" 
           name="multipleDestinations" 
           checked={data.multipleDestinations}
           onChange={handleChange}
-          style={{ width: 'auto' }}
+          style={{ width: '18px', height: '18px', margin: 0, cursor: 'pointer' }}
         />
-        <label htmlFor="multipleDest" style={{ margin: 0, cursor: 'pointer' }}>I have multiple destinations</label>
+        <label htmlFor="multipleDest" style={{ margin: 0, cursor: 'pointer', display: 'inline-block', color: '#d1d5db', fontSize: '15px' }}>I have multiple destinations</label>
       </div>
 
       {/* Dates */}
@@ -96,16 +96,16 @@ const Step1Basics = ({ data, setData }) => {
         </div>
       </div>
 
-      <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '25px', justifyContent: 'flex-start' }}>
         <input 
           type="checkbox" 
           id="flexibleDates" 
           name="flexibleDates" 
           checked={data.flexibleDates}
           onChange={handleChange}
-          style={{ width: 'auto' }}
+          style={{ width: '18px', height: '18px', margin: 0, cursor: 'pointer' }}
         />
-        <label htmlFor="flexibleDates" style={{ margin: 0, cursor: 'pointer' }}>My dates are flexible</label>
+        <label htmlFor="flexibleDates" style={{ margin: 0, cursor: 'pointer', display: 'inline-block', color: '#d1d5db', fontSize: '15px' }}>My dates are flexible</label>
       </div>
 
       {/* Travelers */}
