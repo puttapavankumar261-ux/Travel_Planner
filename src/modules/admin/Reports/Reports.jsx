@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Navbar from "../../../components/Navbar/Navbar";
 import './Reports.css';
 
 // Mock Data
@@ -84,6 +85,11 @@ const Reports = () => {
 
   return (
     <div className="reports-container">
+  <div className="dashboard-page">
+    <Navbar />
+
+    <div className="dashboard-wrapper reports-wrapper">
+      <div className="reports-container">
       <div className="admin-header">
         <h1>Reports & Analytics</h1>
         <p>Analyze revenue, bookings, and user activity</p>
@@ -241,9 +247,13 @@ const Reports = () => {
           </table>
         </div>
       </div>
-
     </div>
   );
-};
+;
 
+          </div>
+    </div>
+  </div>
+);
+};
 export default Reports;
