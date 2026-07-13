@@ -17,7 +17,6 @@ public class GlobalExceptionHandler {
             RoleAlreadyExistsException ex) {
 
         Map<String, Object> response = new HashMap<>();
-
         response.put("timestamp", LocalDateTime.now());
         response.put("status", HttpStatus.CONFLICT.value());
         response.put("message", ex.getMessage());
@@ -30,7 +29,6 @@ public class GlobalExceptionHandler {
             RoleNotFoundException ex) {
 
         Map<String, Object> response = new HashMap<>();
-
         response.put("timestamp", LocalDateTime.now());
         response.put("status", HttpStatus.NOT_FOUND.value());
         response.put("message", ex.getMessage());
@@ -43,17 +41,64 @@ public class GlobalExceptionHandler {
             UserAlreadyExistsException ex) {
 
         Map<String, Object> response = new HashMap<>();
-
         response.put("timestamp", LocalDateTime.now());
         response.put("status", HttpStatus.CONFLICT.value());
         response.put("message", ex.getMessage());
 
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
-    
+
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleUserNotFoundException(
             UserNotFoundException ex) {
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("timestamp", LocalDateTime.now());
+        response.put("status", HttpStatus.NOT_FOUND.value());
+        response.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<Map<String, Object>> handleInvalidCredentialsException(
+            InvalidCredentialsException ex) {
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("timestamp", LocalDateTime.now());
+        response.put("status", HttpStatus.UNAUTHORIZED.value());
+        response.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(AccountDisabledException.class)
+    public ResponseEntity<Map<String, Object>> handleAccountDisabledException(
+            AccountDisabledException ex) {
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("timestamp", LocalDateTime.now());
+        response.put("status", HttpStatus.FORBIDDEN.value());
+        response.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(AccountLockedException.class)
+    public ResponseEntity<Map<String, Object>> handleAccountLockedException(
+            AccountLockedException ex) {
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("timestamp", LocalDateTime.now());
+        response.put("status", HttpStatus.FORBIDDEN.value());
+        response.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+    }
+    
+    @ExceptionHandler(TripNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleTripNotFoundException(
+            TripNotFoundException ex) {
 
         Map<String, Object> response = new HashMap<>();
 
@@ -63,4 +108,18 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
+    
+    @ExceptionHandler(ItineraryNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleItineraryNotFoundException(
+            ItineraryNotFoundException ex) {
+
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("timestamp", LocalDateTime.now());
+        response.put("status", HttpStatus.NOT_FOUND.value());
+        response.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
 }
