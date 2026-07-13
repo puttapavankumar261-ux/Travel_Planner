@@ -6,11 +6,7 @@ import Users from "../modules/admin/Users/Users";
 import Bookings from "../modules/admin/Bookings/Bookings";
 
 // Future Imports
-<<<<<<< HEAD
-=======
-import Trips from "../modules/admin/Trips/Trips";
-// import Bookings from "../modules/admin/Bookings/Bookings";
->>>>>>> 89f0b20 (Added Trips Management module)
+// // import Bookings from "../modules/admin/Bookings/Bookings";
 // import Reports from "../modules/admin/Reports/Reports";
 // import Settings from "../modules/admin/Settings/Settings";
 
@@ -18,24 +14,14 @@ const AdminRoutes = () => {
   return (
     <Routes>
       <Route path="dashboard" element={<Dashboard />} />
-<<<<<<< HEAD
-
       {/* Admin Routes */}
       <Route path="users" element={<Users />} />
       <Route path="trips" element={<Trips />} />
       <Route path="bookings" element={<Bookings />} />
-=======
-      
-
       {/* Future Routes */}
-
       /* <Route path="trips" element={<Trips />} /> */
-
       {/* <Route path="bookings" element={<Bookings />} /> */}
->>>>>>> 89f0b20 (Added Trips Management module)
-
       {/* <Route path="reports" element={<Reports />} /> */}
-
       {/* <Route path="settings" element={<Settings />} /> */}
     </Routes>
   );
