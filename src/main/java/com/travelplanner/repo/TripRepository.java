@@ -16,6 +16,4 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
 
     List<Trip> findByTripStatus(TripStatus tripStatus);
 
-    List<Trip> findByUserAndTripStatus(User user, TripStatus tripStatus);
-
 }
