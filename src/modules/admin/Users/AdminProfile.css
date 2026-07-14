@@ -42,11 +42,13 @@
 ===================================================== */
 
 .profile-card{
-    background:#ffffff;
+    /* background:#ffffff; */
+    background: #0f172a;
     border-radius:18px;
     overflow:hidden;
     box-shadow:0 8px 25px rgba(0,0,0,.08);
     transition:.35s;
+    border:1px solid #fff;
 }
 
 .profile-card:hover{
@@ -99,7 +101,8 @@
 
     font-size:24px;
 
-    color:#1f2937;
+    /* color:#1f2937; */
+    color : #fff;
 
     margin-bottom:8px;
 }
@@ -162,7 +165,8 @@
 }
 
 .left-sidebar .profile-info span{
-    color:#000 !important;
+    /* color:#000 !important; */
+    color : #fff;
 }
 
 .info-row{
@@ -222,7 +226,8 @@
 
     border-radius:12px;
 
-    background:#2563eb;
+    /* background:#2563eb; */
+    background:#3b82f6;
 
     color:#fff;
 
@@ -253,7 +258,8 @@
 
 .permission-card{
 
-    background:#ffffff;
+    /* background:#ffffff; */
+    background: #0f172a;
 
     border-radius:18px;
 
@@ -262,6 +268,7 @@
     box-shadow:0 8px 25px rgba(0,0,0,.08);
 
     transition:.35s;
+    border: 1px solid #fff;
 }
 
 .permission-card:hover{
@@ -279,7 +286,8 @@
 
     gap:10px;
 
-    color:#1f2937;
+    /* color:#1f2937; */
+    color :#fff;
 
     font-size:20px;
 
@@ -306,7 +314,8 @@
 
     padding:12px 0;
 
-    color:#374151;
+    /* color:#374151; */
+    color :#fff;
 
     font-size:15px;
 
@@ -324,6 +333,107 @@
 
     font-size:18px;
 }
+
+/*===================================================
+    Quick Stats
+======================================================*/
+.left-sidebar .quick-stats{
+
+    /* background:#ffffff; */
+    background: #0f172a;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+
+    transition:.35s;
+    border: 1px solid #fff;
+}
+
+.left-sidebar .quick-stats:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:0 18px 35px rgba(0,0,0,.12);
+}
+
+.left-sidebar .quick-stats h3{
+    /* display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:20px; */
+    /* color:#1f2937; */
+    /* color : #fff;  */
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color :#fff;
+    font-size:20px;
+    margin-bottom:22px;
+}
+
+.left-sidebar .quick-stats h3 i{
+    color:#4f46e5;
+    font-size:20px;
+}
+
+.left-sidebar .stats-grid{
+    display:grid;
+    /* grid-template-columns:repeat(1,1fr); */
+    gap:15px;
+    margin-bottom: 25px;
+
+}
+
+.left-sidebar .stat-box{
+    background:#f8fafc;
+    border:1px solid #e5e7eb;
+    border-radius:12px;
+    padding:18px;
+    text-align:center;
+    transition:.3s;
+    cursor:pointer;
+}
+
+.left-sidebar .stat-box:hover{
+    transform:translateY(-4px);
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+.left-sidebar .stat-box i{
+    font-size:24px;
+    color:#4f46e5;
+    margin-bottom:10px;
+}
+
+.left-sidebar .stat-box h2{
+    margin:5px 0;
+    color:#111827;
+    font-size:24px;
+    font-weight:700;
+}
+
+.left-sidebar .stat-box span{
+    color:#6b7280;
+    font-size:14px;
+}
+
+/* .left-sidebar .stats-footer{
+    margin-top:20px;
+    padding-top:15px;
+    border-top:1px solid #e5e7eb;
+    color:#6b7280;
+    font-size:14px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.left-sidebar .stats-footer i{
+    color:#10b981;
+} */
 
 /* =====================================================
    RIGHT CONTENT
@@ -344,11 +454,13 @@
 ===================================================== */
 
 .content-card{
-    background:#ffffff;
+    /* background:#ffffff; */
+    background: #0f172a;
     border-radius:18px;
     padding:28px;
     box-shadow:0 8px 25px rgba(0,0,0,.08);
     transition:.35s;
+    border: 1px solid #fff;
 }
 
 .content-card:hover{
@@ -370,14 +482,15 @@
 }
 
 .card-header h3{
-    color:#1f2937;
+    /* color:#1f2937; */
+    color :#fff;
     font-size:22px;
     font-weight:600;
 }
 
 .edit-small-btn{
     border:none;
-    background:#2563eb;
+    background:#3b82f6;
     color:#fff;
     padding:10px 22px;
     border-radius:8px;
@@ -401,7 +514,8 @@
 }
 
 .right-content .profile-grid .form-group input{
-    color:black !important;
+    /* color:black !important; */
+    color:#fff;
 }
 
 .right-content .form-group{
@@ -421,8 +535,10 @@
     border:1px solid #dbe3ec;
     border-radius:10px;
     padding:0 15px;
-    background:#fafbfc;
-    color:#374151;
+    /* background:#fafbfc; */
+    background: #1E293B;
+    /* color:#374151; */
+    color:#fff !important;
     font-size:15px;
     transition:.3s;
 }
@@ -430,7 +546,7 @@
 .right-content .form-group input:focus{
     outline:none;
     border-color:#2563eb;
-    background:#ffffff;
+    /* background:#ffffff; */
 }
 
 .right-content .form-group.full-width{
@@ -464,17 +580,20 @@
     padding:18px;
     border:1px solid #edf2f7;
     border-radius:12px;
-    background:#fafbfc;
+    /* background:#fafbfc; */
+    background: #1E293B;
 }
 
 .security-row h4{
-    color:#1f2937;
+    /* color:#1f2937; */
+    color:#fff;
     font-size:16px;
     margin-bottom:5px;
 }
 
 .security-row p{
-    color:#6b7280;
+    /* color:#6b7280; */
+    color:#fff;
     font-size:14px;
 }
 
@@ -489,7 +608,8 @@
 
 .primary-btn{
     border:none;
-    background:#2563eb;
+    /* background:#2563eb; */
+    background:#3b82f6;
     color:#fff;
     padding:10px 22px;
     border-radius:8px;
@@ -503,8 +623,10 @@
 }
 
 .outline-btn{
-    background:#fff;
-    color:#2563eb;
+    /* background:#fff; */
+    background: #1E293B;
+    /* color:#2563eb; */
+    color:#fff;
     border:2px solid #2563eb;
     padding:10px 22px;
     border-radius:8px;
@@ -548,19 +670,20 @@ input,
     border-radius:12px;
 }
 
-.login-table{
+.right-content .login-table{
     width:100%;
     border-collapse:collapse;
     min-width:700px;
 }
 
-.login-table thead{
-    background:#2563eb;
+.right-content .login-table thead{
+    /* background:#2563eb; */
+    background: #3b82f6;
 }
 
-.login-table thead th{
+.right-content .login-table thead th{
 
-    color:#fff;
+    /* color:#fff; */
 
     padding:16px;
 
@@ -571,24 +694,24 @@ input,
     font-weight:600;
 }
 
-.login-table tbody tr{
+.right-content .login-table tbody tr{
 
     transition:.3s;
 
     border-bottom:1px solid #edf2f7;
 }
 
-.login-table tbody tr:hover{
+.right-content .login-table tbody tr:hover{
 
     background:#f8fbff;
+    color:#000 !important;
 }
 
-.login-table tbody td{
+.right-content .login-table tbody td{
 
     padding:16px;
-
-    color:#4b5563;
-
+    /* color:#4b5563; */
+    /* color: #fff; */
     font-size:14px;
 }
 

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "../../../components/Navbar/Navbar";
+import StatCard from "../../../components/Dashboard/StatCard/StatCard";
+import { Users, Plane, Calendar, IndianRupee } from "lucide-react";
 import {
   Search,
   Mail,
@@ -62,6 +64,33 @@ const AdminProfile = () => {
       ip: "192.168.1.60",
       location: "Chennai",
       date: "08 Jul 2026 08:10 AM",
+    },
+  ];
+
+const stats = [
+    {
+      title: "Total Users",
+      value: "1250",
+      icon: <Users size={30} />,
+      color: "linear-gradient(135deg,#2563EB,#3B82F6)",
+    },
+    {
+      title: "Total Trips",
+      value: "325",
+      icon: <Plane size={30} />,
+      color: "linear-gradient(135deg,#10B981,#22C55E)",
+    },
+    {
+      title: "Bookings",
+      value: "95",
+      icon: <Calendar size={30} />,
+      color: "linear-gradient(135deg,#8B5CF6,#A855F7)",
+    },
+    {
+      title: "Revenue",
+      value: "₹8,45,000",
+      icon: <IndianRupee size={30} />,
+      color: "linear-gradient(135deg,#F59E0B,#FB923C)",
     },
   ];
 
@@ -153,6 +182,23 @@ const AdminProfile = () => {
 
                 </ul>
 
+                </div>
+
+                {/*  Quick Stats    */}
+
+                <div className="profile-card quick-stats">
+                    <h3>
+                        <i className="bi bi-bar-chart-line-fill"></i>
+                        Quick Admin Stats
+                    </h3>
+                    
+                    <div className="stats-grid">
+                        {/* <div className="stats-grid"> */}
+                            {stats.map((card) => (
+                                <StatCard key={card.title} {...card} />
+                            ))}
+                        {/* </div> */}
+                    </div>
                 </div>
 
             </aside>
