@@ -60,7 +60,7 @@ const UpcomingTrips = () => {
             <div className="upcoming-right">
               <span className="days-left">{trip.daysLeft}</span>
 
-              <button className="view-trip-btn">View</button>
+              <button>View</button>
             </div>
           </div>
         ))}

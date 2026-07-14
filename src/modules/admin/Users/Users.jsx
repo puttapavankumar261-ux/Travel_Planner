@@ -3,9 +3,6 @@ import Navbar from "../../../components/Navbar/Navbar";
 import {
   Search,
   Mail,
-  Edit2,
-  Trash2,
-  ExternalLink,
   UserPlus,
   Download,
 } from "lucide-react";
@@ -392,24 +389,23 @@ const Users = () => {
                   <td>
 
                     <div className="actions">
-
                       <button className="view-btn">
-                        <ExternalLink size={17} />
+                        <i className="bi bi-box-arrow-up-right"></i>
+                        <span>View</span>
                       </button>
 
                       <button className="edit-btn">
-                        <Edit2 size={17} />
+                        <i className="bi bi-pencil-square"></i>
+                        <span>Edit</span>
                       </button>
 
                       <button
                         className="delete-btn"
-                        onClick={() =>
-                          deleteUser(user.id)
-                        }
+                        onClick={() => deleteUser(user.id)}
                       >
-                        <Trash2 size={17} />
+                        <i className="bi bi-trash"></i>
+                        <span>Delete</span>
                       </button>
-
                     </div>
 
                   </td>

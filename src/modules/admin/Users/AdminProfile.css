@@ -24,7 +24,12 @@
     gap:25px;
     padding:30px;
     min-height:100vh;
-    /* background:#f4f7fc; */
+    background:
+        linear-gradient(rgba(6,13,29,.92),rgba(6,13,29,.95)),
+        url("../../../assets/images/dashboard-bg.jpg");
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
 }
 
 /* =====================================================
@@ -35,6 +40,36 @@
     display:flex;
     flex-direction:column;
     gap:25px;
+    height: 100%;
+}
+
+.left-sidebar .permission-card {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.left-sidebar .permission-card ul {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* =====================================================
+   RIGHT CONTENT
+===================================================== */
+
+.right-content{
+    display:flex;
+    flex-direction:column;
+    gap:25px;
+    height: 100%;
+    max-width: 680px; /* Limits the maximum width further */
+}
+
+.right-content .two-column {
+    flex-grow: 1;
 }
 
 /* =====================================================
@@ -74,20 +109,13 @@
 ===================================================== */
 
 .left-sidebar .profile-image{
-
     width:135px;
     height:135px;
-
     border-radius:50%;
-
     object-fit:cover;
-
     border:6px solid #fff;
-
     display:block;
-
     margin:-70px auto 15px;
-
     box-shadow:0 10px 25px rgba(0,0,0,.15);
 }
 
@@ -214,7 +242,7 @@
    EDIT BUTTON
 ===================================================== */
 
-.edit-btn{
+.profile-edit-btn{
 
     width:calc(100% - 40px);
 
@@ -240,14 +268,14 @@
     transition:.3s;
 }
 
-.edit-btn:hover{
+.profile-edit-btn:hover{
 
     background:#1d4ed8;
 
     transform:translateY(-2px);
 }
 
-.edit-btn i{
+.profile-edit-btn i{
 
     margin-right:8px;
 }
@@ -439,14 +467,6 @@
    RIGHT CONTENT
 ===================================================== */
 
-.right-content{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:25px;
-}
 
 
 /* =====================================================
@@ -457,7 +477,7 @@
     /* background:#ffffff; */
     background: #0f172a;
     border-radius:18px;
-    padding:28px;
+    padding:25px 30px;
     box-shadow:0 8px 25px rgba(0,0,0,.08);
     transition:.35s;
     border: 1px solid #fff;
@@ -476,9 +496,9 @@
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:25px;
+    margin-bottom:15px;
     border-bottom:1px solid #eef2f7;
-    padding-bottom:15px;
+    padding-bottom:10px;
 }
 
 .card-header h3{
@@ -510,7 +530,7 @@
 .right-content .profile-grid{
     display:grid;
     grid-template-columns:repeat(2,1fr);
-    gap:22px;
+    gap:16px;
 }
 
 .right-content .profile-grid .form-group input{
@@ -531,7 +551,7 @@
 }
 
 .right-content .form-group input{
-    height:48px;
+    height:42px;
     border:1px solid #dbe3ec;
     border-radius:10px;
     padding:0 15px;
@@ -539,7 +559,7 @@
     background: #1E293B;
     /* color:#374151; */
     color:#fff !important;
-    font-size:15px;
+    font-size:14px;
     transition:.3s;
 }
 
@@ -560,7 +580,7 @@
 .two-column{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:25px;
+    gap:20px;
 }
 
 /* =====================================================
@@ -570,14 +590,14 @@
 .security-section{
     display:flex;
     flex-direction:column;
-    gap:20px;
+    gap:14px;
 }
 
 .security-row{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:18px;
+    padding:14px 16px;
     border:1px solid #edf2f7;
     border-radius:12px;
     /* background:#fafbfc; */
@@ -670,48 +690,51 @@ input,
     border-radius:12px;
 }
 
-.right-content .login-table{
+.login-table{
     width:100%;
-    border-collapse:collapse;
+    border-collapse:separate;
+    border-spacing:0;
     min-width:700px;
 }
 
-.right-content .login-table thead{
-    /* background:#2563eb; */
+.login-table thead{
     background: #3b82f6;
 }
 
-.right-content .login-table thead th{
-
-    /* color:#fff; */
-
+.login-table thead th{
+    color: #fff;
     padding:16px;
-
     text-align:left;
-
     font-size:15px;
-
     font-weight:600;
 }
 
-.right-content .login-table tbody tr{
+.login-table thead th:first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
 
+.login-table thead th:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.login-table tbody tr{
     transition:.3s;
-
-    border-bottom:1px solid #edf2f7;
+    border-bottom:1px solid rgba(255, 255, 255, 0.1);
 }
 
-.right-content .login-table tbody tr:hover{
-
-    background:#f8fbff;
-    color:#000 !important;
+.login-table tbody tr:hover{
+    background: #ffffff;
 }
 
-.right-content .login-table tbody td{
+.login-table tbody tr:hover td {
+    color: #000;
+}
 
+.login-table tbody td{
     padding:16px;
-    /* color:#4b5563; */
-    /* color: #fff; */
+    color: #fff;
     font-size:14px;
 }
 
@@ -910,7 +933,7 @@ width:100%;
 
 }
 
-.edit-btn{
+.profile-edit-btn{
 
 width:100%;
 

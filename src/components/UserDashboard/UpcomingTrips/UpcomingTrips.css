@@ -1,257 +1,157 @@
 .upcoming-trips{
-
     background:rgba(15,23,42,.68);
-
     backdrop-filter:blur(20px);
-
     border:1px solid rgba(255,255,255,.08);
-
-    border-radius:24px;
-
-    padding:28px;
-
+    border-radius:18px !important;
+    padding:16px !important;
     box-shadow:0 20px 40px rgba(0,0,0,.25);
-
     height:100%;
-
 }
 
 /* ================= HEADER ================= */
 
-.section-header{
-
+.upcoming-trips .section-header{
     display:flex;
-
     justify-content:space-between;
-
     align-items:center;
-
-    margin-bottom:30px;
-
+    margin-bottom:16px;
 }
 
-.section-header h2{
-
+.upcoming-trips .section-header h2{
     color:white;
-
-    font-size:32px;
-
-    margin-bottom:6px;
-
+    font-size:20px !important;
+    margin-bottom:4px;
 }
 
-.section-header p{
-
+.upcoming-trips .section-header p{
     color:#94a3b8;
-
-    font-size:15px;
-
+    font-size:13px;
 }
 
-.view-all-btn{
-
+.upcoming-trips .view-all-btn{
     display:flex;
-
     align-items:center;
-
-    gap:8px;
-
-    padding:12px 18px;
-
+    gap:6px;
+    padding:6px 12px !important;
     border:none;
-
-    border-radius:12px;
-
+    border-radius:8px !important;
     background:rgba(59,130,246,.15);
-
     color:#60a5fa;
-
     cursor:pointer;
-
     font-weight:600;
-
     transition:.3s;
-
+    font-size:12px !important;
 }
 
-.view-all-btn:hover{
-
+.upcoming-trips .view-all-btn:hover{
     background:#2563eb;
-
     color:white;
-
 }
 
 /* ================= LIST ================= */
 
-.upcoming-list{
-
+.upcoming-trips .upcoming-list{
     display:flex;
-
     flex-direction:column;
-
-    gap:16px;
-
+    gap:12px;
 }
 
 /* ================= CARD ================= */
 
-.upcoming-card{
-
+.upcoming-trips .upcoming-card{
     display:flex;
-
     justify-content:space-between;
-
     align-items:center;
-
-    padding:14px 18px;
-
-    min-height:108px;
-
-    border-radius:18px;
-
+    padding:10px 14px !important;
+    min-height:72px !important;
+    border-radius:12px !important;
     background:rgba(255,255,255,.03);
-
     border:1px solid rgba(255,255,255,.06);
-
     transition:.35s;
-
 }
 
-.upcoming-card:hover{
-
-    transform:translateY(-4px);
-
+.upcoming-trips .upcoming-card:hover{
+    transform:translateY(-2px);
     background:rgba(255,255,255,.05);
-
     border-color:rgba(59,130,246,.35);
-
 }
 
 /* ================= LEFT ================= */
 
-.upcoming-left{
-
+.upcoming-trips .upcoming-left{
     display:flex;
-
     align-items:center;
-
-    gap:18px;
-
+    gap:12px;
 }
 
-.upcoming-icon{
-
-    width:58px;
-
-    height:58px;
-
-    border-radius:16px;
-
+.upcoming-trips .upcoming-icon{
+    width:42px !important;
+    height:42px !important;
+    border-radius:50% !important;
     background:linear-gradient(135deg,#2563eb,#3b82f6);
-
     display:flex;
-
     justify-content:center;
-
     align-items:center;
-
     color:white;
-
-    font-size:22px;
-
+    font-size:16px !important;
     flex-shrink:0;
-
 }
 
-.upcoming-info h3{
-
+.upcoming-trips .upcoming-info h3{
     color:white;
-
-    font-size:24px;
-
-    margin-bottom:10px;
-
+    font-size:16px !important;
+    margin-bottom:4px;
+    font-weight:600;
 }
 
-.upcoming-meta{
-
+.upcoming-trips .upcoming-meta{
     display:flex;
-
-    gap:24px;
-
+    gap:16px;
 }
 
-.upcoming-meta span{
-
+.upcoming-trips .upcoming-meta span{
     display:flex;
-
     align-items:center;
-
-    gap:8px;
-
+    gap:6px;
     color:#cbd5e1;
-
-    font-size:15px;
-
+    font-size:13px !important;
 }
 
 /* ================= RIGHT ================= */
 
-.upcoming-right{
-
+.upcoming-trips .upcoming-right{
     display:flex;
-
-    flex-direction:column;
-
-    align-items:flex-end;
-
-    gap:12px;
-
+    flex-direction:row;
+    align-items:center;
+    justify-content:flex-end;
+    gap:10px;
 }
 
-.days-left{
-
+.upcoming-trips .days-left{
     background:#2563eb;
-
     color:white;
-
-    padding:8px 16px;
-
+    padding:4px 10px !important;
     border-radius:30px;
-
-    font-size:13px;
-
+    font-size:11px !important;
     font-weight:600;
-
 }
 
-.view-trip-btn{
-
-    background:#2563eb;
-
-    color:white;
-
-    border:none;
-
-    padding:10px 20px;
-
-    border-radius:10px;
-
-    cursor:pointer;
-
-    font-size:15px;
-
-    font-weight:600;
-
-    transition:.3s;
-
+.upcoming-trips .upcoming-right button{
+    background:#2563eb !important;
+    color:white !important;
+    border:none !important;
+    padding:5px 12px !important;
+    border-radius:8px !important;
+    cursor:pointer !important;
+    font-size:12px !important;
+    font-weight:600 !important;
+    transition:.3s !important;
+    display: inline-flex !important;
+    align-items: center !important;
 }
 
-.view-trip-btn:hover{
-
-    background:#1d4ed8;
-
+.upcoming-trips .upcoming-right button:hover{
+    background:#1d4ed8 !important;
 }
 
 /* ================= RESPONSIVE ================= */

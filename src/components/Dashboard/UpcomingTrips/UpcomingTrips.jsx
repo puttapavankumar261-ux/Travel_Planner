@@ -25,24 +25,30 @@ const trips = [
 
 function UpcomingTrips() {
   return (
-    <div className="upcoming-trips glass">
+    <div className="upcoming-trips">
       <div className="section-header">
-        <h3>Upcoming Trips</h3>
+        <div>
+          <h2>Upcoming Trips</h2>
+          <p>Your upcoming travel plans</p>
+        </div>
 
-        <button>View All</button>
+        <button className="view-all-btn">
+          View All
+          <i className="bi bi-chevron-right" style={{ marginLeft: "6px" }}></i>
+        </button>
       </div>
 
-      {trips.map((trip) => (
-        <div className="trip-item" key={trip.id}>
-          <div>
-            <h4>{trip.place}</h4>
-
-            <small>Travel Package</small>
+      <div className="trip-list">
+        {trips.map((trip) => (
+          <div className="trip-item" key={trip.id}>
+            <div>
+              <h4>{trip.place}</h4>
+              <small>Travel Package</small>
+            </div>
+            <span>{trip.date}</span>
           </div>
-
-          <span>{trip.date}</span>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }

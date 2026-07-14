@@ -99,38 +99,38 @@ const Expenses = () => {
               <FaWallet />
             </div>
             <div className="summary-content">
-              <h3>Total Budget</h3>
               <p>₹{EXPENSE_DATA.totalBudget.toLocaleString()}</p>
+              <h3>Total Budget</h3>
             </div>
           </div>
           
           <div className="summary-card glass">
-            <div className="summary-icon" style={{ background: 'rgba(239, 68, 68, 0.2)', color: '#EF4444' }}>
+            <div className="summary-icon" style={{ background: 'rgba(59, 130, 246, 0.2)', color: '#3B82F6' }}>
               <FaMoneyBillWave />
             </div>
             <div className="summary-content">
-              <h3>Total Spent</h3>
               <p>₹{EXPENSE_DATA.totalSpent.toLocaleString()}</p>
+              <h3>Total Spent</h3>
             </div>
           </div>
           
           <div className="summary-card glass">
-            <div className="summary-icon" style={{ background: 'rgba(16, 185, 129, 0.2)', color: '#10B981' }}>
+            <div className="summary-icon" style={{ background: 'rgba(59, 130, 246, 0.2)', color: '#3B82F6' }}>
               <FaPiggyBank />
             </div>
             <div className="summary-content">
-              <h3>Remaining</h3>
               <p>₹{remainingBudget.toLocaleString()}</p>
+              <h3>Remaining</h3>
             </div>
           </div>
           
           <div className="summary-card glass">
-            <div className="summary-icon" style={{ background: 'rgba(139, 92, 246, 0.2)', color: '#8B5CF6' }}>
+            <div className="summary-icon" style={{ background: 'rgba(59, 130, 246, 0.2)', color: '#3B82F6' }}>
               <FaCalendarDay />
             </div>
             <div className="summary-content">
-              <h3>Daily Average</h3>
               <p>₹{dailyAverage.toLocaleString()}</p>
+              <h3>Daily Average</h3>
             </div>
           </div>
         </div>

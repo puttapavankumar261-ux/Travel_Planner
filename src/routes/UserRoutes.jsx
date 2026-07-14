@@ -5,7 +5,7 @@ import Dashboard from "../modules/Users/Dashboard/Dashboard";
 // Future Imports
 import Trips from "../modules/Users/Trips/Trips";
 import Expenses from "../modules/Users/Expenses/Expenses";
-// import Bookings from "../modules/user/Bookings/Bookings";
+import BookingWizard from "../modules/Users/Bookings/BookingWizard";
 // import Profile from "../modules/user/Profile/Profile";
 
 import CreateTripWizard from "../modules/Users/Trips/CreateTrip/CreateTripWizard";
@@ -19,6 +19,8 @@ const UserRoutes = () => {
 
       <Route path="trips" element={<Trips />} />
       <Route path="trips/new" element={<CreateTripWizard />} />
+      
+      <Route path="book-trip" element={<BookingWizard />} />
 
       <Route path="expenses" element={<Expenses />} />
 

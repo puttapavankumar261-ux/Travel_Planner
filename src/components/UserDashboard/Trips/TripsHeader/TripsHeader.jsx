@@ -1,6 +1,8 @@
 import "./TripsHeader.css";
 import { FaSearch, FaPlus, FaMagic } from "react-icons/fa";
 
+import { Link } from "react-router-dom";
+
 const TripsHeader = () => {
   return (
     <div className="trips-header glass">
@@ -16,10 +18,12 @@ const TripsHeader = () => {
           <input type="text" placeholder="Search destination..." />
         </div>
 
-        <button className="recommend-btn">
-          <FaMagic />
-          Smart Recommendations
-        </button>
+        <Link to="/user/book-trip" style={{ textDecoration: 'none' }}>
+          <button className="recommend-btn">
+            <FaMagic />
+            Smart Budget Booking
+          </button>
+        </Link>
 
         <button className="new-trip-btn">
           <FaPlus />

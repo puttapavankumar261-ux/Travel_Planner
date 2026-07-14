@@ -1,66 +1,87 @@
 import "./RecentTrips.css";
+import {
+  FaCalendarAlt,
+  FaWallet,
+  FaChevronRight,
+  FaMapMarkerAlt,
+} from "react-icons/fa";
 
-const users = [
+const trips = [
   {
     id: 1,
-    name: "Rahul Sharma",
-    email: "rahul@gmail.com",
-    status: "Active",
+    destination: "Goa",
+    date: "15 Jul - 20 Jul",
+    budget: "₹18,000",
+    status: "Upcoming",
   },
   {
     id: 2,
-    name: "Pavan Kumar",
-    email: "pavan@gmail.com",
-    status: "Active",
+    destination: "Kerala",
+    date: "10 Aug - 16 Aug",
+    budget: "₹24,000",
+    status: "Planned",
   },
   {
     id: 3,
-    name: "Sneha Reddy",
-    email: "sneha@gmail.com",
-    status: "Pending",
-  },
-  {
-    id: 4,
-    name: "John Peter",
-    email: "john@gmail.com",
-    status: "Blocked",
+    destination: "Manali",
+    date: "02 Sep - 08 Sep",
+    budget: "₹30,000",
+    status: "Upcoming",
   },
 ];
 
-function RecentTrips() {
+const RecentTrips = () => {
   return (
-    <div className="recent-users glass">
+    <div className="recent-trips">
       <div className="section-header">
-        <h3>Recent Users</h3>
-        <button>View All</button>
+        <div>
+          <h2>Recent Trips</h2>
+          <p>Your latest travel plans</p>
+        </div>
+
+        <button className="view-all-btn">
+          View All
+          <FaChevronRight />
+        </button>
       </div>
 
-      <div className="table-responsive">
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr key={user.id}>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>
-                  <span className={`status ${user.status.toLowerCase()}`}>
-                    {user.status}
+      <div className="trip-list">
+        {trips.map((trip) => (
+          <div className="recent-trip-card" key={trip.id}>
+            <div className="trip-left">
+              <div className="trip-icon">
+                <FaMapMarkerAlt />
+              </div>
+
+              <div className="trip-info">
+                <h3>{trip.destination}</h3>
+
+                <div className="trip-meta">
+                  <span>
+                    <FaCalendarAlt />
+                    {trip.date}
                   </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+
+                  <span>
+                    <FaWallet />
+                    {trip.budget}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="trip-right">
+              <span className={`status ${trip.status.toLowerCase()}`}>
+                {trip.status}
+              </span>
+
+              <button>View</button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
-}
+};
 
 export default RecentTrips;

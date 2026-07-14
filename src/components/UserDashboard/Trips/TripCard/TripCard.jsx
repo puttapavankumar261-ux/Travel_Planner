@@ -1,5 +1,4 @@
 import "./TripCard.css";
-import { FaCalendarAlt, FaWallet } from "react-icons/fa";
 
 const TripCard = ({
   destination,
@@ -8,6 +7,7 @@ const TripCard = ({
   endDate,
   budget,
   status,
+  onViewDetails,
 }) => {
   return (
     <div className="trip-card">
@@ -37,17 +37,19 @@ const TripCard = ({
       <div className="trip-content">
         <div className="trip-info">
           <p>
-            <FaCalendarAlt />
+            <i className="bi bi-calendar3" style={{ marginRight: "8px" }}></i>
             {startDate} - {endDate}
           </p>
 
           <p>
-            <FaWallet />
+            <i className="bi bi-wallet2" style={{ marginRight: "8px" }}></i>
             {budget}
           </p>
         </div>
 
-        <button className="view-trip-btn">View Details</button>
+        <button className="view-trip-btn" onClick={onViewDetails}>
+          View Details
+        </button>
       </div>
     </div>
   );

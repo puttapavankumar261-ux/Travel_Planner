@@ -1,106 +1,171 @@
-.recent-users{
-
-    padding:28px;
-
-    border-radius:22px;
+.recent-trips {
+    background: rgba(15, 23, 42, .68);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, .08);
+    border-radius: 24px;
+    padding: 28px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, .25);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
-.section-header{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    margin-bottom:25px;
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
 }
 
-.section-header h3{
-
-    color:white;
-
-    margin:0;
+.section-header h2 {
+    color: #fff;
+    font-size: 32px;
+    margin-bottom: 6px;
 }
 
-.section-header button{
-
-    background:rgba(255,255,255,.08);
-
-    color:white;
-
-    border:none;
-
-    padding:10px 18px;
-
-    border-radius:12px;
-
-    cursor:pointer;
-
-    transition:.3s;
+.section-header p {
+    color: #94a3b8;
+    font-size: 15px;
 }
 
-.section-header button:hover{
-
-    background:#3B82F6;
+.view-all-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(59, 130, 246, .15);
+    color: #60a5fa;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: .3s;
+    font-weight: 600;
 }
 
-.recent-users table{
-    width:100%;
-    min-width:500px;
-    border-collapse:collapse;
+.view-all-btn:hover {
+    background: #2563eb;
+    color: white;
 }
 
-.table-responsive {
-    overflow-x: auto;
+.trip-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
 }
 
-.recent-users th{
-
-    color:#94A3B8;
-
-    text-align:left;
-
-    padding-bottom:18px;
-
-    font-weight:500;
+.recent-trip-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 100px;
+    padding: 14px 18px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, .03);
+    border: 1px solid rgba(255, 255, 255, .06);
+    transition: .35s;
 }
 
-.recent-users td{
-
-    padding:18px 0;
-
-    color:white;
-
-    border-top:1px solid rgba(255,255,255,.08);
+.recent-trip-card:hover {
+    transform: translateY(-4px);
+    background: rgba(255, 255, 255, .06);
+    border-color: rgba(59, 130, 246, .30);
 }
 
-.status{
-
-    padding:6px 14px;
-
-    border-radius:30px;
-
-    font-size:13px;
+.trip-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
 }
 
-.status.active{
-
-    background:rgba(34,197,94,.2);
-
-    color:#22C55E;
+.trip-icon {
+    width: 58px;
+    height: 58px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 20px;
+    flex-shrink: 0;
 }
 
-.status.pending{
-
-    background:rgba(245,158,11,.2);
-
-    color:#F59E0B;
+.trip-info h3 {
+    color: white;
+    font-size: 20px;
+    margin-bottom: 8px;
+    font-weight: 600;
 }
 
-.status.blocked{
+.trip-meta {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+}
 
-    background:rgba(239,68,68,.2);
+.trip-meta span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #cbd5e1;
+    font-size: 15px;
+}
 
-    color:#EF4444;
+.trip-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 10px;
+}
+
+.status {
+    padding: 7px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+}
+
+.status.upcoming {
+    background: #2563eb;
+}
+
+.status.planned {
+    background: #16a34a;
+}
+
+.status.completed {
+    background: #7c3aed;
+}
+
+.trip-right button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: .3s;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.trip-right button:hover {
+    background: #1d4ed8;
+}
+
+@media(max-width:900px) {
+    .recent-trip-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+    }
+    .trip-right {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
 }

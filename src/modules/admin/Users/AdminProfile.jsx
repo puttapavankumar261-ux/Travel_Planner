@@ -155,7 +155,7 @@ const stats = [
 
                 </div>
 
-                <button className="edit-btn">
+                <button className="profile-edit-btn">
                     <i className="bi bi-pencil-square"></i>
                     Edit Profile
                 </button>
@@ -485,63 +485,34 @@ const stats = [
                 </div>
 
                 {/* ================= LOGIN HISTORY ================= */}
-
                 <div className="content-card">
-
-                <div className="card-header">
-
+                  <div className="card-header">
                     <h3>Recent Login Activity</h3>
-
-                </div>
-
-                <div className="table-responsive">
-
+                  </div>
+                  <div className="table-responsive">
                     <table className="login-table">
-
-                    <thead>
-
+                      <thead>
                         <tr>
-
-                        <th>Device</th>
-
-                        <th>Browser</th>
-
-                        <th>IP Address</th>
-
-                        <th>Location</th>
-
-                        <th>Date</th>
-
+                          <th>Device</th>
+                          <th>Browser</th>
+                          <th>IP Address</th>
+                          <th>Location</th>
+                          <th>Date</th>
                         </tr>
-
-                    </thead>
-
-                    <tbody>
-
+                      </thead>
+                      <tbody>
                         {recentLogins.map((login, index) => (
-
-                        <tr key={index}>
-
+                          <tr key={index}>
                             <td>{login.device}</td>
-
                             <td>{login.browser}</td>
-
                             <td>{login.ip}</td>
-
                             <td>{login.location}</td>
-
                             <td>{login.date}</td>
-
-                        </tr>
-
+                          </tr>
                         ))}
-
-                    </tbody>
-
+                      </tbody>
                     </table>
-
-                </div>
-
+                  </div>
                 </div>
 
             </main>
