@@ -45,8 +45,10 @@ body{
     position: relative;
     z-index: 10;
     
-    background: #0B1325; /* Solid background for the 40% side */
-    border-left: 1px solid rgba(255,255,255,0.05);
+    /* background: #0B1325;  */  /* Solid background for the 40% side */
+    background: linear-gradient(rgba(5,15,30,.6), rgba(5,15,30,.8));
+    backdrop-filter:blur(2px);
+    /* border-left: 1px solid rgba(255,255,255,0.05); */
 
     display: flex;
     flex-direction: column;
