@@ -25,28 +25,28 @@ const Dashboard = () => {
             icon={<FaPlaneDeparture />}
             title="Total Trips"
             value="18"
-            color="#0d6efd"
+            color="#2563eb"
           />
 
           <StatCard
             icon={<FaCalendarAlt />}
             title="Upcoming Trips"
             value="5"
-            color="#20c997"
+            color="#2563eb"
           />
 
           <StatCard
             icon={<FaCheckCircle />}
             title="Completed Trips"
             value="13"
-            color="#198754"
+            color="#2563eb"
           />
 
           <StatCard
             icon={<FaWallet />}
             title="Travel Budget"
             value="₹85K"
-            color="#fd7e14"
+            color="#2563eb"
           />
         </div>
 

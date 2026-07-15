@@ -1,299 +1,172 @@
-.recent-trips{
-
-    background:rgba(15,23,42,.68);
-
-    backdrop-filter:blur(20px);
-
-    border:1px solid rgba(255,255,255,.08);
-
-    border-radius:24px;
-
-    padding:28px;
-
-    box-shadow:0 20px 40px rgba(0,0,0,.25);
-
-    display:flex;
-
-    flex-direction:column;
-
-    height:100%;
-
+.recent-trips {
+    background: rgba(15, 23, 42, .68);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, .08);
+    border-radius: 18px !important;
+    padding: 16px !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, .25);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
-.section-header{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    margin-bottom:24px;
-
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
 }
 
-.section-header h2{
-
-    color:#fff;
-
-    font-size:32px;
-
-    margin-bottom:6px;
-
+.section-header h2 {
+    color: #fff;
+    font-size: 20px !important;
+    margin-bottom: 4px;
 }
 
-.section-header p{
-
-    color:#94a3b8;
-
-    font-size:15px;
-
+.section-header p {
+    color: #94a3b8;
+    font-size: 13px;
 }
 
-.view-all-btn{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:8px;
-
-    background:rgba(59,130,246,.15);
-
-    color:#60a5fa;
-
-    border:none;
-
-    padding:12px 18px;
-
-    border-radius:12px;
-
-    cursor:pointer;
-
-    transition:.3s;
-
-    font-weight:600;
-
+.view-all-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(59, 130, 246, .15);
+    color: #60a5fa;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: .3s;
+    font-weight: 600;
+    font-size: 13px;
 }
 
-.view-all-btn:hover{
-
-    background:#2563eb;
-
-    color:white;
-
+.view-all-btn:hover {
+    background: #2563eb;
+    color: white;
 }
 
-.trip-list{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:16px;
-
-    flex:1;
-
+.trip-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
 }
 
-.trip-card{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    min-height:100px;
-
-    padding:14px 18px;
-
-    border-radius:18px;
-
-    background:rgba(255,255,255,.03);
-
-    border:1px solid rgba(255,255,255,.06);
-
-    transition:.35s;
-
+.recent-trip-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 75px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, .03);
+    border: 1px solid rgba(255, 255, 255, .06);
+    transition: .35s;
 }
 
-.trip-card:hover{
-
-    transform:translateY(-4px);
-
-    background:rgba(255,255,255,.06);
-
-    border-color:rgba(59,130,246,.30);
-
+.recent-trip-card:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, .06);
+    border-color: rgba(59, 130, 246, .30);
 }
 
-.trip-left{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:18px;
-
+.trip-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-.trip-icon{
-
-    width:58px;
-
-    height:58px;
-
-    border-radius:16px;
-
-    background:linear-gradient(135deg,#2563eb,#3b82f6);
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    color:white;
-
-    font-size:20px;
-
-    flex-shrink:0;
-
+.trip-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 16px;
+    flex-shrink: 0;
 }
 
-.trip-info h3{
-
-    color:white;
-
-    font-size:20px;
-
-    margin-bottom:8px;
-
-    font-weight:600;
-
+.trip-info h3 {
+    color: white;
+    font-size: 16px;
+    margin-bottom: 4px;
+    font-weight: 600;
 }
 
-.trip-meta{
-
-    display:flex;
-
-    gap:24px;
-
-    flex-wrap:wrap;
-
+.trip-meta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
 }
 
-.trip-meta span{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:8px;
-
-    color:#cbd5e1;
-
-    font-size:15px;
-
+.trip-meta span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #cbd5e1;
+    font-size: 13px;
 }
 
-.trip-right{
-
-    display:flex;
-
-    flex-direction:column;
-
-    align-items:flex-end;
-
-    justify-content:center;
-
-    gap:10px;
-
+.trip-right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
 }
 
-.status{
-
-    padding:7px 15px;
-
-    border-radius:20px;
-
-    font-size:12px;
-
-    font-weight:600;
-
-    color:white;
-
+.status {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    color: white;
 }
 
-.status.upcoming{
-
-    background:#2563eb;
-
+.status.upcoming {
+    background: #2563eb;
 }
 
-.status.planned{
-
-    background:#16a34a;
-
+.status.planned {
+    background: #16a34a;
 }
 
-.status.completed{
-
-    background:#7c3aed;
-
+.status.completed {
+    background: #7c3aed;
 }
 
-.trip-right button{
-
-    background:#2563eb;
-
-    color:white;
-
-    border:none;
-
-    padding:8px 18px;
-
-    border-radius:10px;
-
-    cursor:pointer;
-
-    transition:.3s;
-
-    font-size:14px;
-
-    font-weight:600;
-
+.trip-right button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: .3s;
+    font-size: 12px;
+    font-weight: 600;
 }
 
-.trip-right button:hover{
-
-    background:#1d4ed8;
-
+.trip-right button:hover {
+    background: #1d4ed8;
 }
 
-@media(max-width:900px){
-
-    .trip-card{
-
-        flex-direction:column;
-
-        align-items:flex-start;
-
-        gap:18px;
-
+@media(max-width:900px) {
+    .recent-trip-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
     }
-
-    .trip-right{
-
-        width:100%;
-
-        flex-direction:row;
-
-        justify-content:space-between;
-
-        align-items:center;
-
+    .trip-right {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
     }
-
 }

@@ -1,25 +1,14 @@
 .trips-header{
-
     display:flex;
-
     justify-content:space-between;
-
     align-items:center;
-
     gap:30px;
-
     margin:30px 0;
-
     padding:30px;
-
     background:rgba(15,23,42,.50);
-
     backdrop-filter:blur(22px);
-
     border:1px solid rgba(255,255,255,.10);
-
     border-radius:22px;
-
 }
 
 .header-left h1{
@@ -53,80 +42,50 @@
 /* Search Box */
 
 .search-box{
-
     display:flex;
-
     align-items:center;
-
     gap:12px;
-
     background:rgba(255,255,255,.08);
-
     padding:14px 18px;
-
     border-radius:14px;
-
     min-width:320px;
-
 }
 
 .header-search-icon{
     color:#8ab4ff;
     font-size:18px;
-    position: static; /* Override any absolute positioning bleed */
+    position: static;
     transform: none;
 }
 
 .search-box input{
-
     flex:1;
-
     background:transparent;
-
     border:none;
-
     outline:none;
-
     color:white;
-
     font-size:15px;
-
 }
 
 .search-box input::placeholder{
-
     color:#aaa;
-
 }
 
 /* Button */
 
 .new-trip-btn{
-
     display:flex;
-
     align-items:center;
-
     gap:10px;
-
     border:none;
-
     cursor:pointer;
-
     background:#2563eb;
-
     color:white;
-
     padding:14px 24px;
-
     border-radius:14px;
-
     font-size:15px;
-
     font-weight:600;
-
     transition:.3s;
-
 }
 
 .new-trip-btn:hover{

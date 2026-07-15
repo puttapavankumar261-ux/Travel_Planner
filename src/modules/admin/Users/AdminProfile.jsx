@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "../../../components/Navbar/Navbar";
+import StatCard from "../../../components/Dashboard/StatCard/StatCard";
+import { Users, Plane, Calendar, IndianRupee } from "lucide-react";
 import {
   Search,
   Mail,
@@ -65,6 +67,33 @@ const AdminProfile = () => {
     },
   ];
 
+const stats = [
+    {
+      title: "Total Users",
+      value: "1250",
+      icon: <Users size={30} />,
+      color: "linear-gradient(135deg,#2563EB,#3B82F6)",
+    },
+    {
+      title: "Total Trips",
+      value: "325",
+      icon: <Plane size={30} />,
+      color: "linear-gradient(135deg,#10B981,#22C55E)",
+    },
+    {
+      title: "Bookings",
+      value: "95",
+      icon: <Calendar size={30} />,
+      color: "linear-gradient(135deg,#8B5CF6,#A855F7)",
+    },
+    {
+      title: "Revenue",
+      value: "₹8,45,000",
+      icon: <IndianRupee size={30} />,
+      color: "linear-gradient(135deg,#F59E0B,#FB923C)",
+    },
+  ];
+
   return (
     <div className="dashboard-page">
       <Navbar />
@@ -126,7 +155,7 @@ const AdminProfile = () => {
 
                 </div>
 
-                <button className="edit-btn">
+                <button className="profile-edit-btn">
                     <i className="bi bi-pencil-square"></i>
                     Edit Profile
                 </button>
@@ -153,6 +182,23 @@ const AdminProfile = () => {
 
                 </ul>
 
+                </div>
+
+                {/*  Quick Stats    */}
+
+                <div className="profile-card quick-stats">
+                    <h3>
+                        <i className="bi bi-bar-chart-line-fill"></i>
+                        Quick Admin Stats
+                    </h3>
+                    
+                    <div className="stats-grid">
+                        {/* <div className="stats-grid"> */}
+                            {stats.map((card) => (
+                                <StatCard key={card.title} {...card} />
+                            ))}
+                        {/* </div> */}
+                    </div>
                 </div>
 
             </aside>
@@ -439,63 +485,34 @@ const AdminProfile = () => {
                 </div>
 
                 {/* ================= LOGIN HISTORY ================= */}
-
                 <div className="content-card">
-
-                <div className="card-header">
-
+                  <div className="card-header">
                     <h3>Recent Login Activity</h3>
-
-                </div>
-
-                <div className="table-responsive">
-
+                  </div>
+                  <div className="table-responsive">
                     <table className="login-table">
-
-                    <thead>
-
+                      <thead>
                         <tr>
-
-                        <th>Device</th>
-
-                        <th>Browser</th>
-
-                        <th>IP Address</th>
-
-                        <th>Location</th>
-
-                        <th>Date</th>
-
+                          <th>Device</th>
+                          <th>Browser</th>
+                          <th>IP Address</th>
+                          <th>Location</th>
+                          <th>Date</th>
                         </tr>
-
-                    </thead>
-
-                    <tbody>
-
+                      </thead>
+                      <tbody>
                         {recentLogins.map((login, index) => (
-
-                        <tr key={index}>
-
+                          <tr key={index}>
                             <td>{login.device}</td>
-
                             <td>{login.browser}</td>
-
                             <td>{login.ip}</td>
-
                             <td>{login.location}</td>
-
                             <td>{login.date}</td>
-
-                        </tr>
-
+                          </tr>
                         ))}
-
-                    </tbody>
-
+                      </tbody>
                     </table>
-
-                </div>
-
+                  </div>
                 </div>
 
             </main>

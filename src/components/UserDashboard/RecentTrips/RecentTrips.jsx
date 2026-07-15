@@ -1,10 +1,4 @@
 import "./RecentTrips.css";
-import {
-  FaCalendarAlt,
-  FaWallet,
-  FaChevronRight,
-  FaMapMarkerAlt,
-} from "react-icons/fa";
 
 const trips = [
   {
@@ -41,16 +35,16 @@ const RecentTrips = () => {
 
         <button className="view-all-btn">
           View All
-          <FaChevronRight />
+          <i className="bi bi-chevron-right" style={{ marginLeft: "6px" }}></i>
         </button>
       </div>
 
       <div className="trip-list">
         {trips.map((trip) => (
-          <div className="trip-card" key={trip.id}>
+          <div className="recent-trip-card" key={trip.id}>
             <div className="trip-left">
               <div className="trip-icon">
-                <FaMapMarkerAlt />
+                <i className="bi bi-geo-alt"></i>
               </div>
 
               <div className="trip-info">
@@ -58,12 +52,12 @@ const RecentTrips = () => {
 
                 <div className="trip-meta">
                   <span>
-                    <FaCalendarAlt />
+                    <i className="bi bi-calendar3"></i>
                     {trip.date}
                   </span>
 
                   <span>
-                    <FaWallet />
+                    <i className="bi bi-wallet2"></i>
                     {trip.budget}
                   </span>
                 </div>
