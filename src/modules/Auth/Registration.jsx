@@ -254,7 +254,7 @@ function Registration() {
                      name="gender" 
                      value={registerData.gender} 
                      onChange={handleChange}
-                     style={{ width: '100%', background: 'transparent', border: 'none', color: 'white', outline: 'none', paddingLeft: '15px' }}
+                     style={{ width: '100%', color: 'white', outline: 'none', paddingLeft: '15px' }}
                    >
                      <option value="MALE" style={{color: 'black'}}>Male</option>
                      <option value="FEMALE" style={{color: 'black'}}>Female</option>
