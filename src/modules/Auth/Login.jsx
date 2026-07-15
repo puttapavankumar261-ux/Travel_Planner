@@ -215,7 +215,7 @@ function Login() {
               remember me
             </label>
 
-            <a href="/forgotpassword">forgot password?</a>
+            <Link to="/forgotpassword">forgot password?</Link>
           </div>
 
           {/* Login */}
@@ -238,7 +238,7 @@ function Login() {
 
           {/* Register */}
 
-          <p className="register">
+          <p className="register" style={{margin :'10px'}}>
             new here?
             <Link to="/register"> create an account</Link>
           </p>
