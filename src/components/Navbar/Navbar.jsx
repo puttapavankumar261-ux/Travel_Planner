@@ -32,8 +32,13 @@ function Navbar() {
           </div>
 
           <div className="profile-info">
-            <span>Admin</span>
+            <nav className="nav-links">
+                    <NavLink to="/admin/adminprofile">
+
+            <div>Admin</div>
             <small>Administrator</small>
+            </NavLink>
+            </nav>
           </div>
         </div>
       </div>

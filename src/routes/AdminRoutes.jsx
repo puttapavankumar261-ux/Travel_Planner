@@ -4,11 +4,15 @@ import Dashboard from "../modules/admin/Dashboard/Dashboard";
 import Trips from "../modules/admin/Trips/Trips";
 import Users from "../modules/admin/Users/Users";
 import Bookings from "../modules/admin/Bookings/Bookings";
+import AdminProfile from "../modules/admin/Users/AdminProfile";
 
 // Future Imports
-// // import Bookings from "../modules/admin/Bookings/Bookings";
-// import Reports from "../modules/admin/Reports/Reports";
+
+import Reports from "../modules/admin/Reports/Reports";
 // import Settings from "../modules/admin/Settings/Settings";
+
+import Settings from "../modules/admin/Settings/Settings";
+
 
 const AdminRoutes = () => {
   return (
@@ -18,11 +22,12 @@ const AdminRoutes = () => {
       <Route path="users" element={<Users />} />
       <Route path="trips" element={<Trips />} />
       <Route path="bookings" element={<Bookings />} />
-      {/* Future Routes */}
-      /* <Route path="trips" element={<Trips />} /> */
-      {/* <Route path="bookings" element={<Bookings />} /> */}
-      {/* <Route path="reports" element={<Reports />} /> */}
-      {/* <Route path="settings" element={<Settings />} /> */}
+
+
+      <Route path="reports" element={<Reports />} />
+
+       <Route path="settings" element={<Settings />} />
+       <Route path="adminprofile" element={<AdminProfile />} /> 
     </Routes>
   );
 };

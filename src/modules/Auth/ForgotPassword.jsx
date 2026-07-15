@@ -5,32 +5,38 @@ import loginBg from "../../assets/images/login-bg.jpg";
 import Logo from "../../components/common/Logo";
 import authService from "../../services/authService";
 
-function Login() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [loginData, setLoginData] = useState({
-    email: "",
-    password: "",
-  });
+function ForgotPassword() {
+  const [email, setEmail] = useState("");
   const [error, setError] = useState("");
-  const navigate = useNavigate();
+  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => {
-    setLoginData({
-      ...loginData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleLogin = async (e) => {
+  const handleForgotPassword = async (e) => {
     e.preventDefault();
+
     setError("");
+    setSuccess("");
+
+    if (!email.trim()) {
+      setError("Email address is required.");
+      return;
+    }
+
     try {
-      const response = await authService.login(loginData);
-      localStorage.setItem("token", response.token);
-      navigate("/user/dashboard");
+      setLoading(true);
+
+      // Call your backend API
+      // await authService.forgotPassword({ email });
+
+      // Demo Success Message
+      setSuccess(
+        "A password reset link has been sent to your registered email address."
+      );
     } catch (err) {
-      setError("Login failed. Please check your credentials.");
       console.error(err);
+      setError("Unable to send reset link. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -41,32 +47,25 @@ function Login() {
         backgroundImage: `url(${loginBg})`,
       }}
     >
-      {/* Dark Overlay */}
+      {/* Overlay */}
       <div className="overlay"></div>
 
       {/* LEFT SIDE */}
 
       <div className="hero-section">
-        {/* Logo */}
-
         <Logo className="brand-logo" />
-
-        {/* Heading */}
 
         <h1>
           <div>plan every journey.</div>
-         
-          <div><span>explore without limits.</span></div>
+          <div>
+            <span>explore without limits.</span>
+          </div>
         </h1>
-
-        {/* Description */}
 
         <p className="hero-description">
           discover new destinations, plan smart itineraries, track expenses and
           organize every detail of your trip — all in one place.
         </p>
-
-        {/* Feature Cards */}
 
         <div className="feature-grid">
           <div className="feature-card">
@@ -106,35 +105,25 @@ function Login() {
           </div>
         </div>
 
-        {/* Statistics */}
-
         <div className="statistics">
           <div className="stat">
             <i className="bi bi-flag"></i>
-
             <h3>4+</h3>
-
             <span>destinations</span>
           </div>
 
           <div className="stat">
             <i className="bi bi-calendar-check"></i>
-
             <h3>15+</h3>
-
             <span>trips planned</span>
           </div>
 
           <div className="stat">
             <i className="bi bi-emoji-smile"></i>
-
             <h3>100%</h3>
-
             <span>user satisfaction</span>
           </div>
         </div>
-
-        {/* Quote */}
 
         <div className="quote-card">
           <i className="bi bi-quote"></i>
@@ -151,101 +140,93 @@ function Login() {
 
       <div className="login-section">
         <div className="login-card">
-          {/* Logo */}
 
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <Logo showTagline={false} className="login-card-logo" />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Logo
+              showTagline={false}
+              className="login-card-logo"
+            />
           </div>
 
-          <h2>welcome back</h2>
+          <h2>Forgot Password</h2>
 
-          <p className="subtitle">sign in to continue your journey</p>
+          <p className="subtitle">
+            Enter your registered email address and we'll send you a password
+            reset link.
+          </p>
 
-          <form onSubmit={handleLogin}>
+          <form onSubmit={handleForgotPassword}>
+
             {error && (
-              <div style={{ color: "#ef4444", marginBottom: "15px", fontSize: "14px" }}>
+              <div
+                style={{
+                  color: "#ef4444",
+                  marginBottom: "15px",
+                  fontSize: "14px",
+                }}
+              >
                 {error}
               </div>
             )}
 
-            {/* Email */}
+            {success && (
+              <div
+                style={{
+                  color: "#16a34a",
+                  marginBottom: "15px",
+                  fontSize: "14px",
+                }}
+              >
+                {success}
+              </div>
+            )}
 
-          <label>Email Address</label>
+            <label>Email Address</label>
 
-          <div className="input-box">
-            <i className="bi bi-envelope"></i>
-            <input
-              type="email"
-              name="email"
-              value={loginData.email}
-              onChange={handleChange}
-              placeholder="Enter your email"
-            />{" "}
-          </div>
+            <div className="input-box">
+              <i className="bi bi-envelope"></i>
 
-          {/* Password */}
-
-          <label>Password</label>
-
-          <div className="input-box">
-            <i className="bi bi-lock"></i>
-
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              value={loginData.password}
-              onChange={handleChange}
-              placeholder="Enter your password"
-            />
+              <input
+                type="email"
+                placeholder="Enter your registered email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
 
             <button
-              type="button"
-              className="eye-btn"
-              onClick={() => setShowPassword(!showPassword)}
+              type="submit"
+              className="login-btn"
+              disabled={loading}
             >
-              <i className={showPassword ? "bi bi-eye-slash" : "bi bi-eye"}></i>
+              {loading ? "Sending..." : "Send Reset Link"}
             </button>
-          </div>
-
-          {/* Options */}
-
-          <div className="login-options">
-            <label>
-              <input type="checkbox" />
-              remember me
-            </label>
-
-            <a href="/forgotpassword">forgot password?</a>
-          </div>
-
-          {/* Login */}
-
-          <button type="submit" className="login-btn">sign in</button>
           </form>
-
-          {/* Divider */}
 
           <div className="divider">
             <span>or</span>
           </div>
 
-          {/* Google */}
-
-          <button className="google-btn">
-            <i className="bi bi-google"></i>
-            continue with google
-          </button>
-
-          {/* Register */}
+          <p className="register">
+            Remember your password?
+            <Link to="/"> Sign In</Link>
+          </p>
 
           <p className="register">
-            new here?
-            <Link to="/register"> create an account</Link>
+            Don't have an account?
+            <Link to="/register"> Create an Account</Link>
           </p>
+
         </div>
       </div>
     </div>
   );
 }
 
-export default Login;
+export default ForgotPassword;

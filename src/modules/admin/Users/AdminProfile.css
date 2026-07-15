@@ -1,0 +1,920 @@
+/* =====================================================
+   ADMIN PROFILE
+   Travel Planner Dashboard
+===================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Poppins",sans-serif;
+}
+
+/* body{
+    background:#f4f7fc;
+} */
+
+/* =====================================================
+   PAGE
+===================================================== */
+
+.profile-page{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:25px;
+    padding:30px;
+    min-height:100vh;
+    /* background:#f4f7fc; */
+}
+
+/* =====================================================
+   LEFT SIDEBAR
+===================================================== */
+
+.left-sidebar{
+    display:flex;
+    flex-direction:column;
+    gap:25px;
+}
+
+/* =====================================================
+   PROFILE CARD
+===================================================== */
+
+.profile-card{
+    background:#ffffff;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    transition:.35s;
+}
+
+.profile-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 18px 35px rgba(0,0,0,.12);
+}
+
+/* =====================================================
+   COVER IMAGE
+===================================================== */
+
+.profile-cover{
+    height:110px;
+    background:linear-gradient(
+        135deg,
+        #2563eb,
+        #7c3aed
+    );
+}
+
+/* =====================================================
+   PROFILE IMAGE
+===================================================== */
+
+.left-sidebar .profile-image{
+
+    width:135px;
+    height:135px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:6px solid #fff;
+
+    display:block;
+
+    margin:-70px auto 15px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+
+/* =====================================================
+   PROFILE NAME
+===================================================== */
+
+.profile-card h2{
+
+    text-align:center;
+
+    font-size:24px;
+
+    color:#1f2937;
+
+    margin-bottom:8px;
+}
+
+.role{
+
+    text-align:center;
+
+    color:#6b7280;
+
+    font-size:15px;
+
+    margin-bottom:10px;
+}
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status{
+
+    display:block;
+
+    width:max-content;
+
+    margin:auto;
+
+    padding:8px 18px;
+
+    border-radius:30px;
+
+    font-size:13px;
+
+    font-weight:600;
+}
+
+.status.active{
+
+    background:#dcfce7;
+
+    color:#16a34a;
+}
+
+.profile-card hr{
+
+    border:none;
+
+    border-top:1px solid #ececec;
+
+    margin:25px;
+}
+
+/* =====================================================
+   PROFILE INFORMATION
+===================================================== */
+
+.left-sidebar .profile-info{
+
+    padding:0 25px 20px;
+}
+
+.left-sidebar .profile-info span{
+    color:#000 !important;
+}
+
+.info-row{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    margin-bottom:18px;
+
+    color:#374151;
+
+    font-size:14px;
+}
+
+.info-row i{
+
+    width:40px;
+
+    height:40px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:#eef2ff;
+
+    color:#2563eb;
+
+    font-size:18px;
+}
+
+.info-row span{
+
+    word-break:break-word;
+}
+
+/* =====================================================
+   EDIT BUTTON
+===================================================== */
+
+.edit-btn{
+
+    width:calc(100% - 40px);
+
+    margin:20px;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#2563eb;
+
+    color:#fff;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.edit-btn:hover{
+
+    background:#1d4ed8;
+
+    transform:translateY(-2px);
+}
+
+.edit-btn i{
+
+    margin-right:8px;
+}
+
+/* =====================================================
+   PERMISSION CARD
+===================================================== */
+
+.permission-card{
+
+    background:#ffffff;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+
+    transition:.35s;
+}
+
+.permission-card:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:0 18px 35px rgba(0,0,0,.12);
+}
+
+.permission-card h3{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    color:#1f2937;
+
+    font-size:20px;
+
+    margin-bottom:22px;
+}
+
+.permission-card h3 i{
+
+    color:#2563eb;
+}
+
+.permission-card ul{
+
+    list-style:none;
+}
+
+.permission-card li{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:12px 0;
+
+    color:#374151;
+
+    font-size:15px;
+
+    border-bottom:1px solid #f2f2f2;
+}
+
+.permission-card li:last-child{
+
+    border-bottom:none;
+}
+
+.permission-card li i{
+
+    color:#22c55e;
+
+    font-size:18px;
+}
+
+/* =====================================================
+   RIGHT CONTENT
+===================================================== */
+
+.right-content{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:25px;
+}
+
+
+/* =====================================================
+   CONTENT CARDS
+===================================================== */
+
+.content-card{
+    background:#ffffff;
+    border-radius:18px;
+    padding:28px;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    transition:.35s;
+}
+
+.content-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 16px 35px rgba(0,0,0,.12);
+}
+
+/* =====================================================
+   CARD HEADER
+===================================================== */
+
+.card-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+    border-bottom:1px solid #eef2f7;
+    padding-bottom:15px;
+}
+
+.card-header h3{
+    color:#1f2937;
+    font-size:22px;
+    font-weight:600;
+}
+
+.edit-small-btn{
+    border:none;
+    background:#2563eb;
+    color:#fff;
+    padding:10px 22px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:.3s;
+    font-weight:500;
+}
+
+.edit-small-btn:hover{
+    background:#1d4ed8;
+}
+
+/* =====================================================
+   PROFILE GRID
+===================================================== */
+
+.right-content .profile-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:22px;
+}
+
+.right-content .profile-grid .form-group input{
+    color:black !important;
+}
+
+.right-content .form-group{
+    display:flex;
+    flex-direction:column;
+}
+
+.right-content .form-group label{
+    font-size:14px;
+    color:#6e8dbd !important;
+    margin-bottom:8px;
+    font-weight:500;
+}
+
+.right-content .form-group input{
+    height:48px;
+    border:1px solid #dbe3ec;
+    border-radius:10px;
+    padding:0 15px;
+    background:#fafbfc;
+    color:#374151;
+    font-size:15px;
+    transition:.3s;
+}
+
+.right-content .form-group input:focus{
+    outline:none;
+    border-color:#2563eb;
+    background:#ffffff;
+}
+
+.right-content .form-group.full-width{
+    grid-column:1 / -1;
+}
+
+/* =====================================================
+   ACCOUNT + SECURITY
+===================================================== */
+
+.two-column{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px;
+}
+
+/* =====================================================
+   SECURITY
+===================================================== */
+
+.security-section{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+.security-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px;
+    border:1px solid #edf2f7;
+    border-radius:12px;
+    background:#fafbfc;
+}
+
+.security-row h4{
+    color:#1f2937;
+    font-size:16px;
+    margin-bottom:5px;
+}
+
+.security-row p{
+    color:#6b7280;
+    font-size:14px;
+}
+
+.active-text{
+    color:#16a34a !important;
+    font-weight:600;
+}
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+
+.primary-btn{
+    border:none;
+    background:#2563eb;
+    color:#fff;
+    padding:10px 22px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:500;
+    transition:.3s;
+}
+
+.primary-btn:hover{
+    background:#1d4ed8;
+}
+
+.outline-btn{
+    background:#fff;
+    color:#2563eb;
+    border:2px solid #2563eb;
+    padding:10px 22px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:500;
+    transition:.3s;
+}
+
+.outline-btn:hover{
+    background:#2563eb;
+    color:#fff;
+}
+
+/* =====================================================
+   CONTACT DETAILS
+===================================================== */
+
+.content-card .profile-grid .form-group input{
+    width:100%;
+}
+
+/* =====================================================
+   SMOOTH TRANSITIONS
+===================================================== */
+
+button,
+input,
+.content-card,
+.profile-card,
+.permission-card{
+    transition:all .3s ease;
+}
+
+/* =====================================================
+   LOGIN HISTORY TABLE
+===================================================== */
+
+.table-responsive{
+    width:100%;
+    overflow-x:auto;
+    border-radius:12px;
+}
+
+.login-table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:700px;
+}
+
+.login-table thead{
+    background:#2563eb;
+}
+
+.login-table thead th{
+
+    color:#fff;
+
+    padding:16px;
+
+    text-align:left;
+
+    font-size:15px;
+
+    font-weight:600;
+}
+
+.login-table tbody tr{
+
+    transition:.3s;
+
+    border-bottom:1px solid #edf2f7;
+}
+
+.login-table tbody tr:hover{
+
+    background:#f8fbff;
+}
+
+.login-table tbody td{
+
+    padding:16px;
+
+    color:#4b5563;
+
+    font-size:14px;
+}
+
+/* =====================================================
+   TABLE SCROLLBAR
+===================================================== */
+
+.table-responsive::-webkit-scrollbar{
+
+    height:8px;
+}
+
+.table-responsive::-webkit-scrollbar-track{
+
+    background:#ececec;
+}
+
+.table-responsive::-webkit-scrollbar-thumb{
+
+    background:#2563eb;
+
+    border-radius:10px;
+}
+
+/* =====================================================
+   PAGE ANIMATION
+===================================================== */
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(20px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+.left-sidebar{
+
+    animation:fadeIn .5s ease;
+}
+
+.right-content{
+
+    animation:fadeIn .7s ease;
+}
+
+/* =====================================================
+   HOVER EFFECTS
+===================================================== */
+
+.left-sidebar .profile-card:hover .profile-image{
+
+    transform:scale(1.05);
+}
+
+.left-sidebar .profile-image{
+
+    transition:.35s;
+}
+
+.form-group input:hover{
+
+    border-color:#2563eb;
+}
+
+.permission-card li:hover{
+
+    color:#2563eb;
+
+    padding-left:6px;
+
+    transition:.25s;
+}
+
+.permission-card li i{
+
+    transition:.25s;
+}
+
+.permission-card li:hover i{
+
+    transform:scale(1.2);
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:1200px){
+
+.profile-page{
+
+grid-template-columns:280px 1fr;
+
+}
+
+}
+
+/* ===================== */
+
+@media(max-width:992px){
+
+.profile-page{
+
+grid-template-columns:1fr;
+
+}
+
+.left-sidebar{
+
+order:1;
+
+}
+
+.right-content{
+
+order:2;
+
+}
+
+.two-column{
+
+grid-template-columns:1fr;
+
+}
+
+.profile-grid{
+
+grid-template-columns:1fr;
+
+}
+
+}
+
+/* ===================== */
+
+@media(max-width:768px){
+
+.profile-page{
+
+padding:18px;
+
+}
+
+.profile-card{
+
+border-radius:15px;
+
+}
+
+.permission-card{
+
+border-radius:15px;
+
+}
+
+.content-card{
+
+padding:20px;
+
+border-radius:15px;
+
+}
+
+.card-header{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+gap:12px;
+
+}
+
+.card-header h3{
+
+font-size:20px;
+
+}
+
+.edit-small-btn{
+
+width:100%;
+
+}
+
+.edit-btn{
+
+width:100%;
+
+margin:20px 0 0;
+
+}
+
+.security-row{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+gap:15px;
+
+}
+
+.security-row button{
+
+width:100%;
+
+}
+
+}
+
+/* ===================== */
+
+@media(max-width:576px){
+
+.left-sidebar .profile-image{
+
+width:110px;
+
+height:110px;
+
+margin-top:-55px;
+
+}
+
+.profile-card h2{
+
+font-size:21px;
+
+}
+
+.role{
+
+font-size:14px;
+
+}
+
+.status{
+
+font-size:12px;
+
+padding:6px 14px;
+
+}
+
+.info-row{
+
+font-size:13px;
+
+}
+
+.card-header h3{
+
+font-size:18px;
+
+}
+
+.form-group input{
+
+height:44px;
+
+font-size:14px;
+
+}
+
+.login-table{
+
+font-size:13px;
+
+}
+
+.login-table thead th,
+
+.login-table tbody td{
+
+padding:12px;
+
+}
+
+}
+
+/* =====================================================
+   CUSTOM SCROLLBAR
+===================================================== */
+
+::-webkit-scrollbar{
+
+width:8px;
+
+height:8px;
+
+}
+
+::-webkit-scrollbar-track{
+
+background:#f2f2f2;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+background:#2563eb;
+
+border-radius:20px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+background:#1d4ed8;
+
+}
+
+/* =====================================================
+   END
+===================================================== */

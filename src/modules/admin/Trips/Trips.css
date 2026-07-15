@@ -61,8 +61,13 @@
     color: #9ca3af;
 }
 
+.table-responsive {
+    overflow-x: auto;
+}
+
 .trips-table {
     width: 100%;
+    min-width: 1000px;
     border-collapse: collapse;
     background: #111827;
     border-radius: 10px;

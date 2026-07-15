@@ -46,10 +46,13 @@
 }
 
 .recent-users table{
-
     width:100%;
-
+    min-width:500px;
     border-collapse:collapse;
+}
+
+.table-responsive {
+    overflow-x: auto;
 }
 
 .recent-users th{
