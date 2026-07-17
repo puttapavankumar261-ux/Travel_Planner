@@ -14,6 +14,7 @@ function Navbar() {
         <NavLink to="/admin/bookings">Bookings</NavLink>
         <NavLink to="/admin/reports">Reports</NavLink>
         <NavLink to="/admin/settings">Settings</NavLink>
+        <NavLink to="/admin/admins">Admins</NavLink>
       </nav>
 
       <div className="nav-actions">

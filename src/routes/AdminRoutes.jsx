@@ -5,7 +5,7 @@ import Trips from "../modules/admin/Trips/Trips";
 import Users from "../modules/admin/Users/Users";
 import Bookings from "../modules/admin/Bookings/Bookings";
 import AdminProfile from "../modules/admin/Users/AdminProfile";
-
+import AdminsManagement from "../modules/admin/Admins_management/Admins_management";
 // Future Imports
 import Reports from "../modules/admin/Reports/Reports";
 // import Settings from "../modules/admin/Settings/Settings";
@@ -22,7 +22,7 @@ const AdminRoutes = () => {
       <Route path="users" element={<Users />} />
       <Route path="trips" element={<Trips />} />
       <Route path="bookings" element={<Bookings />} />
-
+      <Route path="admins" element={<AdminsManagement />} /> 
       <Route path="reports" element={<Reports />} />
 
        <Route path="settings" element={<Settings />} />
