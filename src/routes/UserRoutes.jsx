@@ -9,6 +9,7 @@ import BookingWizard from "../modules/Users/Bookings/BookingWizard";
 // import Profile from "../modules/user/Profile/Profile";
 
 import CreateTripWizard from "../modules/Users/Trips/CreateTrip/CreateTripWizard";
+import UserProfile from "../modules/Users/UserProfile/UserProfile";
 
 const UserRoutes = () => {
   return (
@@ -27,6 +28,7 @@ const UserRoutes = () => {
       {/* <Route path="bookings" element={<Bookings />} /> */}
 
       {/* <Route path="profile" element={<Profile />} /> */}
+      <Route path="userprofile" element={<UserProfile/>} />
     </Routes>
   );
 };

@@ -2,9 +2,9 @@
     width:100%;
     min-height:100vh;
 
-    background:
+    /* background:
         linear-gradient(rgba(6,13,29,.92),rgba(6,13,29,.95)),
-        url("../../../assets/images/dashboard-bg.jpg");
+        url("../../../assets/images/dashboard-bg.jpg"); */
 
     background-size:cover;
     background-position:center;
