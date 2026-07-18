@@ -7,6 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import com.travelplanner.common.ApiResponse;
+import com.travelplanner.common.ApiResponseUtil;
+import com.travelplanner.common.constants.ApiMessages;
 import com.travelplanner.dto.ActivityRequestDto;
 import com.travelplanner.dto.ActivityResponseDto;
 import com.travelplanner.service.ActivityService;
@@ -25,54 +28,78 @@ public class ActivityController {
     }
 
     @PostMapping
-    public ResponseEntity<ActivityResponseDto> createActivity(
+    public ResponseEntity<ApiResponse<ActivityResponseDto>> createActivity(
             @Valid @RequestBody ActivityRequestDto request) {
 
-        return new ResponseEntity<>(
-                activityService.createActivity(request),
-                HttpStatus.CREATED);
+        ActivityResponseDto response = activityService.createActivity(request);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponseUtil.success(
+                        ApiMessages.ACTIVITY_CREATED,
+                        response));
     }
 
     @GetMapping("/{activityId}")
-    public ResponseEntity<ActivityResponseDto> getActivityById(
+    public ResponseEntity<ApiResponse<ActivityResponseDto>> getActivityById(
             @PathVariable Long activityId) {
 
+        ActivityResponseDto response =
+                activityService.getActivityById(activityId);
+
         return ResponseEntity.ok(
-                activityService.getActivityById(activityId));
+                ApiResponseUtil.success(
+                        "Activity Retrieved Successfully",
+                        response));
     }
 
     @GetMapping
-    public ResponseEntity<List<ActivityResponseDto>> getAllActivities() {
+    public ResponseEntity<ApiResponse<List<ActivityResponseDto>>> getAllActivities() {
+
+        List<ActivityResponseDto> response =
+                activityService.getAllActivities();
 
         return ResponseEntity.ok(
-                activityService.getAllActivities());
+                ApiResponseUtil.success(
+                        "Activities Retrieved Successfully",
+                        response));
     }
 
     @GetMapping("/trip/{tripId}")
-    public ResponseEntity<List<ActivityResponseDto>> getActivitiesByTrip(
+    public ResponseEntity<ApiResponse<List<ActivityResponseDto>>> getActivitiesByTrip(
             @PathVariable Long tripId) {
 
+        List<ActivityResponseDto> response =
+                activityService.getActivitiesByTrip(tripId);
+
         return ResponseEntity.ok(
-                activityService.getActivitiesByTrip(tripId));
+                ApiResponseUtil.success(
+                        "Trip Activities Retrieved Successfully",
+                        response));
     }
 
     @PutMapping("/{activityId}")
-    public ResponseEntity<ActivityResponseDto> updateActivity(
+    public ResponseEntity<ApiResponse<ActivityResponseDto>> updateActivity(
             @PathVariable Long activityId,
             @Valid @RequestBody ActivityRequestDto request) {
 
+        ActivityResponseDto response =
+                activityService.updateActivity(activityId, request);
+
         return ResponseEntity.ok(
-                activityService.updateActivity(activityId, request));
+                ApiResponseUtil.success(
+                        ApiMessages.ACTIVITY_UPDATED,
+                        response));
     }
 
     @DeleteMapping("/{activityId}")
-    public ResponseEntity<String> deleteActivity(
+    public ResponseEntity<ApiResponse<String>> deleteActivity(
             @PathVariable Long activityId) {
 
         activityService.deleteActivity(activityId);
 
         return ResponseEntity.ok(
-                "Activity deleted successfully.");
+                ApiResponseUtil.success(
+                        ApiMessages.ACTIVITY_DELETED,
+                        null));
     }
-
 }

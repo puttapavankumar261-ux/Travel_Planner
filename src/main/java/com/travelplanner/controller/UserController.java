@@ -7,6 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import com.travelplanner.common.ApiResponse;
+import com.travelplanner.common.ApiResponseUtil;
+import com.travelplanner.common.constants.ApiMessages;
 import com.travelplanner.dto.UserRequestDto;
 import com.travelplanner.dto.UserResponseDto;
 import com.travelplanner.service.UserService;
@@ -26,47 +29,69 @@ public class UserController {
 
     // Register User
     @PostMapping
-    public ResponseEntity<UserResponseDto> registerUser(
+    public ResponseEntity<ApiResponse<UserResponseDto>> registerUser(
             @Valid @RequestBody UserRequestDto request) {
 
         UserResponseDto response = userService.registerUser(request);
 
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponseUtil.success(
+                		ApiMessages.USER_CREATED,
+                        response));
     }
 
     // Get User By ID
     @GetMapping("/{userId}")
-    public ResponseEntity<UserResponseDto> getUserById(
+    public ResponseEntity<ApiResponse<UserResponseDto>> getUserById(
             @PathVariable Long userId) {
 
-        return ResponseEntity.ok(userService.getUserById(userId));
+        UserResponseDto response = userService.getUserById(userId);
+
+        return ResponseEntity.ok(
+                ApiResponseUtil.success(
+                        "User Retrieved Successfully",
+                        response));
     }
 
     // Get All Users
     @GetMapping
-    public ResponseEntity<List<UserResponseDto>> getAllUsers() {
+    public ResponseEntity<ApiResponse<List<UserResponseDto>>> getAllUsers() {
 
-        return ResponseEntity.ok(userService.getAllUsers());
+        List<UserResponseDto> response =
+                userService.getAllUsers();
+
+        return ResponseEntity.ok(
+                ApiResponseUtil.success(
+                        "Users Retrieved Successfully",
+                        response));
     }
 
     // Update User
     @PutMapping("/{userId}")
-    public ResponseEntity<UserResponseDto> updateUser(
+    public ResponseEntity<ApiResponse<UserResponseDto>> updateUser(
             @PathVariable Long userId,
             @Valid @RequestBody UserRequestDto request) {
 
+        UserResponseDto response =
+                userService.updateUser(userId, request);
+
         return ResponseEntity.ok(
-                userService.updateUser(userId, request));
+                ApiResponseUtil.success(
+                		ApiMessages.USER_UPDATED,
+                        response));
     }
 
     // Delete User
     @DeleteMapping("/{userId}")
-    public ResponseEntity<String> deleteUser(
+    public ResponseEntity<ApiResponse<String>> deleteUser(
             @PathVariable Long userId) {
 
         userService.deleteUser(userId);
 
-        return ResponseEntity.ok("User deleted successfully.");
+        return ResponseEntity.ok(
+                ApiResponseUtil.success(
+                		ApiMessages.USER_DELETED,
+                        null));
     }
 
 }

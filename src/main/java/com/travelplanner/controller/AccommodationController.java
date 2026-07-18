@@ -7,6 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import com.travelplanner.common.ApiResponse;
+import com.travelplanner.common.ApiResponseUtil;
+import com.travelplanner.common.constants.ApiMessages;
 import com.travelplanner.dto.AccommodationRequestDto;
 import com.travelplanner.dto.AccommodationResponseDto;
 import com.travelplanner.service.AccommodationService;
@@ -24,54 +27,86 @@ public class AccommodationController {
         this.accommodationService = accommodationService;
     }
 
+    // Create Accommodation
     @PostMapping
-    public ResponseEntity<AccommodationResponseDto> createAccommodation(
+    public ResponseEntity<ApiResponse<AccommodationResponseDto>> createAccommodation(
             @Valid @RequestBody AccommodationRequestDto request) {
 
-        return new ResponseEntity<>(
-                accommodationService.createAccommodation(request),
-                HttpStatus.CREATED);
+        AccommodationResponseDto response =
+                accommodationService.createAccommodation(request);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponseUtil.success(
+                        ApiMessages.ACCOMMODATION_CREATED,
+                        response));
     }
 
+    // Get Accommodation By ID
     @GetMapping("/{accommodationId}")
-    public ResponseEntity<AccommodationResponseDto> getAccommodationById(
+    public ResponseEntity<ApiResponse<AccommodationResponseDto>> getAccommodationById(
             @PathVariable Long accommodationId) {
 
+        AccommodationResponseDto response =
+                accommodationService.getAccommodationById(accommodationId);
+
         return ResponseEntity.ok(
-                accommodationService.getAccommodationById(accommodationId));
+                ApiResponseUtil.success(
+                        "Accommodation Retrieved Successfully",
+                        response));
     }
 
+    // Get All Accommodations
     @GetMapping
-    public ResponseEntity<List<AccommodationResponseDto>> getAllAccommodations() {
+    public ResponseEntity<ApiResponse<List<AccommodationResponseDto>>> getAllAccommodations() {
+
+        List<AccommodationResponseDto> response =
+                accommodationService.getAllAccommodations();
 
         return ResponseEntity.ok(
-                accommodationService.getAllAccommodations());
+                ApiResponseUtil.success(
+                        "Accommodations Retrieved Successfully",
+                        response));
     }
 
+    // Get Accommodations By Trip
     @GetMapping("/trip/{tripId}")
-    public ResponseEntity<List<AccommodationResponseDto>> getAccommodationsByTrip(
+    public ResponseEntity<ApiResponse<List<AccommodationResponseDto>>> getAccommodationsByTrip(
             @PathVariable Long tripId) {
 
+        List<AccommodationResponseDto> response =
+                accommodationService.getAccommodationsByTrip(tripId);
+
         return ResponseEntity.ok(
-                accommodationService.getAccommodationsByTrip(tripId));
+                ApiResponseUtil.success(
+                        "Trip Accommodations Retrieved Successfully",
+                        response));
     }
 
+    // Update Accommodation
     @PutMapping("/{accommodationId}")
-    public ResponseEntity<AccommodationResponseDto> updateAccommodation(
+    public ResponseEntity<ApiResponse<AccommodationResponseDto>> updateAccommodation(
             @PathVariable Long accommodationId,
             @Valid @RequestBody AccommodationRequestDto request) {
 
+        AccommodationResponseDto response =
+                accommodationService.updateAccommodation(accommodationId, request);
+
         return ResponseEntity.ok(
-                accommodationService.updateAccommodation(accommodationId, request));
+                ApiResponseUtil.success(
+                        ApiMessages.ACCOMMODATION_UPDATED,
+                        response));
     }
 
+    // Delete Accommodation
     @DeleteMapping("/{accommodationId}")
-    public ResponseEntity<String> deleteAccommodation(
+    public ResponseEntity<ApiResponse<String>> deleteAccommodation(
             @PathVariable Long accommodationId) {
 
         accommodationService.deleteAccommodation(accommodationId);
 
-        return ResponseEntity.ok("Accommodation deleted successfully.");
+        return ResponseEntity.ok(
+                ApiResponseUtil.success(
+                        ApiMessages.ACCOMMODATION_DELETED,
+                        null));
     }
-
 }

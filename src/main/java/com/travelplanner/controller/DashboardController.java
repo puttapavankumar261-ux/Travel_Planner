@@ -3,6 +3,8 @@ package com.travelplanner.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.travelplanner.common.ApiResponse;
+import com.travelplanner.common.ApiResponseUtil;
 import com.travelplanner.dto.DashboardResponseDto;
 import com.travelplanner.service.DashboardService;
 
@@ -12,18 +14,21 @@ public class DashboardController {
 
     private final DashboardService dashboardService;
 
-    public DashboardController(
-            DashboardService dashboardService) {
-
+    public DashboardController(DashboardService dashboardService) {
         this.dashboardService = dashboardService;
     }
 
-    @GetMapping("/trip/{tripId}")
-    public ResponseEntity<DashboardResponseDto> getTripDashboard(
+    @GetMapping("/{tripId}")
+    public ResponseEntity<ApiResponse<DashboardResponseDto>> getDashboard(
             @PathVariable Long tripId) {
 
+        DashboardResponseDto response =
+                dashboardService.getTripDashboard(tripId);
+
         return ResponseEntity.ok(
-                dashboardService.getTripDashboard(tripId));
+                ApiResponseUtil.success(
+                        "Dashboard Retrieved Successfully",
+                        response));
     }
 
 }

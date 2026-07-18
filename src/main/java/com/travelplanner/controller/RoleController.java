@@ -6,6 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.travelplanner.common.ApiResponse;
+import com.travelplanner.common.ApiResponseUtil;
+import com.travelplanner.common.constants.ApiMessages;
 import com.travelplanner.entity.Role;
 import com.travelplanner.service.RoleService;
 
@@ -19,42 +22,69 @@ public class RoleController {
         this.roleService = roleService;
     }
 
+    // Create Role
     @PostMapping
-    public ResponseEntity<Role> saveRole(@RequestBody Role role) {
+    public ResponseEntity<ApiResponse<Role>> saveRole(
+            @RequestBody Role role) {
 
-        return new ResponseEntity<>(roleService.saveRole(role), HttpStatus.CREATED);
+        Role response = roleService.saveRole(role);
 
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponseUtil.success(
+                		ApiMessages.ROLE_CREATED,
+                        response));
     }
 
+    // Get All Roles
     @GetMapping
-    public ResponseEntity<List<Role>> getAllRoles() {
+    public ResponseEntity<ApiResponse<List<Role>>> getAllRoles() {
 
-        return ResponseEntity.ok(roleService.getAllRoles());
+        List<Role> response = roleService.getAllRoles();
 
+        return ResponseEntity.ok(
+                ApiResponseUtil.success(
+                        "Roles Retrieved Successfully",
+                        response));
     }
 
+    // Get Role By Id
     @GetMapping("/{roleId}")
-    public ResponseEntity<Role> getRoleById(@PathVariable Long roleId) {
+    public ResponseEntity<ApiResponse<Role>> getRoleById(
+            @PathVariable Long roleId) {
 
-        return ResponseEntity.ok(roleService.getRoleById(roleId));
+        Role response = roleService.getRoleById(roleId);
 
+        return ResponseEntity.ok(
+                ApiResponseUtil.success(
+                        "Role Retrieved Successfully",
+                        response));
     }
 
+    // Update Role
     @PutMapping("/{roleId}")
-    public ResponseEntity<Role> updateRole(@PathVariable Long roleId,
-                                           @RequestBody Role role) {
+    public ResponseEntity<ApiResponse<Role>> updateRole(
+            @PathVariable Long roleId,
+            @RequestBody Role role) {
 
-        return ResponseEntity.ok(roleService.updateRole(roleId, role));
+        Role response = roleService.updateRole(roleId, role);
 
+        return ResponseEntity.ok(
+                ApiResponseUtil.success(
+                		ApiMessages.ROLE_UPDATED,
+                        response));
     }
 
+    // Delete Role
     @DeleteMapping("/{roleId}")
-    public ResponseEntity<String> deleteRole(@PathVariable Long roleId) {
+    public ResponseEntity<ApiResponse<String>> deleteRole(
+            @PathVariable Long roleId) {
 
         roleService.deleteRole(roleId);
 
-        return ResponseEntity.ok("Role deleted successfully.");
-
+        return ResponseEntity.ok(
+                ApiResponseUtil.success(
+                		ApiMessages.ROLE_DELETED,
+                        null));
     }
 
 }

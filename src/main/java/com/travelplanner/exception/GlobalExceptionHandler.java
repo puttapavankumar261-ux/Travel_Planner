@@ -1,176 +1,252 @@
 package com.travelplanner.exception;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.travelplanner.common.ApiResponse;
+import com.travelplanner.common.ApiResponseUtil;
+import com.travelplanner.common.constants.ApiMessages;
+
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    // =====================================================
+    // Common Builder
+    // =====================================================
+
+    private ResponseEntity<ApiResponse<Object>> buildErrorResponse(
+            String message,
+            HttpStatus status) {
+
+        return ResponseEntity
+                .status(status)
+                .body(ApiResponseUtil.error(message));
+    }
+
+    private ResponseEntity<ApiResponse<Object>> buildErrorResponse(
+            String message,
+            Object data,
+            HttpStatus status) {
+
+        return ResponseEntity
+                .status(status)
+                .body(ApiResponseUtil.error(message, data));
+    }
+
+    // =====================================================
+    // Custom Exceptions
+    // =====================================================
+
     @ExceptionHandler(RoleAlreadyExistsException.class)
-    public ResponseEntity<Map<String, Object>> handleRoleAlreadyExistsException(
+    public ResponseEntity<ApiResponse<Object>> handleRoleAlreadyExistsException(
             RoleAlreadyExistsException ex) {
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", HttpStatus.CONFLICT.value());
-        response.put("message", ex.getMessage());
-
-        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+        return buildErrorResponse(ex.getMessage(), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(RoleNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleRoleNotFoundException(
+    public ResponseEntity<ApiResponse<Object>> handleRoleNotFoundException(
             RoleNotFoundException ex) {
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", HttpStatus.NOT_FOUND.value());
-        response.put("message", ex.getMessage());
-
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<Map<String, Object>> handleUserAlreadyExistsException(
+    public ResponseEntity<ApiResponse<Object>> handleUserAlreadyExistsException(
             UserAlreadyExistsException ex) {
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", HttpStatus.CONFLICT.value());
-        response.put("message", ex.getMessage());
-
-        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+        return buildErrorResponse(ex.getMessage(), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleUserNotFoundException(
+    public ResponseEntity<ApiResponse<Object>> handleUserNotFoundException(
             UserNotFoundException ex) {
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", HttpStatus.NOT_FOUND.value());
-        response.put("message", ex.getMessage());
-
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(InvalidCredentialsException.class)
-    public ResponseEntity<Map<String, Object>> handleInvalidCredentialsException(
+    public ResponseEntity<ApiResponse<Object>> handleInvalidCredentialsException(
             InvalidCredentialsException ex) {
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", HttpStatus.UNAUTHORIZED.value());
-        response.put("message", ex.getMessage());
-
-        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        return buildErrorResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(AccountDisabledException.class)
-    public ResponseEntity<Map<String, Object>> handleAccountDisabledException(
+    public ResponseEntity<ApiResponse<Object>> handleAccountDisabledException(
             AccountDisabledException ex) {
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", HttpStatus.FORBIDDEN.value());
-        response.put("message", ex.getMessage());
-
-        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+        return buildErrorResponse(ex.getMessage(), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(AccountLockedException.class)
-    public ResponseEntity<Map<String, Object>> handleAccountLockedException(
+    public ResponseEntity<ApiResponse<Object>> handleAccountLockedException(
             AccountLockedException ex) {
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", HttpStatus.FORBIDDEN.value());
-        response.put("message", ex.getMessage());
-
-        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+        return buildErrorResponse(ex.getMessage(), HttpStatus.FORBIDDEN);
     }
-    
+
     @ExceptionHandler(TripNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleTripNotFoundException(
+    public ResponseEntity<ApiResponse<Object>> handleTripNotFoundException(
             TripNotFoundException ex) {
 
-        Map<String, Object> response = new HashMap<>();
-
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", HttpStatus.NOT_FOUND.value());
-        response.put("message", ex.getMessage());
-
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
-    
+
     @ExceptionHandler(ItineraryNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleItineraryNotFoundException(
+    public ResponseEntity<ApiResponse<Object>> handleItineraryNotFoundException(
             ItineraryNotFoundException ex) {
 
-        Map<String, Object> response = new HashMap<>();
-
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", HttpStatus.NOT_FOUND.value());
-        response.put("message", ex.getMessage());
-
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
-    
+
     @ExceptionHandler(ExpenseNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleExpenseNotFoundException(
+    public ResponseEntity<ApiResponse<Object>> handleExpenseNotFoundException(
             ExpenseNotFoundException ex) {
 
-        Map<String, Object> response = new HashMap<>();
-
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", HttpStatus.NOT_FOUND.value());
-        response.put("message", ex.getMessage());
-
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(AccommodationNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleAccommodationNotFoundException(
+    public ResponseEntity<ApiResponse<Object>> handleAccommodationNotFoundException(
             AccommodationNotFoundException ex) {
 
-        Map<String, Object> response = new HashMap<>();
-
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", HttpStatus.NOT_FOUND.value());
-        response.put("message", ex.getMessage());
-
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
-    
+
     @ExceptionHandler(TransportNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleTransportationNotFoundException(
+    public ResponseEntity<ApiResponse<Object>> handleTransportNotFoundException(
             TransportNotFoundException ex) {
 
-        Map<String, Object> response = new HashMap<>();
-
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", HttpStatus.NOT_FOUND.value());
-        response.put("message", ex.getMessage());
-
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
-    
+
     @ExceptionHandler(ActivityNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleActivityNotFoundException(
+    public ResponseEntity<ApiResponse<Object>> handleActivityNotFoundException(
             ActivityNotFoundException ex) {
 
-        Map<String, Object> response = new HashMap<>();
+        return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
 
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", HttpStatus.NOT_FOUND.value());
-        response.put("message", ex.getMessage());
+    // =====================================================
+    // Validation Errors
+    // =====================================================
 
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<Object>> handleValidationException(
+            MethodArgumentNotValidException ex) {
+
+        Map<String, String> errors = new LinkedHashMap<>();
+
+        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
+            errors.put(error.getField(), error.getDefaultMessage());
+        }
+
+        return buildErrorResponse(
+        		ApiMessages.VALIDATION_FAILED,
+                errors,
+                HttpStatus.BAD_REQUEST);
+    }
+
+    // =====================================================
+    // Invalid Enum / Invalid JSON
+    // =====================================================
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiResponse<Object>> handleInvalidJson(
+            HttpMessageNotReadableException ex) {
+
+        if (ex.getCause() instanceof InvalidFormatException formatException) {
+
+            String field = formatException.getPath().get(0).getFieldName();
+
+            String value = String.valueOf(formatException.getValue());
+
+            return buildErrorResponse(
+                    "Invalid value '" + value + "' for field '" + field + "'",
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        return buildErrorResponse(
+        		ApiMessages.INVALID_JSON,
+                HttpStatus.BAD_REQUEST);
+    }
+
+    // =====================================================
+    // Path Variable Type Mismatch
+    // =====================================================
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ApiResponse<Object>> handleTypeMismatch(
+            MethodArgumentTypeMismatchException ex) {
+
+        return buildErrorResponse(
+                "Invalid value for parameter '" + ex.getName() + "'",
+                HttpStatus.BAD_REQUEST);
+    }
+
+    // =====================================================
+    // Constraint Validation
+    // =====================================================
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ApiResponse<Object>> handleConstraintViolation(
+            ConstraintViolationException ex) {
+
+        Map<String, String> errors = new LinkedHashMap<>();
+
+        for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
+
+            errors.put(
+                    violation.getPropertyPath().toString(),
+                    violation.getMessage());
+        }
+
+        return buildErrorResponse(
+                "Constraint Validation Failed",
+                errors,
+                HttpStatus.BAD_REQUEST);
+    }
+
+    // =====================================================
+    // Database Exceptions
+    // =====================================================
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ApiResponse<Object>> handleDatabaseException(
+            DataIntegrityViolationException ex) {
+
+        return buildErrorResponse(
+        		ApiMessages.DATABASE_ERROR,
+                HttpStatus.CONFLICT);
+    }
+
+    // =====================================================
+    // Generic Exception
+    // =====================================================
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse<Object>> handleGenericException(
+            Exception ex) {
+
+        ex.printStackTrace();
+
+        return buildErrorResponse(
+        		ApiMessages.INTERNAL_SERVER_ERROR,
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

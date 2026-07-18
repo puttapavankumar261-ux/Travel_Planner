@@ -15,14 +15,18 @@ import com.travelplanner.mapper.UserMapper;
 import com.travelplanner.repo.RoleRepository;
 import com.travelplanner.repo.UserRepository;
 import com.travelplanner.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.travelplanner.common.constants.ApiMessages;
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepo;
     private final RoleRepository roleRepo;
     private final UserMapper userMapper;
-
+    private static final Logger logger =
+            LoggerFactory.getLogger(UserServiceImpl.class);
     public UserServiceImpl(UserRepository userRepo,
                            RoleRepository roleRepo,
                            UserMapper userMapper) {
@@ -34,22 +38,40 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto registerUser(UserRequestDto request) {
 
+        logger.info("Registering user with email: {}", request.getEmail());
+
         if (userRepo.existsByEmail(request.getEmail())) {
+
+            logger.warn("Registration failed. Email already exists: {}",
+                    request.getEmail());
+
             throw new UserAlreadyExistsException("Email already exists.");
         }
 
         if (userRepo.existsByMobileNumber(request.getMobileNumber())) {
+
+            logger.warn("Registration failed. Mobile number already exists: {}",
+                    request.getMobileNumber());
+
             throw new UserAlreadyExistsException("Mobile Number already exists.");
         }
 
         Role role = roleRepo.findById(request.getRoleId())
-                .orElseThrow(() ->
-                        new RoleNotFoundException(
-                                "Role not found with ID : " + request.getRoleId()));
+                .orElseThrow(() -> {
+
+                    logger.warn("Role not found with ID: {}",
+                            request.getRoleId());
+
+                    return new RoleNotFoundException(
+                            "Role not found with ID : " + request.getRoleId());
+                });
 
         User user = userMapper.mapToUser(request, role);
 
         User savedUser = userRepo.save(user);
+
+        logger.info("User registered successfully with ID: {}",
+                savedUser.getUserId());
 
         return userMapper.mapToUserResponse(savedUser);
     }
@@ -57,16 +79,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto getUserById(Long userId) {
 
+        logger.info("Fetching user with ID: {}", userId);
+
         User user = userRepo.findById(userId)
-                .orElseThrow(() ->
-                        new UserNotFoundException(
-                                "User not found with ID : " + userId));
+                .orElseThrow(() -> {
+
+                    logger.warn("User not found with ID: {}", userId);
+
+                    return new UserNotFoundException(
+                            "User not found with ID : " + userId);
+                });
 
         return userMapper.mapToUserResponse(user);
     }
 
     @Override
     public List<UserResponseDto> getAllUsers() {
+
+        logger.info("Fetching all users.");
 
         return userRepo.findAll()
                 .stream()
@@ -77,13 +107,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto updateUser(Long userId, UserRequestDto request) {
 
+        logger.info("Updating user with ID: {}", userId);
+
         User existingUser = userRepo.findById(userId)
-                .orElseThrow(() ->
-                        new UserNotFoundException(
-                                "User not found with ID : " + userId));
+                .orElseThrow(() -> {
+
+                    logger.warn("User not found with ID: {}", userId);
+
+                    return new UserNotFoundException(
+                            "User not found with ID : " + userId);
+                });
 
         if (!existingUser.getEmail().equals(request.getEmail())
                 && userRepo.existsByEmail(request.getEmail())) {
+
+            logger.warn("Email already exists: {}", request.getEmail());
 
             throw new UserAlreadyExistsException("Email already exists.");
         }
@@ -91,13 +129,22 @@ public class UserServiceImpl implements UserService {
         if (!existingUser.getMobileNumber().equals(request.getMobileNumber())
                 && userRepo.existsByMobileNumber(request.getMobileNumber())) {
 
-            throw new UserAlreadyExistsException("Mobile Number already exists.");
+            logger.warn("Mobile number already exists: {}",
+                    request.getMobileNumber());
+
+            throw new UserAlreadyExistsException(
+                    "Mobile Number already exists.");
         }
 
         Role role = roleRepo.findById(request.getRoleId())
-                .orElseThrow(() ->
-                        new RoleNotFoundException(
-                                "Role not found with ID : " + request.getRoleId()));
+                .orElseThrow(() -> {
+
+                    logger.warn("Role not found with ID: {}",
+                            request.getRoleId());
+
+                    return new RoleNotFoundException(
+                            "Role not found with ID : " + request.getRoleId());
+                });
 
         existingUser.setFirstName(request.getFirstName());
         existingUser.setLastName(request.getLastName());
@@ -113,18 +160,27 @@ public class UserServiceImpl implements UserService {
 
         User updatedUser = userRepo.save(existingUser);
 
+        logger.info("User updated successfully with ID: {}", userId);
+
         return userMapper.mapToUserResponse(updatedUser);
     }
-
     @Override
     public void deleteUser(Long userId) {
 
+        logger.info("Deleting user with ID: {}", userId);
+
         User user = userRepo.findById(userId)
-                .orElseThrow(() ->
-                        new UserNotFoundException(
-                                "User not found with ID : " + userId));
+                .orElseThrow(() -> {
+
+                    logger.warn("User not found with ID: {}", userId);
+
+                    return new UserNotFoundException(
+                            "User not found with ID : " + userId);
+                });
 
         userRepo.delete(user);
+
+        logger.info("User deleted successfully with ID: {}", userId);
     }
 
 }

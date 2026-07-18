@@ -7,6 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import com.travelplanner.common.ApiResponse;
+import com.travelplanner.common.ApiResponseUtil;
+import com.travelplanner.common.constants.ApiMessages;
 import com.travelplanner.dto.ExpenseRequestDto;
 import com.travelplanner.dto.ExpenseResponseDto;
 import com.travelplanner.service.ExpenseService;
@@ -24,63 +27,86 @@ public class ExpenseController {
         this.expenseService = expenseService;
     }
 
+    // Create Expense
     @PostMapping
-    public ResponseEntity<ExpenseResponseDto> createExpense(
+    public ResponseEntity<ApiResponse<ExpenseResponseDto>> createExpense(
             @Valid @RequestBody ExpenseRequestDto request) {
 
-        return new ResponseEntity<>(
-                expenseService.createExpense(request),
-                HttpStatus.CREATED);
+        ExpenseResponseDto response = expenseService.createExpense(request);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponseUtil.success(
+                        ApiMessages.EXPENSE_CREATED,
+                        response));
     }
 
+    // Get Expense By ID
     @GetMapping("/{expenseId}")
-    public ResponseEntity<ExpenseResponseDto> getExpenseById(
+    public ResponseEntity<ApiResponse<ExpenseResponseDto>> getExpenseById(
             @PathVariable Long expenseId) {
 
+        ExpenseResponseDto response =
+                expenseService.getExpenseById(expenseId);
+
         return ResponseEntity.ok(
-                expenseService.getExpenseById(expenseId));
+                ApiResponseUtil.success(
+                        "Expense Retrieved Successfully",
+                        response));
     }
 
+    // Get All Expenses
     @GetMapping
-    public ResponseEntity<List<ExpenseResponseDto>> getAllExpenses() {
+    public ResponseEntity<ApiResponse<List<ExpenseResponseDto>>> getAllExpenses() {
+
+        List<ExpenseResponseDto> response =
+                expenseService.getAllExpenses();
 
         return ResponseEntity.ok(
-                expenseService.getAllExpenses());
+                ApiResponseUtil.success(
+                        "Expenses Retrieved Successfully",
+                        response));
     }
 
+    // Get Expenses By Trip
     @GetMapping("/trip/{tripId}")
-    public ResponseEntity<List<ExpenseResponseDto>> getExpensesByTrip(
+    public ResponseEntity<ApiResponse<List<ExpenseResponseDto>>> getExpensesByTrip(
             @PathVariable Long tripId) {
 
-        return ResponseEntity.ok(
-                expenseService.getExpensesByTrip(tripId));
-    }
-
-    @GetMapping("/trip/{tripId}/total")
-    public ResponseEntity<Double> getTotalExpenseByTrip(
-            @PathVariable Long tripId) {
+        List<ExpenseResponseDto> response =
+                expenseService.getExpensesByTrip(tripId);
 
         return ResponseEntity.ok(
-                expenseService.getTotalExpenseByTrip(tripId));
+                ApiResponseUtil.success(
+                        "Trip Expenses Retrieved Successfully",
+                        response));
     }
 
+    // Update Expense
     @PutMapping("/{expenseId}")
-    public ResponseEntity<ExpenseResponseDto> updateExpense(
+    public ResponseEntity<ApiResponse<ExpenseResponseDto>> updateExpense(
             @PathVariable Long expenseId,
             @Valid @RequestBody ExpenseRequestDto request) {
 
+        ExpenseResponseDto response =
+                expenseService.updateExpense(expenseId, request);
+
         return ResponseEntity.ok(
-                expenseService.updateExpense(expenseId, request));
+                ApiResponseUtil.success(
+                        ApiMessages.EXPENSE_UPDATED,
+                        response));
     }
 
+    // Delete Expense
     @DeleteMapping("/{expenseId}")
-    public ResponseEntity<String> deleteExpense(
+    public ResponseEntity<ApiResponse<String>> deleteExpense(
             @PathVariable Long expenseId) {
 
         expenseService.deleteExpense(expenseId);
 
         return ResponseEntity.ok(
-                "Expense deleted successfully.");
+                ApiResponseUtil.success(
+                       ApiMessages.EXPENSE_DELETED,
+                        null));
     }
 
 }

@@ -3,6 +3,9 @@ package com.travelplanner.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.travelplanner.common.ApiResponse;
+import com.travelplanner.common.ApiResponseUtil;
+import com.travelplanner.common.constants.ApiMessages;
 import com.travelplanner.dto.LoginRequestDto;
 import com.travelplanner.dto.LoginResponseDto;
 import com.travelplanner.dto.LogoutResponseDto;
@@ -21,19 +24,24 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(
+    public ResponseEntity<ApiResponse<LoginResponseDto>> login(
             @Valid @RequestBody LoginRequestDto request) {
 
         LoginResponseDto response = authService.login(request);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(
+                ApiResponseUtil.success(ApiMessages.LOGIN_SUCCESS, response)
+        );
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<LogoutResponseDto> logout() {
+    public ResponseEntity<ApiResponse<LogoutResponseDto>> logout() {
 
-        return ResponseEntity.ok(authService.logout());
+        LogoutResponseDto response = authService.logout();
 
+        return ResponseEntity.ok(
+                ApiResponseUtil.success(ApiMessages.LOGOUT_SUCCESS, response)
+        );
     }
-    
+
 }

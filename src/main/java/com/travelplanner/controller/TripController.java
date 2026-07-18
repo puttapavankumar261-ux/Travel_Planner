@@ -6,6 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.travelplanner.common.ApiResponse;
+import com.travelplanner.common.ApiResponseUtil;
+import com.travelplanner.common.constants.ApiMessages;
 import com.travelplanner.dto.TripRequestDto;
 import com.travelplanner.dto.TripResponseDto;
 import com.travelplanner.enums.TripStatus;
@@ -25,74 +28,97 @@ public class TripController {
 
     // Create Trip
     @PostMapping
-    public ResponseEntity<TripResponseDto> createTrip(
+    public ResponseEntity<ApiResponse<TripResponseDto>> createTrip(
             @Valid @RequestBody TripRequestDto request) {
 
         TripResponseDto response = tripService.createTrip(request);
 
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponseUtil.success(
+                		ApiMessages.TRIP_CREATED,
+                        response));
     }
 
     // Get Trip By ID
     @GetMapping("/{tripId}")
-    public ResponseEntity<TripResponseDto> getTripById(
+    public ResponseEntity<ApiResponse<TripResponseDto>> getTripById(
             @PathVariable Long tripId) {
 
         TripResponseDto response = tripService.getTripById(tripId);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(
+                ApiResponseUtil.success(
+                        "Trip Retrieved Successfully",
+                        response));
     }
 
     // Get All Trips
     @GetMapping
-    public ResponseEntity<List<TripResponseDto>> getAllTrips() {
+    public ResponseEntity<ApiResponse<List<TripResponseDto>>> getAllTrips() {
 
-        List<TripResponseDto> response = tripService.getAllTrips();
+        List<TripResponseDto> response =
+                tripService.getAllTrips();
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(
+                ApiResponseUtil.success(
+                        "Trips Retrieved Successfully",
+                        response));
     }
 
     // Get Trips By User
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<TripResponseDto>> getTripsByUser(
+    public ResponseEntity<ApiResponse<List<TripResponseDto>>> getTripsByUser(
             @PathVariable Long userId) {
 
-        List<TripResponseDto> response = tripService.getTripsByUser(userId);
+        List<TripResponseDto> response =
+                tripService.getTripsByUser(userId);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(
+                ApiResponseUtil.success(
+                        "User Trips Retrieved Successfully",
+                        response));
     }
 
     // Get Trips By Status
     @GetMapping("/status/{tripStatus}")
-    public ResponseEntity<List<TripResponseDto>> getTripsByStatus(
+    public ResponseEntity<ApiResponse<List<TripResponseDto>>> getTripsByStatus(
             @PathVariable TripStatus tripStatus) {
 
         List<TripResponseDto> response =
                 tripService.getTripsByStatus(tripStatus);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(
+                ApiResponseUtil.success(
+                        "Trips Retrieved Successfully",
+                        response));
     }
 
     // Update Trip
     @PutMapping("/{tripId}")
-    public ResponseEntity<TripResponseDto> updateTrip(
+    public ResponseEntity<ApiResponse<TripResponseDto>> updateTrip(
             @PathVariable Long tripId,
             @Valid @RequestBody TripRequestDto request) {
 
         TripResponseDto response =
                 tripService.updateTrip(tripId, request);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(
+                ApiResponseUtil.success(
+                        ApiMessages.TRIP_UPDATED,
+                        response));
     }
 
     // Delete Trip
     @DeleteMapping("/{tripId}")
-    public ResponseEntity<String> deleteTrip(
+    public ResponseEntity<ApiResponse<String>> deleteTrip(
             @PathVariable Long tripId) {
 
         tripService.deleteTrip(tripId);
 
-        return ResponseEntity.ok("Trip Deleted Successfully.");
+        return ResponseEntity.ok(
+                ApiResponseUtil.success(
+                        ApiMessages.TRIP_DELETED,
+                        null));
     }
 
 }

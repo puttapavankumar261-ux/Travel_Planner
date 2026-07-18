@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import com.travelplanner.common.ApiResponse;
+import com.travelplanner.common.ApiResponseUtil;
 import com.travelplanner.dto.TransportationRequestDto;
 import com.travelplanner.dto.TransportationResponseDto;
 import com.travelplanner.service.TransportationService;
@@ -20,69 +22,84 @@ public class TransportationController {
 
     private final TransportationService transportationService;
 
-    public TransportationController(
-            TransportationService transportationService) {
-
+    public TransportationController(TransportationService transportationService) {
         this.transportationService = transportationService;
     }
 
     @PostMapping
-    public ResponseEntity<TransportationResponseDto> createTransportation(
+    public ResponseEntity<ApiResponse<TransportationResponseDto>> createTransportation(
             @Valid @RequestBody TransportationRequestDto request) {
 
-        return new ResponseEntity<>(
-                transportationService.createTransportation(request),
-                HttpStatus.CREATED);
+        TransportationResponseDto response =
+                transportationService.createTransportation(request);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponseUtil.success(
+                        "Transportation Created Successfully",
+                        response));
     }
 
     @GetMapping("/{transportationId}")
-    public ResponseEntity<TransportationResponseDto> getTransportationById(
+    public ResponseEntity<ApiResponse<TransportationResponseDto>> getTransportationById(
             @PathVariable Long transportationId) {
 
+        TransportationResponseDto response =
+                transportationService.getTransportationById(transportationId);
+
         return ResponseEntity.ok(
-                transportationService.getTransportationById(
-                        transportationId));
+                ApiResponseUtil.success(
+                        "Transportation Retrieved Successfully",
+                        response));
     }
 
     @GetMapping
-    public ResponseEntity<List<TransportationResponseDto>>
-            getAllTransportations() {
+    public ResponseEntity<ApiResponse<List<TransportationResponseDto>>> getAllTransportations() {
+
+        List<TransportationResponseDto> response =
+                transportationService.getAllTransportations();
 
         return ResponseEntity.ok(
-                transportationService.getAllTransportations());
+                ApiResponseUtil.success(
+                        "Transportations Retrieved Successfully",
+                        response));
     }
 
     @GetMapping("/trip/{tripId}")
-    public ResponseEntity<List<TransportationResponseDto>>
-            getTransportationsByTrip(
-                    @PathVariable Long tripId) {
+    public ResponseEntity<ApiResponse<List<TransportationResponseDto>>> getTransportationsByTrip(
+            @PathVariable Long tripId) {
+
+        List<TransportationResponseDto> response =
+                transportationService.getTransportationsByTrip(tripId);
 
         return ResponseEntity.ok(
-                transportationService
-                        .getTransportationsByTrip(tripId));
+                ApiResponseUtil.success(
+                        "Trip Transportations Retrieved Successfully",
+                        response));
     }
 
     @PutMapping("/{transportationId}")
-    public ResponseEntity<TransportationResponseDto>
-            updateTransportation(
-                    @PathVariable Long transportationId,
-                    @Valid @RequestBody TransportationRequestDto request) {
+    public ResponseEntity<ApiResponse<TransportationResponseDto>> updateTransportation(
+            @PathVariable Long transportationId,
+            @Valid @RequestBody TransportationRequestDto request) {
+
+        TransportationResponseDto response =
+                transportationService.updateTransportation(transportationId, request);
 
         return ResponseEntity.ok(
-                transportationService.updateTransportation(
-                        transportationId,
-                        request));
+                ApiResponseUtil.success(
+                        "Transportation Updated Successfully",
+                        response));
     }
 
     @DeleteMapping("/{transportationId}")
-    public ResponseEntity<String> deleteTransportation(
+    public ResponseEntity<ApiResponse<String>> deleteTransportation(
             @PathVariable Long transportationId) {
 
-        transportationService.deleteTransportation(
-                transportationId);
+        transportationService.deleteTransportation(transportationId);
 
         return ResponseEntity.ok(
-                "Transportation deleted successfully.");
+                ApiResponseUtil.success(
+                        "Transportation Deleted Successfully",
+                        null));
     }
-
 }
