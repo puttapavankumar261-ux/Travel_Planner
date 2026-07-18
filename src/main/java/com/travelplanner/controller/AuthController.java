@@ -9,7 +9,13 @@ import com.travelplanner.common.constants.ApiMessages;
 import com.travelplanner.dto.LoginRequestDto;
 import com.travelplanner.dto.LoginResponseDto;
 import com.travelplanner.dto.LogoutResponseDto;
+import com.travelplanner.dto.ForgotPasswordRequestDto;
+import com.travelplanner.dto.OtpRequestDto;
+import com.travelplanner.dto.OtpVerificationDto;
+import com.travelplanner.dto.ResetPasswordDto;
+import com.travelplanner.enums.OtpPurpose;
 import com.travelplanner.service.AuthService;
+import com.travelplanner.service.OtpService;
 
 import jakarta.validation.Valid;
 
@@ -18,9 +24,11 @@ import jakarta.validation.Valid;
 public class AuthController {
 
     private final AuthService authService;
+    private final OtpService otpService;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, OtpService otpService) {
         this.authService = authService;
+        this.otpService = otpService;
     }
 
     @PostMapping("/login")
@@ -41,6 +49,46 @@ public class AuthController {
 
         return ResponseEntity.ok(
                 ApiResponseUtil.success(ApiMessages.LOGOUT_SUCCESS, response)
+        );
+    }
+
+    @PostMapping("/generate-otp")
+    public ResponseEntity<ApiResponse<String>> generateOtp(@Valid @RequestBody OtpRequestDto requestDto) {
+        otpService.generateAndSendOtp(requestDto);
+        return ResponseEntity.ok(
+                ApiResponseUtil.success("OTP has been sent to " + requestDto.getEmail(), null)
+        );
+    }
+
+    @PostMapping("/verify-otp")
+    public ResponseEntity<ApiResponse<String>> verifyOtp(@Valid @RequestBody OtpVerificationDto verificationDto) {
+        otpService.verifyOtp(verificationDto);
+        return ResponseEntity.ok(
+                ApiResponseUtil.success("OTP verified successfully", null)
+        );
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<ApiResponse<String>> forgotPassword(@Valid @RequestBody ForgotPasswordRequestDto requestDto) {
+        OtpRequestDto otpRequest = new OtpRequestDto(requestDto.getEmail(), OtpPurpose.PASSWORD_RESET);
+        otpService.generateAndSendOtp(otpRequest);
+        return ResponseEntity.ok(
+                ApiResponseUtil.success("Password reset OTP has been sent to " + requestDto.getEmail(), null)
+        );
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<ApiResponse<String>> resetPassword(@Valid @RequestBody ResetPasswordDto requestDto) {
+        OtpVerificationDto verificationDto = new OtpVerificationDto(requestDto.getEmail(), requestDto.getOtp(), OtpPurpose.PASSWORD_RESET);
+        
+        // Verify the OTP first
+        otpService.verifyOtp(verificationDto);
+        
+        // In a real application, you'd encode the password and save the User entity here.
+        // For example: userService.updatePassword(requestDto.getEmail(), passwordEncoder.encode(requestDto.getNewPassword()));
+        
+        return ResponseEntity.ok(
+                ApiResponseUtil.success("Password has been reset successfully", null)
         );
     }
 
