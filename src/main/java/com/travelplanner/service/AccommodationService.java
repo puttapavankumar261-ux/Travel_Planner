@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.travelplanner.dto.AccommodationRequestDto;
 import com.travelplanner.dto.AccommodationResponseDto;
+import com.travelplanner.dto.PageResponseDto;
 
 public interface AccommodationService {
 
@@ -11,8 +12,11 @@ public interface AccommodationService {
 
     AccommodationResponseDto getAccommodationById(Long accommodationId);
 
-    List<AccommodationResponseDto> getAllAccommodations();
-
+    PageResponseDto<AccommodationResponseDto> getAllAccommodations(
+            int page,
+            int size,
+            String sortBy,
+            String direction);
     List<AccommodationResponseDto> getAccommodationsByTrip(Long tripId);
 
     AccommodationResponseDto updateAccommodation(Long accommodationId,

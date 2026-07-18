@@ -1,7 +1,16 @@
 package com.travelplanner.service.impl;
 
 import java.util.List;
+import java.time.LocalDate;
 
+import org.springframework.data.jpa.domain.Specification;
+
+import com.travelplanner.enums.ExpenseCategory;
+import com.travelplanner.enums.PaymentMethod;
+import com.travelplanner.specification.ExpenseSpecification;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.travelplanner.dto.ExpenseRequestDto;
@@ -14,9 +23,19 @@ import com.travelplanner.mapper.ExpenseMapper;
 import com.travelplanner.repo.ExpenseRepository;
 import com.travelplanner.repo.TripRepository;
 import com.travelplanner.service.ExpenseService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
+import com.travelplanner.dto.PageResponseDto;
+import com.travelplanner.util.PaginationUtil;
 
 @Service
 public class ExpenseServiceImpl implements ExpenseService {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(ExpenseServiceImpl.class);
 
     private final ExpenseRepository expenseRepo;
     private final TripRepository tripRepo;
@@ -35,14 +54,22 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Override
     public ExpenseResponseDto createExpense(ExpenseRequestDto request) {
 
-        Trip trip = tripRepo.findById(request.getTripId())
-                .orElseThrow(() ->
-                        new TripNotFoundException(
-                                "Trip not found with ID : "
-                                        + request.getTripId()));
+        logger.info("Creating expense for trip ID: {}", request.getTripId());
 
-        if(request.getExpenseDate().isBefore(trip.getStartDate())
+        Trip trip = tripRepo.findById(request.getTripId())
+                .orElseThrow(() -> {
+
+                    logger.warn("Trip not found with ID: {}", request.getTripId());
+
+                    return new TripNotFoundException(
+                            "Trip not found with ID : "
+                                    + request.getTripId());
+                });
+
+        if (request.getExpenseDate().isBefore(trip.getStartDate())
                 || request.getExpenseDate().isAfter(trip.getEndDate())) {
+
+            logger.warn("Expense date is outside trip duration.");
 
             throw new IllegalArgumentException(
                     "Expense Date must be within Trip Duration.");
@@ -52,43 +79,110 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         Expense savedExpense = expenseRepo.save(expense);
 
+        logger.info("Expense created successfully with ID: {}",
+                savedExpense.getExpenseId());
+
         return expenseMapper.mapToExpenseResponse(savedExpense);
     }
 
     @Override
     public ExpenseResponseDto getExpenseById(Long expenseId) {
 
+        logger.info("Fetching expense with ID: {}", expenseId);
+
         Expense expense = expenseRepo.findById(expenseId)
-                .orElseThrow(() ->
-                        new ExpenseNotFoundException(
-                                "Expense not found with ID : "
-                                        + expenseId));
+                .orElseThrow(() -> {
+
+                    logger.warn("Expense not found with ID: {}", expenseId);
+
+                    return new ExpenseNotFoundException(
+                            "Expense not found with ID : "
+                                    + expenseId);
+                });
+
+        logger.info("Expense retrieved successfully with ID: {}", expenseId);
 
         return expenseMapper.mapToExpenseResponse(expense);
     }
 
     @Override
-    public List<ExpenseResponseDto> getAllExpenses() {
+    public PageResponseDto<ExpenseResponseDto> getAllExpenses(
+            int page,
+            int size,
+            String sortBy,
+            String direction,
+            String expenseTitle,
+            ExpenseCategory expenseCategory,
+            PaymentMethod paymentMethod,
+            Double minAmount,
+            Double maxAmount,
+            LocalDate fromDate,
+            LocalDate toDate) {
 
-        return expenseRepo.findAll()
-                .stream()
-                .map(expenseMapper::mapToExpenseResponse)
-                .toList();
+        logger.info(
+                "Fetching expenses with filters - Page: {}, Size: {}, SortBy: {}, Direction: {}, Title: {}, Category: {}, PaymentMethod: {}",
+                page,
+                size,
+                sortBy,
+                direction,
+                expenseTitle,
+                expenseCategory,
+                paymentMethod);
+
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Specification<Expense> specification =
+                ExpenseSpecification.filterExpenses(
+                        expenseTitle,
+                        expenseCategory,
+                        paymentMethod,
+                        minAmount,
+                        maxAmount,
+                        fromDate,
+                        toDate);
+
+        Page<Expense> expensePage =
+                expenseRepo.findAll(specification, pageable);
+
+        Page<ExpenseResponseDto> dtoPage =
+                expensePage.map(expenseMapper::mapToExpenseResponse);
+
+        logger.info(
+                "Retrieved {} expense(s) on page {}.",
+                dtoPage.getNumberOfElements(),
+                dtoPage.getNumber());
+
+        return PaginationUtil.build(dtoPage);
     }
 
     @Override
     public List<ExpenseResponseDto> getExpensesByTrip(Long tripId) {
 
-        Trip trip = tripRepo.findById(tripId)
-                .orElseThrow(() ->
-                        new TripNotFoundException(
-                                "Trip not found with ID : "
-                                        + tripId));
+        logger.info("Fetching expenses for trip ID: {}", tripId);
 
-        return expenseRepo.findByTrip(trip)
+        Trip trip = tripRepo.findById(tripId)
+                .orElseThrow(() -> {
+
+                    logger.warn("Trip not found with ID: {}", tripId);
+
+                    return new TripNotFoundException(
+                            "Trip not found with ID : "
+                                    + tripId);
+                });
+
+        List<ExpenseResponseDto> expenses = expenseRepo.findByTrip(trip)
                 .stream()
                 .map(expenseMapper::mapToExpenseResponse)
                 .toList();
+
+        logger.info("Retrieved {} expense(s) for trip ID: {}",
+                expenses.size(), tripId);
+
+        return expenses;
     }
 
     @Override
@@ -96,17 +190,27 @@ public class ExpenseServiceImpl implements ExpenseService {
             Long expenseId,
             ExpenseRequestDto request) {
 
+        logger.info("Updating expense with ID: {}", expenseId);
+
         Expense expense = expenseRepo.findById(expenseId)
-                .orElseThrow(() ->
-                        new ExpenseNotFoundException(
-                                "Expense not found with ID : "
-                                        + expenseId));
+                .orElseThrow(() -> {
+
+                    logger.warn("Expense not found with ID: {}", expenseId);
+
+                    return new ExpenseNotFoundException(
+                            "Expense not found with ID : "
+                                    + expenseId);
+                });
 
         Trip trip = tripRepo.findById(request.getTripId())
-                .orElseThrow(() ->
-                        new TripNotFoundException(
-                                "Trip not found with ID : "
-                                        + request.getTripId()));
+                .orElseThrow(() -> {
+
+                    logger.warn("Trip not found with ID: {}", request.getTripId());
+
+                    return new TripNotFoundException(
+                            "Trip not found with ID : "
+                                    + request.getTripId());
+                });
 
         expense.setTrip(trip);
         expense.setExpenseTitle(request.getExpenseTitle());
@@ -118,31 +222,52 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         Expense updatedExpense = expenseRepo.save(expense);
 
+        logger.info("Expense updated successfully with ID: {}", expenseId);
+
         return expenseMapper.mapToExpenseResponse(updatedExpense);
     }
 
     @Override
     public void deleteExpense(Long expenseId) {
 
+        logger.info("Deleting expense with ID: {}", expenseId);
+
         Expense expense = expenseRepo.findById(expenseId)
-                .orElseThrow(() ->
-                        new ExpenseNotFoundException(
-                                "Expense not found with ID : "
-                                        + expenseId));
+                .orElseThrow(() -> {
+
+                    logger.warn("Expense not found with ID: {}", expenseId);
+
+                    return new ExpenseNotFoundException(
+                            "Expense not found with ID : "
+                                    + expenseId);
+                });
 
         expenseRepo.delete(expense);
+
+        logger.info("Expense deleted successfully with ID: {}", expenseId);
     }
 
     @Override
     public Double getTotalExpenseByTrip(Long tripId) {
 
-        Trip trip = tripRepo.findById(tripId)
-                .orElseThrow(() ->
-                        new TripNotFoundException(
-                                "Trip not found with ID : "
-                                        + tripId));
+        logger.info("Calculating total expense for trip ID: {}", tripId);
 
-        return expenseRepo.getTotalExpenseByTrip(trip);
+        Trip trip = tripRepo.findById(tripId)
+                .orElseThrow(() -> {
+
+                    logger.warn("Trip not found with ID: {}", tripId);
+
+                    return new TripNotFoundException(
+                            "Trip not found with ID : "
+                                    + tripId);
+                });
+
+        Double totalExpense = expenseRepo.getTotalExpenseByTrip(trip);
+
+        logger.info("Total expense for trip ID {} is {}",
+                tripId, totalExpense);
+
+        return totalExpense;
     }
 
 }

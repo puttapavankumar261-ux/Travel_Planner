@@ -1,14 +1,17 @@
 package com.travelplanner.controller;
 
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.travelplanner.common.ApiResponse;
 import com.travelplanner.common.ApiResponseUtil;
 import com.travelplanner.common.constants.ApiMessages;
+import com.travelplanner.common.constants.PaginationConstants;
+import com.travelplanner.dto.PageResponseDto;
 import com.travelplanner.dto.TripRequestDto;
 import com.travelplanner.dto.TripResponseDto;
 import com.travelplanner.enums.TripStatus;
@@ -35,7 +38,7 @@ public class TripController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponseUtil.success(
-                		ApiMessages.TRIP_CREATED,
+                        ApiMessages.TRIP_CREATED,
                         response));
     }
 
@@ -48,48 +51,91 @@ public class TripController {
 
         return ResponseEntity.ok(
                 ApiResponseUtil.success(
-                        "Trip Retrieved Successfully",
+                        ApiMessages.TRIP_RETRIEVED,
                         response));
     }
 
-    // Get All Trips
+    // Get All Trips (Pagination + Sorting)
+ // Get All Trips (Pagination + Sorting + Filtering)
     @GetMapping
-    public ResponseEntity<ApiResponse<List<TripResponseDto>>> getAllTrips() {
+    public ResponseEntity<ApiResponse<PageResponseDto<TripResponseDto>>> getAllTrips(
 
-        List<TripResponseDto> response =
-                tripService.getAllTrips();
+            @RequestParam(defaultValue = "" + PaginationConstants.DEFAULT_PAGE)
+            int page,
+
+            @RequestParam(defaultValue = "" + PaginationConstants.DEFAULT_SIZE)
+            int size,
+
+            @RequestParam(defaultValue = PaginationConstants.DEFAULT_SORT_BY)
+            String sortBy,
+
+            @RequestParam(defaultValue = PaginationConstants.DEFAULT_SORT_DIRECTION)
+            String direction,
+
+            @RequestParam(required = false)
+            String destination,
+
+            @RequestParam(required = false)
+            TripStatus tripStatus,
+
+            @RequestParam(required = false)
+            Double minBudget,
+
+            @RequestParam(required = false)
+            Double maxBudget,
+
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate startDate,
+
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate endDate) {
+
+        PageResponseDto<TripResponseDto> response =
+                tripService.getAllTrips(
+                        page,
+                        size,
+                        sortBy,
+                        direction,
+                        destination,
+                        tripStatus,
+                        minBudget,
+                        maxBudget,
+                        startDate,
+                        endDate);
 
         return ResponseEntity.ok(
                 ApiResponseUtil.success(
-                        "Trips Retrieved Successfully",
+                        ApiMessages.TRIPS_RETRIEVED,
                         response));
     }
 
     // Get Trips By User
     @GetMapping("/user/{userId}")
-    public ResponseEntity<ApiResponse<List<TripResponseDto>>> getTripsByUser(
+    public ResponseEntity<ApiResponse<java.util.List<TripResponseDto>>> getTripsByUser(
             @PathVariable Long userId) {
 
-        List<TripResponseDto> response =
+        java.util.List<TripResponseDto> response =
                 tripService.getTripsByUser(userId);
 
         return ResponseEntity.ok(
                 ApiResponseUtil.success(
-                        "User Trips Retrieved Successfully",
+                        ApiMessages.TRIPS_RETRIEVED,
                         response));
     }
 
     // Get Trips By Status
     @GetMapping("/status/{tripStatus}")
-    public ResponseEntity<ApiResponse<List<TripResponseDto>>> getTripsByStatus(
+    public ResponseEntity<ApiResponse<java.util.List<TripResponseDto>>> getTripsByStatus(
             @PathVariable TripStatus tripStatus) {
 
-        List<TripResponseDto> response =
+        java.util.List<TripResponseDto> response =
                 tripService.getTripsByStatus(tripStatus);
 
         return ResponseEntity.ok(
                 ApiResponseUtil.success(
-                        "Trips Retrieved Successfully",
+                        ApiMessages.TRIPS_RETRIEVED,
                         response));
     }
 

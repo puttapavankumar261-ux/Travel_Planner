@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.travelplanner.dto.ItineraryRequestDto;
 import com.travelplanner.dto.ItineraryResponseDto;
+import com.travelplanner.dto.PageResponseDto;
 
 public interface ItineraryService {
 
@@ -11,8 +12,12 @@ public interface ItineraryService {
 
     ItineraryResponseDto getItineraryById(Long itineraryId);
 
-    List<ItineraryResponseDto> getAllItineraries();
-
+    PageResponseDto<ItineraryResponseDto> getAllItineraries(
+            int page,
+            int size,
+            String sortBy,
+            String direction);
+    
     List<ItineraryResponseDto> getItinerariesByTrip(Long tripId);
 
     ItineraryResponseDto updateItinerary(Long itineraryId,

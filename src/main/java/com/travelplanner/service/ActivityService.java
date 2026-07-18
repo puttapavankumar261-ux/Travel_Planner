@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.travelplanner.dto.ActivityRequestDto;
 import com.travelplanner.dto.ActivityResponseDto;
+import com.travelplanner.dto.PageResponseDto;
 
 public interface ActivityService {
 
@@ -11,8 +12,11 @@ public interface ActivityService {
 
     ActivityResponseDto getActivityById(Long activityId);
 
-    List<ActivityResponseDto> getAllActivities();
-
+    PageResponseDto<ActivityResponseDto> getAllActivities(
+            int page,
+            int size,
+            String sortBy,
+            String direction);
     List<ActivityResponseDto> getActivitiesByTrip(Long tripId);
 
     ActivityResponseDto updateActivity(Long activityId,

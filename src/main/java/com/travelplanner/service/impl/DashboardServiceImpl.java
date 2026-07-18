@@ -3,11 +3,14 @@ package com.travelplanner.service.impl;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.travelplanner.dto.DashboardResponseDto;
 import com.travelplanner.entity.Expense;
 import com.travelplanner.entity.Trip;
+import com.travelplanner.enums.ActivityStatus;
 import com.travelplanner.exception.TripNotFoundException;
 import com.travelplanner.repo.AccommodationRepository;
 import com.travelplanner.repo.ActivityRepository;
@@ -15,11 +18,13 @@ import com.travelplanner.repo.ExpenseRepository;
 import com.travelplanner.repo.ItineraryRepository;
 import com.travelplanner.repo.TransportationRepository;
 import com.travelplanner.repo.TripRepository;
-import com.travelplanner.enums.ActivityStatus;
 import com.travelplanner.service.DashboardService;
 
 @Service
 public class DashboardServiceImpl implements DashboardService {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(DashboardServiceImpl.class);
 
     private final TripRepository tripRepository;
     private final ExpenseRepository expenseRepository;
@@ -47,10 +52,16 @@ public class DashboardServiceImpl implements DashboardService {
     @Override
     public DashboardResponseDto getTripDashboard(Long tripId) {
 
+        logger.info("Generating dashboard for trip ID: {}", tripId);
+
         Trip trip = tripRepository.findById(tripId)
-                .orElseThrow(() ->
-                        new TripNotFoundException(
-                                "Trip not found with ID : " + tripId));
+                .orElseThrow(() -> {
+
+                    logger.warn("Trip not found with ID: {}", tripId);
+
+                    return new TripNotFoundException(
+                            "Trip not found with ID : " + tripId);
+                });
 
         DashboardResponseDto dashboard = new DashboardResponseDto();
 
@@ -77,7 +88,6 @@ public class DashboardServiceImpl implements DashboardService {
                 .sum();
 
         dashboard.setTotalExpenses(totalExpenses);
-
         dashboard.setRemainingBudget(
                 trip.getBudget() - totalExpenses);
 
@@ -139,6 +149,13 @@ public class DashboardServiceImpl implements DashboardService {
         // =====================================================
 
         dashboard.setGeneratedAt(LocalDateTime.now());
+
+        logger.info(
+                "Dashboard generated successfully for trip ID: {} | Expenses: {} | Activities: {} | Progress: {}%",
+                tripId,
+                totalExpenses,
+                totalActivities,
+                progress);
 
         return dashboard;
     }

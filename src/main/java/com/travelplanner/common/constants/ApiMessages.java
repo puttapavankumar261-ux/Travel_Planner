@@ -14,6 +14,8 @@ public final class ApiMessages {
     public static final String ROLE_DELETED = "Role deleted successfully";
     public static final String ROLE_ALREADY_EXISTS = "Role already exists";
     public static final String ROLE_NOT_FOUND = "Role not found";
+    public static final String ROLE_RETRIEVED = "Role retrieved successfully";
+    public static final String ROLES_RETRIEVED = "Roles retrieved successfully";
 
     // ===============================
     // User Messages
@@ -24,6 +26,8 @@ public final class ApiMessages {
     public static final String USER_DELETED = "User deleted successfully";
     public static final String USER_ALREADY_EXISTS = "User already exists";
     public static final String USER_NOT_FOUND = "User not found";
+    public static final String USER_RETRIEVED = "User retrieved successfully";
+    public static final String USERS_RETRIEVED = "Users retrieved successfully";
 
     // ===============================
     // Authentication
@@ -43,6 +47,8 @@ public final class ApiMessages {
     public static final String TRIP_UPDATED = "Trip updated successfully";
     public static final String TRIP_DELETED = "Trip deleted successfully";
     public static final String TRIP_NOT_FOUND = "Trip not found";
+    public static final String TRIP_RETRIEVED = "Trip retrieved successfully";
+    public static final String TRIPS_RETRIEVED = "Trips retrieved successfully";
 
     // ===============================
     // Itinerary
@@ -52,6 +58,8 @@ public final class ApiMessages {
     public static final String ITINERARY_UPDATED = "Itinerary updated successfully";
     public static final String ITINERARY_DELETED = "Itinerary deleted successfully";
     public static final String ITINERARY_NOT_FOUND = "Itinerary not found";
+    public static final String ITINERARY_RETRIEVED = "Itinerary retrieved successfully";
+    public static final String ITINERARIES_RETRIEVED = "Itineraries retrieved successfully";
 
     // ===============================
     // Expense
@@ -61,6 +69,8 @@ public final class ApiMessages {
     public static final String EXPENSE_UPDATED = "Expense updated successfully";
     public static final String EXPENSE_DELETED = "Expense deleted successfully";
     public static final String EXPENSE_NOT_FOUND = "Expense not found";
+    public static final String EXPENSE_RETRIEVED = "Expense retrieved successfully";
+    public static final String EXPENSES_RETRIEVED = "Expenses retrieved successfully";
 
     // ===============================
     // Accommodation
@@ -70,6 +80,8 @@ public final class ApiMessages {
     public static final String ACCOMMODATION_UPDATED = "Accommodation updated successfully";
     public static final String ACCOMMODATION_DELETED = "Accommodation deleted successfully";
     public static final String ACCOMMODATION_NOT_FOUND = "Accommodation not found";
+    public static final String ACCOMMODATION_RETRIEVED = "Accommodation retrieved successfully";
+    public static final String ACCOMMODATIONS_RETRIEVED = "Accommodations retrieved successfully";
 
     // ===============================
     // Transportation
@@ -79,6 +91,8 @@ public final class ApiMessages {
     public static final String TRANSPORT_UPDATED = "Transportation updated successfully";
     public static final String TRANSPORT_DELETED = "Transportation deleted successfully";
     public static final String TRANSPORT_NOT_FOUND = "Transportation not found";
+    public static final String TRANSPORT_RETRIEVED = "Transportation retrieved successfully";
+    public static final String TRANSPORTS_RETRIEVED = "Transportations retrieved successfully";
 
     // ===============================
     // Activities
@@ -88,6 +102,14 @@ public final class ApiMessages {
     public static final String ACTIVITY_UPDATED = "Activity updated successfully";
     public static final String ACTIVITY_DELETED = "Activity deleted successfully";
     public static final String ACTIVITY_NOT_FOUND = "Activity not found";
+    public static final String ACTIVITY_RETRIEVED = "Activity retrieved successfully";
+    public static final String ACTIVITIES_RETRIEVED = "Activities retrieved successfully";
+
+    // ===============================
+    // Dashboard
+    // ===============================
+
+    public static final String DASHBOARD_RETRIEVED = "Dashboard retrieved successfully";
 
     // ===============================
     // Validation

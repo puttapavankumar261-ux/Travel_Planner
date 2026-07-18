@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 import com.travelplanner.common.ApiResponse;
 import com.travelplanner.common.ApiResponseUtil;
+import com.travelplanner.common.constants.ApiMessages;
+import com.travelplanner.common.constants.PaginationConstants;
+import com.travelplanner.dto.PageResponseDto;
 import com.travelplanner.dto.TransportationRequestDto;
 import com.travelplanner.dto.TransportationResponseDto;
 import com.travelplanner.service.TransportationService;
@@ -53,14 +56,30 @@ public class TransportationController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<TransportationResponseDto>>> getAllTransportations() {
+    public ResponseEntity<ApiResponse<PageResponseDto<TransportationResponseDto>>> getAllTransportations(
 
-        List<TransportationResponseDto> response =
-                transportationService.getAllTransportations();
+            @RequestParam(defaultValue = "" + PaginationConstants.DEFAULT_PAGE)
+            int page,
+
+            @RequestParam(defaultValue = "" + PaginationConstants.DEFAULT_SIZE)
+            int size,
+
+            @RequestParam(defaultValue = PaginationConstants.DEFAULT_SORT_BY)
+            String sortBy,
+
+            @RequestParam(defaultValue = PaginationConstants.DEFAULT_SORT_DIRECTION)
+            String direction) {
+
+        PageResponseDto<TransportationResponseDto> response =
+                transportationService.getAllTransportations(
+                        page,
+                        size,
+                        sortBy,
+                        direction);
 
         return ResponseEntity.ok(
                 ApiResponseUtil.success(
-                        "Transportations Retrieved Successfully",
+                        ApiMessages.TRANSPORTS_RETRIEVED,
                         response));
     }
 

@@ -1,15 +1,23 @@
 package com.travelplanner.service.impl;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
+import com.travelplanner.dto.PageResponseDto;
+import com.travelplanner.util.PaginationUtil;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.travelplanner.dto.TransportationRequestDto;
 import com.travelplanner.dto.TransportationResponseDto;
 import com.travelplanner.entity.Transportation;
 import com.travelplanner.entity.Trip;
-import com.travelplanner.exception.TransportNotFoundException;
 import com.travelplanner.exception.TransportNotFoundException;
 import com.travelplanner.exception.TripNotFoundException;
 import com.travelplanner.mapper.TransportationMapper;
@@ -19,6 +27,9 @@ import com.travelplanner.service.TransportationService;
 
 @Service
 public class TransportationServiceImpl implements TransportationService {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(TransportationServiceImpl.class);
 
     private final TransportationRepository transportationRepo;
     private final TripRepository tripRepo;
@@ -38,13 +49,24 @@ public class TransportationServiceImpl implements TransportationService {
     public TransportationResponseDto createTransportation(
             TransportationRequestDto request) {
 
+        logger.info("Creating transportation booking for trip ID: {}",
+                request.getTripId());
+
         Trip trip = tripRepo.findById(request.getTripId())
-                .orElseThrow(() ->
-                        new TripNotFoundException(
-                                "Trip not found with ID : "
-                                        + request.getTripId()));
+                .orElseThrow(() -> {
+
+                    logger.warn("Trip not found with ID: {}",
+                            request.getTripId());
+
+                    return new TripNotFoundException(
+                            "Trip not found with ID : "
+                                    + request.getTripId());
+                });
 
         if (request.getArrivalDate().isBefore(request.getDepartureDate())) {
+
+            logger.warn("Invalid transportation dates. Arrival date is before departure date.");
+
             throw new IllegalArgumentException(
                     "Arrival Date cannot be before Departure Date.");
         }
@@ -52,12 +74,16 @@ public class TransportationServiceImpl implements TransportationService {
         if (request.getDepartureDate().isBefore(trip.getStartDate())
                 || request.getDepartureDate().isAfter(trip.getEndDate())) {
 
+            logger.warn("Departure date is outside trip duration.");
+
             throw new IllegalArgumentException(
                     "Departure Date must be within Trip Duration.");
         }
 
         if (request.getArrivalDate().isBefore(trip.getStartDate())
                 || request.getArrivalDate().isAfter(trip.getEndDate())) {
+
+            logger.warn("Arrival date is outside trip duration.");
 
             throw new IllegalArgumentException(
                     "Arrival Date must be within Trip Duration.");
@@ -75,6 +101,9 @@ public class TransportationServiceImpl implements TransportationService {
         Transportation saved =
                 transportationRepo.save(transportation);
 
+        logger.info("Transportation created successfully with ID: {}",
+                saved.getTransportationId());
+
         return transportationMapper.mapToTransportationResponse(saved);
     }
 
@@ -82,40 +111,84 @@ public class TransportationServiceImpl implements TransportationService {
     public TransportationResponseDto getTransportationById(
             Long transportationId) {
 
+        logger.info("Fetching transportation with ID: {}", transportationId);
+
         Transportation transportation =
                 transportationRepo.findById(transportationId)
-                .orElseThrow(() ->
-                        new TransportNotFoundException(
-                                "Transportation not found with ID : "
-                                        + transportationId));
+                        .orElseThrow(() -> {
 
-        return transportationMapper
-                .mapToTransportationResponse(transportation);
+                            logger.warn("Transportation not found with ID: {}",
+                                    transportationId);
+
+                            return new TransportNotFoundException(
+                                    "Transportation not found with ID : "
+                                            + transportationId);
+                        });
+
+        logger.info("Transportation retrieved successfully with ID: {}",
+                transportationId);
+
+        return transportationMapper.mapToTransportationResponse(transportation);
     }
 
     @Override
-    public List<TransportationResponseDto> getAllTransportations() {
+    public PageResponseDto<TransportationResponseDto> getAllTransportations(
+            int page,
+            int size,
+            String sortBy,
+            String direction) {
 
-        return transportationRepo.findAll()
-                .stream()
-                .map(transportationMapper::mapToTransportationResponse)
-                .toList();
+        logger.info(
+                "Fetching transportation bookings - Page: {}, Size: {}, SortBy: {}, Direction: {}",
+                page, size, sortBy, direction);
+
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<Transportation> transportationPage =
+                transportationRepo.findAll(pageable);
+
+        Page<TransportationResponseDto> dtoPage =
+                transportationPage.map(transportationMapper::mapToTransportationResponse);
+
+        logger.info(
+                "Retrieved {} transportation booking(s) on page {}.",
+                dtoPage.getNumberOfElements(),
+                dtoPage.getNumber());
+
+        return PaginationUtil.build(dtoPage);
     }
 
     @Override
     public List<TransportationResponseDto> getTransportationsByTrip(
             Long tripId) {
 
-        Trip trip = tripRepo.findById(tripId)
-                .orElseThrow(() ->
-                        new TripNotFoundException(
-                                "Trip not found with ID : "
-                                        + tripId));
+        logger.info("Fetching transportation records for trip ID: {}",
+                tripId);
 
-        return transportationRepo.findByTrip(trip)
-                .stream()
-                .map(transportationMapper::mapToTransportationResponse)
-                .toList();
+        Trip trip = tripRepo.findById(tripId)
+                .orElseThrow(() -> {
+
+                    logger.warn("Trip not found with ID: {}", tripId);
+
+                    return new TripNotFoundException(
+                            "Trip not found with ID : "
+                                    + tripId);
+                });
+
+        List<TransportationResponseDto> transportations =
+                transportationRepo.findByTrip(trip)
+                        .stream()
+                        .map(transportationMapper::mapToTransportationResponse)
+                        .toList();
+
+        logger.info("Retrieved {} transportation record(s) for trip ID: {}",
+                transportations.size(), tripId);
+
+        return transportations;
     }
 
     @Override
@@ -123,20 +196,36 @@ public class TransportationServiceImpl implements TransportationService {
             Long transportationId,
             TransportationRequestDto request) {
 
+        logger.info("Updating transportation with ID: {}",
+                transportationId);
+
         Transportation transportation =
                 transportationRepo.findById(transportationId)
-                .orElseThrow(() ->
-                        new TransportNotFoundException(
-                                "Transportation not found with ID : "
-                                        + transportationId));
+                        .orElseThrow(() -> {
+
+                            logger.warn("Transportation not found with ID: {}",
+                                    transportationId);
+
+                            return new TransportNotFoundException(
+                                    "Transportation not found with ID : "
+                                            + transportationId);
+                        });
 
         Trip trip = tripRepo.findById(request.getTripId())
-                .orElseThrow(() ->
-                        new TripNotFoundException(
-                                "Trip not found with ID : "
-                                        + request.getTripId()));
+                .orElseThrow(() -> {
+
+                    logger.warn("Trip not found with ID: {}",
+                            request.getTripId());
+
+                    return new TripNotFoundException(
+                            "Trip not found with ID : "
+                                    + request.getTripId());
+                });
 
         if (request.getArrivalDate().isBefore(request.getDepartureDate())) {
+
+            logger.warn("Invalid transportation dates. Arrival date is before departure date.");
+
             throw new IllegalArgumentException(
                     "Arrival Date cannot be before Departure Date.");
         }
@@ -160,21 +249,34 @@ public class TransportationServiceImpl implements TransportationService {
         Transportation updated =
                 transportationRepo.save(transportation);
 
-        return transportationMapper
-                .mapToTransportationResponse(updated);
+        logger.info("Transportation updated successfully with ID: {}",
+                transportationId);
+
+        return transportationMapper.mapToTransportationResponse(updated);
     }
 
     @Override
     public void deleteTransportation(Long transportationId) {
 
+        logger.info("Deleting transportation with ID: {}",
+                transportationId);
+
         Transportation transportation =
                 transportationRepo.findById(transportationId)
-                .orElseThrow(() ->
-                        new TransportNotFoundException(
-                                "Transportation not found with ID : "
-                                        + transportationId));
+                        .orElseThrow(() -> {
+
+                            logger.warn("Transportation not found with ID: {}",
+                                    transportationId);
+
+                            return new TransportNotFoundException(
+                                    "Transportation not found with ID : "
+                                            + transportationId);
+                        });
 
         transportationRepo.delete(transportation);
+
+        logger.info("Transportation deleted successfully with ID: {}",
+                transportationId);
     }
 
 }

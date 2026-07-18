@@ -2,8 +2,11 @@ package com.travelplanner.service.impl;
 
 import java.time.LocalDateTime;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.travelplanner.common.constants.ApiMessages;
 import com.travelplanner.dto.LoginRequestDto;
 import com.travelplanner.dto.LoginResponseDto;
 import com.travelplanner.dto.LogoutResponseDto;
@@ -17,6 +20,9 @@ import com.travelplanner.service.AuthService;
 @Service
 public class AuthServiceImpl implements AuthService {
 
+    private static final Logger logger =
+            LoggerFactory.getLogger(AuthServiceImpl.class);
+
     private final UserRepository userRepo;
 
     public AuthServiceImpl(UserRepository userRepo) {
@@ -26,21 +32,47 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public LoginResponseDto login(LoginRequestDto request) {
 
+        logger.info("Login attempt for email: {}", request.getEmail());
+
         User user = userRepo.findByEmail(request.getEmail())
-                .orElseThrow(() ->
-                        new InvalidCredentialsException("Invalid email or password"));
+                .orElseThrow(() -> {
+
+                    logger.warn("Login failed. User not found with email: {}",
+                            request.getEmail());
+
+                    return new InvalidCredentialsException(
+                            ApiMessages.INVALID_CREDENTIALS);
+                });
 
         if (!user.getPassword().equals(request.getPassword())) {
-            throw new InvalidCredentialsException("Invalid email or password");
+
+            logger.warn("Login failed. Invalid password for email: {}",
+                    request.getEmail());
+
+            throw new InvalidCredentialsException(
+                    ApiMessages.INVALID_CREDENTIALS);
         }
 
         if (!user.isAccountEnabled()) {
-            throw new AccountDisabledException("Your account has been disabled.");
+
+            logger.warn("Login failed. Account disabled for email: {}",
+                    request.getEmail());
+
+            throw new AccountDisabledException(
+                    ApiMessages.ACCOUNT_DISABLED);
         }
 
         if (user.isAccountLocked()) {
-            throw new AccountLockedException("Your account has been locked.");
+
+            logger.warn("Login failed. Account locked for email: {}",
+                    request.getEmail());
+
+            throw new AccountLockedException(
+                    ApiMessages.ACCOUNT_LOCKED);
         }
+
+        logger.info("Login successful for user ID: {}",
+                user.getUserId());
 
         return new LoginResponseDto(
                 user.getUserId(),
@@ -48,7 +80,7 @@ public class AuthServiceImpl implements AuthService {
                 user.getLastName(),
                 user.getEmail(),
                 user.getRole().getRoleName(),
-                "Login Successful",
+                ApiMessages.LOGIN_SUCCESS,
                 LocalDateTime.now()
         );
     }
@@ -56,7 +88,10 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public LogoutResponseDto logout() {
 
-        return new LogoutResponseDto("Logout Successful");
+        logger.info("User logged out successfully.");
+
+        return new LogoutResponseDto(
+                ApiMessages.LOGOUT_SUCCESS);
     }
 
 }

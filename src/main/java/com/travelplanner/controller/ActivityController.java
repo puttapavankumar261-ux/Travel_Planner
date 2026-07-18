@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import com.travelplanner.common.ApiResponse;
 import com.travelplanner.common.ApiResponseUtil;
 import com.travelplanner.common.constants.ApiMessages;
+import com.travelplanner.common.constants.PaginationConstants;
 import com.travelplanner.dto.ActivityRequestDto;
 import com.travelplanner.dto.ActivityResponseDto;
+import com.travelplanner.dto.PageResponseDto;
 import com.travelplanner.service.ActivityService;
 
 import jakarta.validation.Valid;
@@ -53,14 +55,30 @@ public class ActivityController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<ActivityResponseDto>>> getAllActivities() {
+    public ResponseEntity<ApiResponse<PageResponseDto<ActivityResponseDto>>> getAllActivities(
 
-        List<ActivityResponseDto> response =
-                activityService.getAllActivities();
+            @RequestParam(defaultValue = "" + PaginationConstants.DEFAULT_PAGE)
+            int page,
+
+            @RequestParam(defaultValue = "" + PaginationConstants.DEFAULT_SIZE)
+            int size,
+
+            @RequestParam(defaultValue = PaginationConstants.DEFAULT_SORT_BY)
+            String sortBy,
+
+            @RequestParam(defaultValue = PaginationConstants.DEFAULT_SORT_DIRECTION)
+            String direction) {
+
+        PageResponseDto<ActivityResponseDto> response =
+                activityService.getAllActivities(
+                        page,
+                        size,
+                        sortBy,
+                        direction);
 
         return ResponseEntity.ok(
                 ApiResponseUtil.success(
-                        "Activities Retrieved Successfully",
+                        ApiMessages.ACTIVITIES_RETRIEVED,
                         response));
     }
 

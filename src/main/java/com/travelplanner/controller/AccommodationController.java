@@ -1,6 +1,7 @@
 package com.travelplanner.controller;
 
-import java.util.List;
+import java.util.List;import com.travelplanner.common.constants.PaginationConstants;
+import com.travelplanner.dto.PageResponseDto;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,14 +58,30 @@ public class AccommodationController {
 
     // Get All Accommodations
     @GetMapping
-    public ResponseEntity<ApiResponse<List<AccommodationResponseDto>>> getAllAccommodations() {
+    public ResponseEntity<ApiResponse<PageResponseDto<AccommodationResponseDto>>> getAllAccommodations(
 
-        List<AccommodationResponseDto> response =
-                accommodationService.getAllAccommodations();
+            @RequestParam(defaultValue = "" + PaginationConstants.DEFAULT_PAGE)
+            int page,
+
+            @RequestParam(defaultValue = "" + PaginationConstants.DEFAULT_SIZE)
+            int size,
+
+            @RequestParam(defaultValue = PaginationConstants.DEFAULT_SORT_BY)
+            String sortBy,
+
+            @RequestParam(defaultValue = PaginationConstants.DEFAULT_SORT_DIRECTION)
+            String direction) {
+
+        PageResponseDto<AccommodationResponseDto> response =
+                accommodationService.getAllAccommodations(
+                        page,
+                        size,
+                        sortBy,
+                        direction);
 
         return ResponseEntity.ok(
                 ApiResponseUtil.success(
-                        "Accommodations Retrieved Successfully",
+                        ApiMessages.ACCOMMODATIONS_RETRIEVED,
                         response));
     }
 

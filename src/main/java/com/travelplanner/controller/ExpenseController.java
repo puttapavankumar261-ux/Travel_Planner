@@ -1,6 +1,12 @@
 package com.travelplanner.controller;
 
 import java.util.List;
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.travelplanner.enums.ExpenseCategory;
+import com.travelplanner.enums.PaymentMethod;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,8 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import com.travelplanner.common.ApiResponse;
 import com.travelplanner.common.ApiResponseUtil;
 import com.travelplanner.common.constants.ApiMessages;
+import com.travelplanner.common.constants.PaginationConstants;
 import com.travelplanner.dto.ExpenseRequestDto;
 import com.travelplanner.dto.ExpenseResponseDto;
+import com.travelplanner.dto.PageResponseDto;
 import com.travelplanner.service.ExpenseService;
 
 import jakarta.validation.Valid;
@@ -55,15 +63,62 @@ public class ExpenseController {
     }
 
     // Get All Expenses
+ // Get All Expenses (Pagination + Sorting + Filtering)
     @GetMapping
-    public ResponseEntity<ApiResponse<List<ExpenseResponseDto>>> getAllExpenses() {
+    public ResponseEntity<ApiResponse<PageResponseDto<ExpenseResponseDto>>> getAllExpenses(
 
-        List<ExpenseResponseDto> response =
-                expenseService.getAllExpenses();
+            @RequestParam(defaultValue = "" + PaginationConstants.DEFAULT_PAGE)
+            int page,
+
+            @RequestParam(defaultValue = "" + PaginationConstants.DEFAULT_SIZE)
+            int size,
+
+            @RequestParam(defaultValue = PaginationConstants.DEFAULT_SORT_BY)
+            String sortBy,
+
+            @RequestParam(defaultValue = PaginationConstants.DEFAULT_SORT_DIRECTION)
+            String direction,
+
+            @RequestParam(required = false)
+            String expenseTitle,
+
+            @RequestParam(required = false)
+            ExpenseCategory expenseCategory,
+
+            @RequestParam(required = false)
+            PaymentMethod paymentMethod,
+
+            @RequestParam(required = false)
+            Double minAmount,
+
+            @RequestParam(required = false)
+            Double maxAmount,
+
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate fromDate,
+
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate toDate) {
+
+        PageResponseDto<ExpenseResponseDto> response =
+                expenseService.getAllExpenses(
+                        page,
+                        size,
+                        sortBy,
+                        direction,
+                        expenseTitle,
+                        expenseCategory,
+                        paymentMethod,
+                        minAmount,
+                        maxAmount,
+                        fromDate,
+                        toDate);
 
         return ResponseEntity.ok(
                 ApiResponseUtil.success(
-                        "Expenses Retrieved Successfully",
+                        ApiMessages.EXPENSES_RETRIEVED,
                         response));
     }
 

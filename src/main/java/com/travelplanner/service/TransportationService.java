@@ -2,6 +2,7 @@ package com.travelplanner.service;
 
 import java.util.List;
 
+import com.travelplanner.dto.PageResponseDto;
 import com.travelplanner.dto.TransportationRequestDto;
 import com.travelplanner.dto.TransportationResponseDto;
 
@@ -13,8 +14,11 @@ public interface TransportationService {
     TransportationResponseDto getTransportationById(
             Long transportationId);
 
-    List<TransportationResponseDto> getAllTransportations();
-
+    PageResponseDto<TransportationResponseDto> getAllTransportations(
+            int page,
+            int size,
+            String sortBy,
+            String direction);
     List<TransportationResponseDto> getTransportationsByTrip(
             Long tripId);
 

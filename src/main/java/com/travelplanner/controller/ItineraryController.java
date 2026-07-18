@@ -1,6 +1,8 @@
 package com.travelplanner.controller;
 
 import java.util.List;
+import com.travelplanner.common.constants.PaginationConstants;
+import com.travelplanner.dto.PageResponseDto;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,14 +59,30 @@ public class ItineraryController {
 
     // Get All Itineraries
     @GetMapping
-    public ResponseEntity<ApiResponse<List<ItineraryResponseDto>>> getAllItineraries() {
+    public ResponseEntity<ApiResponse<PageResponseDto<ItineraryResponseDto>>> getAllItineraries(
 
-        List<ItineraryResponseDto> response =
-                itineraryService.getAllItineraries();
+            @RequestParam(defaultValue = "" + PaginationConstants.DEFAULT_PAGE)
+            int page,
+
+            @RequestParam(defaultValue = "" + PaginationConstants.DEFAULT_SIZE)
+            int size,
+
+            @RequestParam(defaultValue = PaginationConstants.DEFAULT_SORT_BY)
+            String sortBy,
+
+            @RequestParam(defaultValue = PaginationConstants.DEFAULT_SORT_DIRECTION)
+            String direction) {
+
+        PageResponseDto<ItineraryResponseDto> response =
+                itineraryService.getAllItineraries(
+                        page,
+                        size,
+                        sortBy,
+                        direction);
 
         return ResponseEntity.ok(
                 ApiResponseUtil.success(
-                        "Itineraries Retrieved Successfully",
+                        ApiMessages.ITINERARIES_RETRIEVED,
                         response));
     }
 
