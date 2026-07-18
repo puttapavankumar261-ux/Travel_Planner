@@ -1,0 +1,1225 @@
+/* ===========================================================
+   NOTIFICATION DROPDOWN
+   Travel Planner Admin Dashboard
+=========================================================== */
+
+.notification-dropdown {
+
+    position: absolute;
+
+    top: 72px;
+
+    right: -15px;
+
+    /* width: 430px; */
+    width: 380px;
+
+    background: #18222F;
+
+    border: 1px solid #2A394B;
+
+    border-radius: 18px;
+
+    /* overflow: hidden; */
+    overflow: visible;
+
+    box-shadow:
+        0 12px 40px rgba(0,0,0,.45),
+        0 0 0 1px rgba(255,255,255,.03);
+
+    animation: notificationOpen .25s ease;
+
+    z-index: 100000000 !important;
+
+}
+
+
+/* .notification-dropdown{
+
+    position:absolute;
+    top:68px;
+    right:-12px;
+
+    width:430px;
+
+    background:#172230;
+
+    border:1px solid #2B3B4F;
+
+    border-radius:18px;
+
+    box-shadow:
+        0 18px 45px rgba(0,0,0,.45);
+
+    overflow:visible;
+    z-index: 100000000 !important;
+
+} */
+
+
+
+/* ===========================================================
+   Arrow
+=========================================================== */
+
+/* .dropdown-arrow{
+
+    position:absolute;
+
+    top:-9px;
+
+    
+    right: 226px;
+
+    width:18px;
+
+    height:18px;
+
+     background:#18222F; 
+    background: #1D2938;
+
+    border-left:1px solid #2A394B;
+
+    border-top:1px solid #2A394B;
+
+    transform:rotate(45deg);
+    overflow: hidden;
+
+} */
+
+/* Top Triangle Arrow */
+
+.dropdown-arrow{
+    position: absolute;
+    top: -12px;
+    right: 221px;      /* Adjust to align with bell icon */
+
+    width: 0;
+    height: 0;
+
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-bottom: 12px solid #1D2938;
+
+    z-index: 1000;
+}
+
+/* Triangle */
+
+/* .dropdown-arrow{
+
+    position:absolute;
+
+    top:-10px;
+
+    right:28px;
+
+    width:20px;
+
+    height:20px;
+
+    background:#172230;
+
+    border-top:1px solid #2B3B4F;
+
+    border-left:1px solid #2B3B4F;
+
+    transform:rotate(45deg);
+
+    z-index:1;
+
+} */
+
+
+/* ===========================================================
+   Header
+=========================================================== */
+
+.notification-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:18px 20px;
+
+    background:#1D2938;
+
+    border-bottom:1px solid #2D3D51;
+
+}
+
+
+/* left side */
+
+.header-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+}
+
+
+/* ===========================================================
+   Bell Icon
+=========================================================== */
+
+.bell-icon{
+
+    width:48px;
+
+    height:48px;
+
+    border-radius:50%;
+
+    background:linear-gradient(135deg,#5B5FEF,#7C3AED);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    flex-shrink:0;
+
+    box-shadow:
+        0 6px 18px rgba(91,95,239,.35);
+
+}
+
+.bell-icon i{
+
+    font-size:20px;
+
+    color:white;
+
+}
+
+
+/* ===========================================================
+   Heading
+=========================================================== */
+
+.header-left h3{
+
+    margin:0;
+
+    color:#FFFFFF;
+
+    font-size:17px;
+
+    font-weight:700;
+
+    letter-spacing:.3px;
+
+}
+
+.header-left p{
+
+    margin-top:3px;
+
+    color:#A8B4C4;
+
+    font-size:13px;
+
+}
+
+
+/* ===========================================================
+   Right Section
+=========================================================== */
+
+.header-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+}
+
+
+/* ===========================================================
+   Mark All Button
+=========================================================== */
+
+.mark-read-btn{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    background:#263548;
+
+    color:#D5DDE8;
+
+    border:none;
+
+    padding:9px 14px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    transition:.30s;
+
+    font-size:13px;
+
+    font-weight:600;
+
+}
+
+.mark-read-btn:hover{
+
+    background:#31445B;
+
+}
+
+.mark-read-btn i{
+
+    font-size:15px;
+
+}
+
+
+/* ===========================================================
+   Close Button
+=========================================================== */
+
+.close-btn{
+
+    width:38px;
+
+    height:38px;
+
+    border:none;
+
+    background:#263548;
+
+    border-radius:50%;
+
+    cursor:pointer;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    transition:.30s;
+
+}
+
+.close-btn:hover{
+
+    background:#D32F2F;
+
+    transform:rotate(90deg);
+
+}
+
+.close-btn i{
+
+    color:white;
+
+    font-size:15px;
+
+}
+
+
+/* ===========================================================
+   Animation
+=========================================================== */
+
+@keyframes notificationOpen{
+
+    0%{
+
+        opacity:0;
+
+        transform:translateY(-12px) scale(.96);
+
+    }
+
+    100%{
+
+        opacity:1;
+
+        transform:translateY(0) scale(1);
+
+    }
+
+}
+
+
+/*=========================================================
+    NOTIFICATION LIST
+==========================================================*/
+
+.notification-list{
+
+    max-height:480px;
+
+    overflow-y:auto;
+
+    padding:12px;
+
+}
+
+/*=========================================================
+    Notification Card
+==========================================================*/
+
+.notification-card{
+
+    display:flex;
+
+    align-items:flex-start;
+
+    gap:16px;
+
+    padding:16px;
+
+    margin-bottom:12px;
+
+    background:#1F2B3A;
+
+    border:1px solid transparent;
+
+    border-radius:16px;
+
+    transition:all .30s ease;
+
+    cursor:pointer;
+
+    position:relative;
+
+}
+
+.notification-card:last-child{
+
+    margin-bottom:0;
+
+}
+
+.notification-card:hover{
+
+    background:#253446;
+
+    border-color:#33475B;
+
+    transform:translateY(-2px);
+
+    box-shadow:
+
+        0 8px 20px rgba(0,0,0,.30);
+
+}
+
+/*=========================================================
+    Unread Card
+==========================================================*/
+
+.notification-card.unread{
+
+    border-left:4px solid #4F8CFF;
+
+    background:#223247;
+
+}
+
+/*=========================================================
+    Notification Icon
+==========================================================*/
+
+.notification-icon{
+
+    /* width:52px;
+
+    height:52px;
+
+    min-width:52px; */
+    width:40px;
+    height:40px;
+    min-width:40px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:#fff;
+
+    box-shadow:
+
+        0 8px 18px rgba(0,0,0,.30);
+
+}
+
+.notification-icon i{
+
+    font-size:22px;
+
+}
+
+/*=========================================================
+    Icon Colors
+==========================================================*/
+
+.notification-icon.user{
+
+    background:linear-gradient(135deg,#3B82F6,#2563EB);
+
+}
+
+.notification-icon.flight{
+
+    background:linear-gradient(135deg,#14B8A6,#0F766E);
+
+}
+
+.notification-icon.hotel{
+
+    background:linear-gradient(135deg,#8B5CF6,#6D28D9);
+
+}
+
+.notification-icon.payment{
+
+    background:linear-gradient(135deg,#F59E0B,#D97706);
+
+}
+
+.notification-icon.train{
+
+    background:linear-gradient(135deg,#EF4444,#B91C1C);
+
+}
+
+.notification-icon.bus{
+
+    background:linear-gradient(135deg,#06B6D4,#0E7490);
+
+}
+
+.notification-icon.package{
+
+    background:linear-gradient(135deg,#10B981,#047857);
+
+}
+
+.notification-icon.refund { background: linear-gradient(135deg,#22C55E,#15803D); }
+.notification-icon.cancel { background: linear-gradient(135deg,#EF4444,#B91C1C); }
+.notification-icon.destination { background: linear-gradient(135deg,#06B6D4,#0891B2); }
+.notification-icon.report { background: linear-gradient(135deg,#8B5CF6,#6D28D9); }
+.notification-icon.revenue { background: linear-gradient(135deg,#F59E0B,#D97706); }
+.notification-icon.review { background: linear-gradient(135deg,#EC4899,#BE185D); }
+.notification-icon.support { background: linear-gradient(135deg,#0EA5E9,#0369A1); }
+.notification-icon.security { background: linear-gradient(135deg,#6366F1,#4338CA); }
+.notification-icon.alert { background: linear-gradient(135deg,#F97316,#EA580C); }
+.notification-icon.system { background: linear-gradient(135deg,#64748B,#475569); }
+.notification-icon.promotion { background: linear-gradient(135deg,#10B981,#047857); }
+.notification-icon.insurance { background: linear-gradient(135deg,#14B8A6,#0F766E); }
+.notification-icon.vendor { background: linear-gradient(135deg,#A855F7,#7E22CE); }
+
+/*=========================================================
+    Notification Content
+==========================================================*/
+
+.notification-content{
+
+    flex:1;
+
+    min-width:0;
+
+}
+
+/*=========================================================
+    First Row
+==========================================================*/
+
+.notification-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-start;
+
+    gap:15px;
+
+}
+
+/*=========================================================
+    Title
+==========================================================*/
+
+.notification-top h4{
+
+    flex:1;
+
+    margin:0;
+
+    color:#FFFFFF;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    line-height:22px;
+
+}
+
+/*=========================================================
+    Time
+==========================================================*/
+
+.notification-time{
+
+    width:88px;
+
+    min-width:88px;
+
+    text-align:right;
+
+    font-size:12px;
+
+    color:#94A3B8;
+
+    white-space:nowrap;
+
+    font-weight:500;
+
+}
+
+/*=========================================================
+    Message
+==========================================================*/
+
+.notification-message{
+
+    margin-top:8px;
+
+    margin-bottom:12px;
+
+    color:#C6D2E1;
+
+    font-size:13px;
+
+    line-height:22px;
+
+    word-break:break-word;
+
+    overflow-wrap:anywhere;
+
+    white-space:normal;
+
+}
+
+/*=========================================================
+    Bottom Section
+==========================================================*/
+
+.notification-bottom{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+/*=========================================================
+    Category Tag
+==========================================================*/
+
+.notification-tag{
+
+    display:inline-flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:5px 12px;
+
+    border-radius:30px;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    letter-spacing:.5px;
+
+    text-transform:uppercase;
+
+}
+
+/*=========================================================
+    USER
+==========================================================*/
+
+.notification-tag.user{
+
+    background:rgba(59,130,246,.18);
+
+    color:#60A5FA;
+
+}
+
+/*=========================================================
+    FLIGHT
+==========================================================*/
+
+.notification-tag.flight{
+
+    background:rgba(20,184,166,.18);
+
+    color:#2DD4BF;
+
+}
+
+/*=========================================================
+    HOTEL
+==========================================================*/
+
+.notification-tag.hotel{
+
+    background:rgba(139,92,246,.18);
+
+    color:#A78BFA;
+
+}
+
+/*=========================================================
+    PAYMENT
+==========================================================*/
+
+.notification-tag.payment{
+
+    background:rgba(245,158,11,.18);
+
+    color:#FBBF24;
+
+}
+
+/*=========================================================
+    TRAIN
+==========================================================*/
+
+.notification-tag.train{
+
+    background:rgba(239,68,68,.18);
+
+    color:#F87171;
+
+}
+
+/*=========================================================
+    BUS
+==========================================================*/
+
+.notification-tag.bus{
+
+    background:rgba(6,182,212,.18);
+
+    color:#67E8F9;
+
+}
+
+/*=========================================================
+    PACKAGE
+==========================================================*/
+
+.notification-tag.package{
+
+    background:rgba(16,185,129,.18);
+
+    color:#34D399;
+
+}
+
+
+/*=========================================================
+    NOTIFICATION TAG COLORS
+==========================================================*/
+
+.notification-tag.refund{
+    background:rgba(34,197,94,.15);
+    color:#22C55E;
+    border:1px solid rgba(34,197,94,.35);
+}
+
+.notification-tag.cancel{
+    background:rgba(239,68,68,.15);
+    color:#EF4444;
+    border:1px solid rgba(239,68,68,.35);
+}
+
+.notification-tag.destination{
+    background:rgba(6,182,212,.15);
+    color:#06B6D4;
+    border:1px solid rgba(6,182,212,.35);
+}
+
+.notification-tag.report{
+    background:rgba(139,92,246,.15);
+    color:#8B5CF6;
+    border:1px solid rgba(139,92,246,.35);
+}
+
+.notification-tag.revenue{
+    background:rgba(245,158,11,.15);
+    color:#F59E0B;
+    border:1px solid rgba(245,158,11,.35);
+}
+
+.notification-tag.review{
+    background:rgba(236,72,153,.15);
+    color:#EC4899;
+    border:1px solid rgba(236,72,153,.35);
+}
+
+.notification-tag.support{
+    background:rgba(14,165,233,.15);
+    color:#0EA5E9;
+    border:1px solid rgba(14,165,233,.35);
+}
+
+.notification-tag.security{
+    background:rgba(99,102,241,.15);
+    color:#6366F1;
+    border:1px solid rgba(99,102,241,.35);
+}
+
+.notification-tag.alert{
+    background:rgba(249,115,22,.15);
+    color:#F97316;
+    border:1px solid rgba(249,115,22,.35);
+}
+
+.notification-tag.system{
+    background:rgba(100,116,139,.15);
+    color:#64748B;
+    border:1px solid rgba(100,116,139,.35);
+}
+
+.notification-tag.promotion{
+    background:rgba(16,185,129,.15);
+    color:#10B981;
+    border:1px solid rgba(16,185,129,.35);
+}
+
+.notification-tag.insurance{
+    background:rgba(20,184,166,.15);
+    color:#14B8A6;
+    border:1px solid rgba(20,184,166,.35);
+}
+
+.notification-tag.vendor{
+    background:rgba(168,85,247,.15);
+    color:#A855F7;
+    border:1px solid rgba(168,85,247,.35);
+}
+
+/*=========================================================
+    Unread Dot
+==========================================================*/
+
+.unread-dot{
+
+    width:10px;
+
+    height:10px;
+
+    border-radius:50%;
+
+    background:#3B82F6;
+
+    box-shadow:
+
+        0 0 10px rgba(59,130,246,.90);
+
+}
+
+/*=========================================================
+    FOOTER
+==========================================================*/
+
+.notification-footer{
+
+    padding:16px 18px;
+
+    background:#1D2938;
+
+    border-top:1px solid #2D3D51;
+
+}
+
+/*=========================================================
+    VIEW ALL BUTTON
+==========================================================*/
+
+.view-all-btn{
+
+    width:100%;
+
+    height:48px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:linear-gradient(135deg,#4F46E5,#6366F1);
+
+    color:#FFFFFF;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:10px;
+
+    cursor:pointer;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    letter-spacing:.3px;
+
+    transition:all .30s ease;
+
+}
+
+.view-all-btn i{
+
+    font-size:16px;
+
+}
+
+.view-all-btn:hover{
+
+    transform:translateY(-2px);
+
+    background:linear-gradient(135deg,#4338CA,#4F46E5);
+
+    box-shadow:
+
+        0 10px 24px rgba(79,70,229,.35);
+
+}
+
+.view-all-btn:active{
+
+    transform:scale(.98);
+
+}
+
+/*=========================================================
+    SCROLLBAR
+==========================================================*/
+
+.notification-list::-webkit-scrollbar{
+
+    width:8px;
+
+}
+
+.notification-list::-webkit-scrollbar-track{
+
+    background:#18222F;
+
+    border-radius:20px;
+
+}
+
+.notification-list::-webkit-scrollbar-thumb{
+
+    background:#41556F;
+
+    border-radius:20px;
+
+}
+
+.notification-list::-webkit-scrollbar-thumb:hover{
+
+    background:#5C728E;
+
+}
+
+/* Firefox */
+
+.notification-list{
+
+    scrollbar-width:thin;
+
+    scrollbar-color:#41556F #18222F;
+
+}
+
+/*=========================================================
+    SMOOTH EFFECTS
+==========================================================*/
+
+.notification-card,
+.notification-icon,
+.notification-tag,
+.view-all-btn,
+.mark-read-btn,
+.close-btn{
+
+    transition:all .30s ease;
+
+}
+
+/*=========================================================
+    ICON HOVER EFFECT
+==========================================================*/
+
+.notification-card:hover .notification-icon{
+
+    transform:scale(1.08) rotate(-5deg);
+
+}
+
+/*=========================================================
+    TITLE COLOR
+==========================================================*/
+
+.notification-card:hover h4{
+
+    color:#FFFFFF;
+
+}
+
+/*=========================================================
+    MESSAGE COLOR
+==========================================================*/
+
+.notification-card:hover .notification-message{
+
+    color:#D8E4F2;
+
+}
+
+/*=========================================================
+    TAG HOVER
+==========================================================*/
+
+.notification-card:hover .notification-tag{
+
+    transform:translateY(-1px);
+
+}
+
+/*=========================================================
+    GLOW FOR UNREAD
+==========================================================*/
+
+.notification-card.unread{
+
+    box-shadow:
+
+        inset 4px 0 0 #4F8CFF;
+
+}
+
+.notification-card.unread:hover{
+
+    box-shadow:
+
+        inset 4px 0 0 #60A5FA,
+
+        0 10px 24px rgba(0,0,0,.30);
+
+}
+
+/*=========================================================
+    RESPONSIVE
+==========================================================*/
+
+@media (max-width:768px){
+
+    .notification-dropdown{
+
+        width:360px;
+
+        right:-10px;
+
+    }
+
+    .notification-top{
+
+        flex-direction:column;
+
+        gap:4px;
+
+    }
+
+    .notification-time{
+
+        width:auto;
+
+        min-width:auto;
+
+        text-align:left;
+
+    }
+
+}
+
+@media (max-width:576px){
+
+    .notification-dropdown{
+
+        position:fixed;
+
+        top:70px;
+
+        left:10px;
+
+        right:10px;
+
+        width:auto;
+
+        max-height:75vh;
+
+        border-radius:16px;
+
+    }
+
+    .dropdown-arrow{
+
+        display:none;
+
+    }
+
+    .notification-list{
+
+        max-height:55vh;
+
+    }
+
+    .notification-card{
+
+        padding:14px;
+
+        gap:12px;
+
+    }
+
+    .notification-icon{
+
+        width:46px;
+
+        height:46px;
+
+        min-width:46px;
+
+    }
+
+    .notification-icon i{
+
+        font-size:20px;
+
+    }
+
+    .notification-top h4{
+
+        font-size:14px;
+
+    }
+
+    .notification-message{
+
+        /* font-size:12px; */
+        font-size: 10px;
+
+        line-height:20px;
+
+    }
+
+    .notification-footer{
+
+        padding:14px;
+
+    }
+
+}
+
+/*=========================================================
+    ACCESSIBILITY
+==========================================================*/
+
+.notification-card:focus-within{
+
+    outline:2px solid #4F8CFF;
+
+    outline-offset:2px;
+
+}
+
+.view-all-btn:focus,
+
+.mark-read-btn:focus,
+
+.close-btn:focus{
+
+    outline:2px solid #60A5FA;
+
+    outline-offset:2px;
+
+}
+
+/*=========================================================
+    OPTIONAL FADE-IN FOR LIST ITEMS
+==========================================================*/
+
+.notification-card{
+
+    animation:itemFade .25s ease both;
+
+}
+
+.notification-card:nth-child(1){ animation-delay:.02s; }
+.notification-card:nth-child(2){ animation-delay:.04s; }
+.notification-card:nth-child(3){ animation-delay:.06s; }
+.notification-card:nth-child(4){ animation-delay:.08s; }
+.notification-card:nth-child(5){ animation-delay:.10s; }
+.notification-card:nth-child(6){ animation-delay:.12s; }
+.notification-card:nth-child(7){ animation-delay:.14s; }
+
+@keyframes itemFade{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(8px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}

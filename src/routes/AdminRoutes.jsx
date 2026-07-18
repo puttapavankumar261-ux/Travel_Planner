@@ -11,6 +11,7 @@ import Reports from "../modules/admin/Reports/Reports";
 // import Settings from "../modules/admin/Settings/Settings";
 
 import Settings from "../modules/admin/Settings/Settings";
+import NotificationModel from "../modules/admin/Notifications/NotificationModel";
 
 
 const AdminRoutes = () => {
@@ -27,6 +28,7 @@ const AdminRoutes = () => {
 
        <Route path="settings" element={<Settings />} />
        <Route path="adminprofile" element={<AdminProfile />} /> 
+       <Route path="notifications" element={<NotificationModel/>} />
     </Routes>
   );
 };

@@ -1,8 +1,15 @@
 import { NavLink } from "react-router-dom";
 import "./Navbar.css";
 import Logo from "../common/Logo";
-
+import NotificationDropdown from "../../modules/admin/Notifications/NotificationModel";
+import { useState, useRef, useEffect } from "react";
 function Navbar() {
+  const [showNotification, setShowNotification] = useState(false);
+
+  const notificationRef = useRef(null);
+
+  // Example notification count
+  const notificationCount = 5;
   return (
     <header className="navbar glass">
       <Logo showTagline={false} />
@@ -21,12 +28,26 @@ function Navbar() {
         <button className="icon-btn">
           <i className="bi bi-search"></i>
         </button>
-
-        <button className="icon-btn notification">
+        {/* Notification */}
+        <div className="notification-wrapper" ref={notificationRef}>
+        <button className="icon-btn notification" onClick={() =>
+                      setShowNotification(!showNotification) }>
           <i className="bi bi-bell"></i>
-          <span className="nav-badge">5</span>
+           {notificationCount > 0 && (
+          <span className="nav-badge">
+            {notificationCount}
+           {/* {notificationCount > 99
+                          ? "99+"
+                          : notificationCount} */}
+                          </span> )}
         </button>
-
+         <NotificationDropdown
+                    open={showNotification}
+                    onClose={() => setShowNotification(false)}
+                  />
+        </div>
+        {/* END Notification */}
+      
         <div className="profile">
           <div className="profile-image">
             <i className="bi bi-person-fill"></i>

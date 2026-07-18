@@ -5,6 +5,7 @@
     border-radius:25px;
 
     min-height:450px;
+    z-index: -1;
 }
 
 .chart-header{
