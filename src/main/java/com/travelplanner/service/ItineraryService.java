@@ -1,5 +1,6 @@
 package com.travelplanner.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.travelplanner.dto.ItineraryRequestDto;
@@ -16,12 +17,17 @@ public interface ItineraryService {
             int page,
             int size,
             String sortBy,
-            String direction);
-    
+            String direction,
+            Integer dayNumber,
+            String activityTitle,
+            String location,
+            LocalDate activityDate);
+
     List<ItineraryResponseDto> getItinerariesByTrip(Long tripId);
 
-    ItineraryResponseDto updateItinerary(Long itineraryId,
-                                         ItineraryRequestDto request);
+    ItineraryResponseDto updateItinerary(
+            Long itineraryId,
+            ItineraryRequestDto request);
 
     void deleteItinerary(Long itineraryId);
 

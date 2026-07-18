@@ -24,7 +24,14 @@ import com.travelplanner.mapper.TransportationMapper;
 import com.travelplanner.repo.TransportationRepository;
 import com.travelplanner.repo.TripRepository;
 import com.travelplanner.service.TransportationService;
+import java.time.LocalDate;
 
+import org.springframework.data.jpa.domain.Specification;
+
+import com.travelplanner.enums.TransportStatus;
+import com.travelplanner.enums.TransportType;
+import com.travelplanner.enums.TravelClass;
+import com.travelplanner.specification.TransportationSpecification;
 @Service
 public class TransportationServiceImpl implements TransportationService {
 
@@ -136,11 +143,30 @@ public class TransportationServiceImpl implements TransportationService {
             int page,
             int size,
             String sortBy,
-            String direction) {
+            String direction,
+            TransportType transportType,
+            String providerName,
+            String source,
+            String destination,
+            TravelClass travelClass,
+            TransportStatus transportStatus,
+            Double minFare,
+            Double maxFare,
+            LocalDate departureDate,
+            LocalDate arrivalDate) {
 
         logger.info(
-                "Fetching transportation bookings - Page: {}, Size: {}, SortBy: {}, Direction: {}",
-                page, size, sortBy, direction);
+                "Fetching transportation bookings with filters - Page: {}, Size: {}, SortBy: {}, Direction: {}, Type: {}, Provider: {}, Source: {}, Destination: {}, Class: {}, Status: {}",
+                page,
+                size,
+                sortBy,
+                direction,
+                transportType,
+                providerName,
+                source,
+                destination,
+                travelClass,
+                transportStatus);
 
         Sort sort = direction.equalsIgnoreCase("desc")
                 ? Sort.by(sortBy).descending()
@@ -148,11 +174,25 @@ public class TransportationServiceImpl implements TransportationService {
 
         Pageable pageable = PageRequest.of(page, size, sort);
 
+        Specification<Transportation> specification =
+                TransportationSpecification.filterTransportations(
+                        transportType,
+                        providerName,
+                        source,
+                        destination,
+                        travelClass,
+                        transportStatus,
+                        minFare,
+                        maxFare,
+                        departureDate,
+                        arrivalDate);
+
         Page<Transportation> transportationPage =
-                transportationRepo.findAll(pageable);
+                transportationRepo.findAll(specification, pageable);
 
         Page<TransportationResponseDto> dtoPage =
-                transportationPage.map(transportationMapper::mapToTransportationResponse);
+                transportationPage.map(
+                        transportationMapper::mapToTransportationResponse);
 
         logger.info(
                 "Retrieved {} transportation booking(s) on page {}.",

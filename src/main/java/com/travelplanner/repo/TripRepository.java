@@ -17,4 +17,6 @@ public interface TripRepository extends JpaRepository<Trip, Long>, JpaSpecificat
 
     List<Trip> findByTripStatus(TripStatus tripStatus);
 
+	Long countByTripStatus(TripStatus completed);
+
 }

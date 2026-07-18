@@ -1,6 +1,12 @@
 package com.travelplanner.controller;
 
 import java.util.List;
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.travelplanner.enums.ActivityCategory;
+import com.travelplanner.enums.ActivityStatus;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +56,7 @@ public class ActivityController {
 
         return ResponseEntity.ok(
                 ApiResponseUtil.success(
-                        "Activity Retrieved Successfully",
+                        ApiMessages.ACTIVITIES_RETRIEVED,
                         response));
     }
 
@@ -67,14 +73,47 @@ public class ActivityController {
             String sortBy,
 
             @RequestParam(defaultValue = PaginationConstants.DEFAULT_SORT_DIRECTION)
-            String direction) {
+            String direction,
+
+            @RequestParam(required = false)
+            String activityName,
+
+            @RequestParam(required = false)
+            ActivityCategory activityCategory,
+
+            @RequestParam(required = false)
+            String location,
+
+            @RequestParam(required = false)
+            ActivityStatus activityStatus,
+
+            @RequestParam(required = false)
+            Boolean bookingRequired,
+
+            @RequestParam(required = false)
+            Double minEstimatedCost,
+
+            @RequestParam(required = false)
+            Double maxEstimatedCost,
+
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate activityDate) {
 
         PageResponseDto<ActivityResponseDto> response =
                 activityService.getAllActivities(
                         page,
                         size,
                         sortBy,
-                        direction);
+                        direction,
+                        activityName,
+                        activityCategory,
+                        location,
+                        activityStatus,
+                        bookingRequired,
+                        minEstimatedCost,
+                        maxEstimatedCost,
+                        activityDate);
 
         return ResponseEntity.ok(
                 ApiResponseUtil.success(
@@ -91,7 +130,7 @@ public class ActivityController {
 
         return ResponseEntity.ok(
                 ApiResponseUtil.success(
-                        "Trip Activities Retrieved Successfully",
+                		ApiMessages.ACTIVITIES_RETRIEVED,
                         response));
     }
 

@@ -1,6 +1,13 @@
 package com.travelplanner.controller;
 
-import java.util.List;import com.travelplanner.common.constants.PaginationConstants;
+import java.util.List;
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.travelplanner.enums.AccommodationType;
+import com.travelplanner.enums.BookingStatus;
+import com.travelplanner.common.constants.PaginationConstants;
 import com.travelplanner.dto.PageResponseDto;
 
 import org.springframework.http.HttpStatus;
@@ -57,6 +64,7 @@ public class AccommodationController {
     }
 
     // Get All Accommodations
+ // Get All Accommodations (Pagination + Sorting + Filtering)
     @GetMapping
     public ResponseEntity<ApiResponse<PageResponseDto<AccommodationResponseDto>>> getAllAccommodations(
 
@@ -70,14 +78,48 @@ public class AccommodationController {
             String sortBy,
 
             @RequestParam(defaultValue = PaginationConstants.DEFAULT_SORT_DIRECTION)
-            String direction) {
+            String direction,
+
+            @RequestParam(required = false)
+            String hotelName,
+
+            @RequestParam(required = false)
+            AccommodationType accommodationType,
+
+            @RequestParam(required = false)
+            String city,
+
+            @RequestParam(required = false)
+            BookingStatus bookingStatus,
+
+            @RequestParam(required = false)
+            Double minBookingAmount,
+
+            @RequestParam(required = false)
+            Double maxBookingAmount,
+
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate checkInDate,
+
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate checkOutDate) {
 
         PageResponseDto<AccommodationResponseDto> response =
                 accommodationService.getAllAccommodations(
                         page,
                         size,
                         sortBy,
-                        direction);
+                        direction,
+                        hotelName,
+                        accommodationType,
+                        city,
+                        bookingStatus,
+                        minBookingAmount,
+                        maxBookingAmount,
+                        checkInDate,
+                        checkOutDate);
 
         return ResponseEntity.ok(
                 ApiResponseUtil.success(

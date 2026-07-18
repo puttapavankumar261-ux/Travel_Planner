@@ -5,6 +5,7 @@ public enum TripStatus {
     PLANNED,
     ONGOING,
     COMPLETED,
-    CANCELLED
+    CANCELLED, 
+    UPCOMING
 
 }

@@ -5,7 +5,9 @@ import org.springframework.web.bind.annotation.*;
 
 import com.travelplanner.common.ApiResponse;
 import com.travelplanner.common.ApiResponseUtil;
+import com.travelplanner.common.constants.ApiMessages;
 import com.travelplanner.dto.DashboardResponseDto;
+import com.travelplanner.dto.DashboardSummaryDto;
 import com.travelplanner.service.DashboardService;
 
 @RestController
@@ -27,7 +29,20 @@ public class DashboardController {
 
         return ResponseEntity.ok(
                 ApiResponseUtil.success(
-                        "Dashboard Retrieved Successfully",
+                        ApiMessages.DASHBOARD_RETRIEVED,
+                        response));
+    }
+    
+    @GetMapping("/summary")
+    public ResponseEntity<ApiResponse<DashboardSummaryDto>>
+    getDashboardSummary() {
+
+        DashboardSummaryDto response =
+                dashboardService.getDashboardSummary();
+
+        return ResponseEntity.ok(
+                ApiResponseUtil.success(
+                        ApiMessages.DASHBOARD_RETRIEVED,
                         response));
     }
 

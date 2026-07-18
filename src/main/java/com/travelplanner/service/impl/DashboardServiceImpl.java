@@ -8,9 +8,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.travelplanner.dto.DashboardResponseDto;
+import com.travelplanner.dto.DashboardSummaryDto;
 import com.travelplanner.entity.Expense;
 import com.travelplanner.entity.Trip;
 import com.travelplanner.enums.ActivityStatus;
+import com.travelplanner.enums.TripStatus;
 import com.travelplanner.exception.TripNotFoundException;
 import com.travelplanner.repo.AccommodationRepository;
 import com.travelplanner.repo.ActivityRepository;
@@ -158,6 +160,52 @@ public class DashboardServiceImpl implements DashboardService {
                 progress);
 
         return dashboard;
+    }
+    
+    @Override
+    public DashboardSummaryDto getDashboardSummary() {
+
+        logger.info("Generating dashboard summary.");
+
+        DashboardSummaryDto dto = new DashboardSummaryDto();
+
+        dto.setTotalTrips(tripRepository.count());
+
+        dto.setUpcomingTrips(
+                tripRepository.countByTripStatus(TripStatus.UPCOMING));
+
+        dto.setOngoingTrips(
+                tripRepository.countByTripStatus(TripStatus.ONGOING));
+
+        dto.setCompletedTrips(
+                tripRepository.countByTripStatus(TripStatus.COMPLETED));
+
+        dto.setCancelledTrips(
+                tripRepository.countByTripStatus(TripStatus.CANCELLED));
+
+        dto.setTotalExpenses(
+                expenseRepository.getTotalExpenses());
+
+        dto.setTotalActivities(
+                activityRepository.count());
+
+        dto.setUpcomingActivities(
+                activityRepository.countByActivityStatus(
+                        ActivityStatus.PLANNED));
+
+        dto.setCompletedActivities(
+                activityRepository.countByActivityStatus(
+                        ActivityStatus.COMPLETED));
+
+        dto.setTotalAccommodations(
+                accommodationRepository.count());
+
+        dto.setTotalTransportations(
+                transportationRepository.count());
+
+        logger.info("Dashboard summary generated successfully.");
+
+        return dto;
     }
 
 }

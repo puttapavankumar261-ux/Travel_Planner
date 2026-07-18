@@ -1,6 +1,13 @@
 package com.travelplanner.service.impl;
 
 import java.util.List;
+import java.time.LocalDate;
+
+import org.springframework.data.jpa.domain.Specification;
+
+import com.travelplanner.enums.ActivityCategory;
+import com.travelplanner.enums.ActivityStatus;
+import com.travelplanner.specification.ActivitySpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -128,11 +135,26 @@ public class ActivityServiceImpl implements ActivityService {
             int page,
             int size,
             String sortBy,
-            String direction) {
+            String direction,
+            String activityName,
+            ActivityCategory activityCategory,
+            String location,
+            ActivityStatus activityStatus,
+            Boolean bookingRequired,
+            Double minEstimatedCost,
+            Double maxEstimatedCost,
+            LocalDate activityDate) {
 
         logger.info(
-                "Fetching activities - Page: {}, Size: {}, SortBy: {}, Direction: {}",
-                page, size, sortBy, direction);
+                "Fetching activities with filters - Page: {}, Size: {}, SortBy: {}, Direction: {}, Name: {}, Category: {}, Location: {}, Status: {}",
+                page,
+                size,
+                sortBy,
+                direction,
+                activityName,
+                activityCategory,
+                location,
+                activityStatus);
 
         Sort sort = direction.equalsIgnoreCase("desc")
                 ? Sort.by(sortBy).descending()
@@ -140,7 +162,19 @@ public class ActivityServiceImpl implements ActivityService {
 
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<Activity> activityPage = activityRepo.findAll(pageable);
+        Specification<Activity> specification =
+                ActivitySpecification.filterActivities(
+                        activityName,
+                        activityCategory,
+                        location,
+                        activityStatus,
+                        bookingRequired,
+                        minEstimatedCost,
+                        maxEstimatedCost,
+                        activityDate);
+
+        Page<Activity> activityPage =
+                activityRepo.findAll(specification, pageable);
 
         Page<ActivityResponseDto> dtoPage =
                 activityPage.map(activityMapper::mapToActivityResponse);

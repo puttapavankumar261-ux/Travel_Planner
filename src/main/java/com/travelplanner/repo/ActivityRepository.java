@@ -21,4 +21,6 @@ public interface ActivityRepository extends JpaRepository<Activity, Long>,JpaSpe
             Trip trip,
             ActivityStatus activityStatus);
 
+	Long countByActivityStatus(ActivityStatus planned);
+
 }

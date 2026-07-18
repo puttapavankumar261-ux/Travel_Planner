@@ -1,6 +1,11 @@
 package com.travelplanner.service.impl;
 
 import java.util.List;
+import java.time.LocalDate;
+
+import org.springframework.data.jpa.domain.Specification;
+
+import com.travelplanner.specification.ItinerarySpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -113,11 +118,22 @@ public class ItineraryServiceImpl implements ItineraryService {
             int page,
             int size,
             String sortBy,
-            String direction) {
+            String direction,
+            Integer dayNumber,
+            String activityTitle,
+            String location,
+            LocalDate activityDate) {
 
         logger.info(
-                "Fetching itineraries - Page: {}, Size: {}, SortBy: {}, Direction: {}",
-                page, size, sortBy, direction);
+                "Fetching itineraries with filters - Page: {}, Size: {}, SortBy: {}, Direction: {}, Day: {}, Activity: {}, Location: {}, Date: {}",
+                page,
+                size,
+                sortBy,
+                direction,
+                dayNumber,
+                activityTitle,
+                location,
+                activityDate);
 
         Sort sort = direction.equalsIgnoreCase("desc")
                 ? Sort.by(sortBy).descending()
@@ -125,7 +141,15 @@ public class ItineraryServiceImpl implements ItineraryService {
 
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<Itinerary> itineraryPage = itineraryRepo.findAll(pageable);
+        Specification<Itinerary> specification =
+                ItinerarySpecification.filterItineraries(
+                        dayNumber,
+                        activityTitle,
+                        location,
+                        activityDate);
+
+        Page<Itinerary> itineraryPage =
+                itineraryRepo.findAll(specification, pageable);
 
         Page<ItineraryResponseDto> dtoPage =
                 itineraryPage.map(itineraryMapper::mapToItineraryResponse);

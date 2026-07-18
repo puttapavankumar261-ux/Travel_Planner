@@ -1,6 +1,9 @@
 package com.travelplanner.controller;
 
 import java.util.List;
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
 import com.travelplanner.common.constants.PaginationConstants;
 import com.travelplanner.dto.PageResponseDto;
 
@@ -58,6 +61,7 @@ public class ItineraryController {
     }
 
     // Get All Itineraries
+ // Get All Itineraries (Pagination + Sorting + Filtering)
     @GetMapping
     public ResponseEntity<ApiResponse<PageResponseDto<ItineraryResponseDto>>> getAllItineraries(
 
@@ -71,14 +75,31 @@ public class ItineraryController {
             String sortBy,
 
             @RequestParam(defaultValue = PaginationConstants.DEFAULT_SORT_DIRECTION)
-            String direction) {
+            String direction,
+
+            @RequestParam(required = false)
+            Integer dayNumber,
+
+            @RequestParam(required = false)
+            String activityTitle,
+
+            @RequestParam(required = false)
+            String location,
+
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate activityDate) {
 
         PageResponseDto<ItineraryResponseDto> response =
                 itineraryService.getAllItineraries(
                         page,
                         size,
                         sortBy,
-                        direction);
+                        direction,
+                        dayNumber,
+                        activityTitle,
+                        location,
+                        activityDate);
 
         return ResponseEntity.ok(
                 ApiResponseUtil.success(
@@ -95,9 +116,10 @@ public class ItineraryController {
                 itineraryService.getItinerariesByTrip(tripId);
 
         return ResponseEntity.ok(
-                ApiResponseUtil.success(
-                        "Trip Itineraries Retrieved Successfully",
-                        response));
+        		ApiResponseUtil.success(
+        		        ApiMessages.ITINERARIES_RETRIEVED,
+        		        response)
+        		);
     }
 
     // Update Itinerary

@@ -18,4 +18,6 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long>,JpaSpeci
 
 	Double getTotalExpenseByTrip(Trip trip);
 
+	Double getTotalExpenses();
+
 }

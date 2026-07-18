@@ -1,6 +1,13 @@
 package com.travelplanner.controller;
 
 import java.util.List;
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.travelplanner.enums.TransportStatus;
+import com.travelplanner.enums.TransportType;
+import com.travelplanner.enums.TravelClass;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +45,7 @@ public class TransportationController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponseUtil.success(
-                        "Transportation Created Successfully",
+                        ApiMessages.TRANSPORT_CREATED,
                         response));
     }
 
@@ -51,7 +58,7 @@ public class TransportationController {
 
         return ResponseEntity.ok(
                 ApiResponseUtil.success(
-                        "Transportation Retrieved Successfully",
+                        ApiMessages.TRANSPORTS_RETRIEVED,
                         response));
     }
 
@@ -68,14 +75,56 @@ public class TransportationController {
             String sortBy,
 
             @RequestParam(defaultValue = PaginationConstants.DEFAULT_SORT_DIRECTION)
-            String direction) {
+            String direction,
+
+            @RequestParam(required = false)
+            TransportType transportType,
+
+            @RequestParam(required = false)
+            String providerName,
+
+            @RequestParam(required = false)
+            String source,
+
+            @RequestParam(required = false)
+            String destination,
+
+            @RequestParam(required = false)
+            TravelClass travelClass,
+
+            @RequestParam(required = false)
+            TransportStatus transportStatus,
+
+            @RequestParam(required = false)
+            Double minFare,
+
+            @RequestParam(required = false)
+            Double maxFare,
+
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate departureDate,
+
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate arrivalDate) {
 
         PageResponseDto<TransportationResponseDto> response =
                 transportationService.getAllTransportations(
                         page,
                         size,
                         sortBy,
-                        direction);
+                        direction,
+                        transportType,
+                        providerName,
+                        source,
+                        destination,
+                        travelClass,
+                        transportStatus,
+                        minFare,
+                        maxFare,
+                        departureDate,
+                        arrivalDate);
 
         return ResponseEntity.ok(
                 ApiResponseUtil.success(
@@ -92,7 +141,7 @@ public class TransportationController {
 
         return ResponseEntity.ok(
                 ApiResponseUtil.success(
-                        "Trip Transportations Retrieved Successfully",
+                        ApiMessages.TRANSPORTS_RETRIEVED,
                         response));
     }
 
@@ -106,7 +155,7 @@ public class TransportationController {
 
         return ResponseEntity.ok(
                 ApiResponseUtil.success(
-                        "Transportation Updated Successfully",
+                        ApiMessages.TRANSPORT_UPDATED,
                         response));
     }
 
@@ -118,7 +167,7 @@ public class TransportationController {
 
         return ResponseEntity.ok(
                 ApiResponseUtil.success(
-                        "Transportation Deleted Successfully",
+                        ApiMessages.TRANSPORT_DELETED,
                         null));
     }
 }

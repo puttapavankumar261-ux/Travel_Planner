@@ -1,6 +1,13 @@
 package com.travelplanner.service.impl;
 
 import java.util.List;
+import java.time.LocalDate;
+
+import org.springframework.data.jpa.domain.Specification;
+
+import com.travelplanner.enums.AccommodationType;
+import com.travelplanner.enums.BookingStatus;
+import com.travelplanner.specification.AccommodationSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -127,11 +134,26 @@ public class AccommodationServiceImpl implements AccommodationService {
             int page,
             int size,
             String sortBy,
-            String direction) {
+            String direction,
+            String hotelName,
+            AccommodationType accommodationType,
+            String city,
+            BookingStatus bookingStatus,
+            Double minBookingAmount,
+            Double maxBookingAmount,
+            LocalDate checkInDate,
+            LocalDate checkOutDate) {
 
         logger.info(
-                "Fetching accommodations - Page: {}, Size: {}, SortBy: {}, Direction: {}",
-                page, size, sortBy, direction);
+                "Fetching accommodations with filters - Page: {}, Size: {}, SortBy: {}, Direction: {}, Hotel: {}, Type: {}, City: {}, Status: {}",
+                page,
+                size,
+                sortBy,
+                direction,
+                hotelName,
+                accommodationType,
+                city,
+                bookingStatus);
 
         Sort sort = direction.equalsIgnoreCase("desc")
                 ? Sort.by(sortBy).descending()
@@ -139,7 +161,19 @@ public class AccommodationServiceImpl implements AccommodationService {
 
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<Accommodation> accommodationPage = accommodationRepo.findAll(pageable);
+        Specification<Accommodation> specification =
+                AccommodationSpecification.filterAccommodations(
+                        hotelName,
+                        accommodationType,
+                        city,
+                        bookingStatus,
+                        minBookingAmount,
+                        maxBookingAmount,
+                        checkInDate,
+                        checkOutDate);
+
+        Page<Accommodation> accommodationPage =
+                accommodationRepo.findAll(specification, pageable);
 
         Page<AccommodationResponseDto> dtoPage =
                 accommodationPage.map(accommodationMapper::mapToAccommodationResponse);
