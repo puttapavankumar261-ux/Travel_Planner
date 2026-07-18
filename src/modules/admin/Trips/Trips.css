@@ -3,6 +3,7 @@
     color: white;
     min-height: 100vh;
     background: #0f172a;
+    z-index: -1;
 }
 
 .trips-header {

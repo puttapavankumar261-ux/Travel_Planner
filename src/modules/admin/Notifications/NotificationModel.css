@@ -271,7 +271,8 @@
 
     transition:.30s;
 
-    font-size:13px;
+    /* font-size:13px; */
+    font-size: 10px;
 
     font-weight:600;
 
