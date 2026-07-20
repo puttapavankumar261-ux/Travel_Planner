@@ -19,6 +19,7 @@
     margin-bottom:35px;
 
     transition:all .35s ease;
+    z-index: -1;
 
 }
 

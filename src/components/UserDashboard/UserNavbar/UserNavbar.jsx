@@ -53,8 +53,8 @@ const UserNavbar = () => {
           <FaBell />
           <span className="notification-dot"></span>
         </button>
-
-        <div className="user-profile">
+         
+        <div className="user-profile" onClick={()=> navigate('/user/userprofile')}>
           <FaUserCircle className="profile-icon" />
 
           <div>

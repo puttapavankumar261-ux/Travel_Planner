@@ -1,0 +1,375 @@
+/* ==========================================================
+   UserProfile.css 
+   ========================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #121212;
+    color: #FFFFFF;
+}
+
+.user-profile-page{
+    /* position: relative;
+    min-height: 100vh;
+    width: 100%; */
+    position:relative;
+    min-height:100vh;
+    padding:35px;
+    overflow-y:auto;
+}
+
+.user-profile-container {
+    /* max-width: 1300px;
+    margin: 30px auto;
+    padding: 20px; */
+    font-family: Arial, sans-serif;
+}
+
+/* ===================== Profile Header ===================== */
+
+.user-profile-container .profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    padding: 30px;
+    background: #1E1E1E;
+    border: 1px solid #2D2D2D;
+    border-radius: 18px;
+}
+
+.user-profile-container .profile-left {
+    display: flex;
+    align-items: center;
+}
+
+.user-profile-container .profile-image {
+    position: relative;
+    width: 170px;
+    height: 170px;
+}
+
+.user-profile-container .profile-image img {
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #0B5ED7;
+}
+
+.user-profile-container .camera-btn {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    width: 42px;
+    height: 42px;
+    border: none;
+    border-radius: 50%;
+    background: #0B5ED7;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+.user-profile-container .profile-right {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.user-profile-container .welcome h4 {
+    color: #A0A0A0;
+}
+
+.user-profile-container .welcome h1 {
+    margin: 8px 0;
+    font-size: 34px;
+}
+
+.user-profile-container .welcome p {
+    margin: 5px 0;
+    color: #D5D5D5;
+}
+
+.user-profile-container .premium {
+    display: inline-flex;
+    gap: 8px;
+    padding: 8px 14px;
+    background: #2C2C2C;
+    border: 1px solid #FFD700;
+    color: #FFD700;
+    border-radius: 30px;
+}
+
+.user-profile-container .edit-btn,
+.user-profile-container .small-edit-btn,
+.user-profile-container .add-btn,
+.user-profile-container .view-btn,
+.user-profile-container .setting-btn {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    /* background: #0B5ED7; */
+    background: #3B82F6;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+.user-profile-container .edit-btn:hover,
+.user-profile-container .small-edit-btn:hover,
+.user-profile-container .add-btn:hover,
+.user-profile-container .view-btn:hover,
+.user-profile-container .setting-btn:hover {
+    background: #084298;
+}
+
+.user-profile-container .setting-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+
+    margin-bottom: 15px;
+    padding: 14px 18px;
+
+    border: none;
+    border-radius: 10px;
+
+    /* background: #0B5ED7; */
+    background: #3B82F6;
+    color: #FFFFFF;
+
+    font-size: 16px;
+    font-weight: 500;
+
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.user-profile-container .setting-btn:last-child {
+    margin-bottom: 0;
+}
+
+.user-profile-container .setting-btn:hover {
+    background: #084298;
+    transform: translateX(5px);
+}
+
+/* ===================== Statistics ===================== */
+
+.user-profile-container .stats-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.user-profile-container .stat-card,
+.user-profile-container .personal-card,
+.user-profile-container .traveller-card,
+.user-profile-container .booking-card,
+.user-profile-container .payment-card,
+.user-profile-container .settings-card {
+    /* background: #1E1E1E; */
+    background: rgba(15, 23, 42, .68);
+    border: 1px solid #2D2D2D;
+    border-radius: 16px;
+    padding: 25px;
+}
+
+.user-profile-container .stat-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: .3s;
+}
+
+.user-profile-container .stat-card:hover {
+    transform: translateY(-5px);
+    border-color: #0B5ED7;
+    box-shadow: 0 0 20px rgba(11,94,215,.25);
+}
+
+.user-profile-container .stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FFFFFF;
+}
+
+/* ===================== Details ===================== */
+
+.user-profile-container .profile-details {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 25px;
+}
+
+.user-profile-container .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.user-profile-container .info-grid {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 18px;
+}
+
+.user-profile-container .info-item {
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    /* background: #252525;
+    border: 1px solid #2D2D2D; */
+    background: rgba(255, 255, 255, .03);
+    border: 1px solid rgba(255, 255, 255, .06);
+    border-radius: 14px;
+    transition: .35s;
+}
+
+.user-profile-container .info-item label {
+    color: #A0A0A0;
+}
+
+.user-profile-container .info-item p {
+    color: #FFFFFF;
+}
+
+.user-profile-container .traveller-row,
+.user-profile-container .payment-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 0;
+    background: rgba(255, 255, 255, .03);
+    border: 1px solid rgba(255, 255, 255, .06);
+    padding : 10px;
+    /* border-bottom: 1px solid #2D2D2D; */
+}
+
+.user-profile-container .traveller-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    /* background: #0B5ED7; */
+    background: #3B82F6;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ===================== Booking ===================== */
+
+.user-profile-container .booking-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.user-profile-container .booking-table th {
+    /* background: #252525; */
+    background: #3B82F6;
+    color: #FFFFFF;
+}
+
+.user-profile-container .booking-table th,
+.user-profile-container .booking-table td {
+    padding: 14px;
+    border-bottom: 1px solid #2D2D2D;
+}
+
+.user-profile-container .bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
+
+/************** edit-traveller ****************************/
+
+.user-profile-container .edit-traveller{
+
+    margin-left:auto;
+
+    display:flex;
+    align-items:center;
+    gap:6px;
+
+    padding:7px 14px;
+
+    border-radius:30px;
+
+    border:1px solid #0B5ED7;
+
+    background:#1E1E1E;
+
+    color:#0B5ED7;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    font-size:14px;
+
+    font-weight:600;
+}
+
+.user-profile-container .edit-traveller:hover{
+
+    background:#0B5ED7;
+
+    color:#fff;
+
+    transform:translateY(-2px);
+
+}
+
+/* ===================== Responsive ===================== */
+
+@media (max-width: 992px) {
+
+    .user-profile-container .profile-header,
+    .user-profile-container .profile-right {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .user-profile-container .stats-container,
+    .user-profile-container .profile-details,
+    .user-profile-container .bottom-grid,
+    .user-profile-container .info-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+
+    .user-profile-container {
+        padding: 12px;
+    }
+
+    .user-profile-container .profile-image,
+    .user-profile-container .profile-image img {
+        width: 130px;
+        height: 130px;
+    }
+
+    .user-profile-container .booking-table {
+        display: block;
+        overflow-x: auto;
+    }
+}
