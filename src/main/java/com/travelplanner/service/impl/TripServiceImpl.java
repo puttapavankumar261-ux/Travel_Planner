@@ -2,6 +2,7 @@ package com.travelplanner.service.impl;
 
 import org.slf4j.Logger;
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.data.jpa.domain.Specification;
 
@@ -14,8 +15,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.travelplanner.dto.PageResponseDto;
+import com.travelplanner.dto.TripDestinationAnalyticsDto;
 import com.travelplanner.dto.TripRequestDto;
 import com.travelplanner.dto.TripResponseDto;
+import com.travelplanner.dto.TripStatusAnalyticsDto;
 import com.travelplanner.entity.Trip;
 import com.travelplanner.entity.User;
 import com.travelplanner.enums.TripStatus;
@@ -240,4 +243,16 @@ public class TripServiceImpl implements TripService {
 
         logger.info("Trip deleted successfully with ID: {}", tripId);
     }
+
+	@Override
+	public List<TripStatusAnalyticsDto> getTripStatusAnalytics() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<TripDestinationAnalyticsDto> getTripDestinationAnalytics() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -3,8 +3,10 @@ package com.travelplanner.service;
 import java.util.List;
 
 import com.travelplanner.dto.PageResponseDto;
+import com.travelplanner.dto.TripDestinationAnalyticsDto;
 import com.travelplanner.dto.TripRequestDto;
 import com.travelplanner.dto.TripResponseDto;
+import com.travelplanner.dto.TripStatusAnalyticsDto;
 import com.travelplanner.enums.TripStatus;
 
 public interface TripService {
@@ -30,6 +32,10 @@ public interface TripService {
     List<TripResponseDto> getTripsByStatus(TripStatus tripStatus);
 
     TripResponseDto updateTrip(Long tripId, TripRequestDto request);
+    
+    List<TripStatusAnalyticsDto> getTripStatusAnalytics();
+
+    List<TripDestinationAnalyticsDto> getTripDestinationAnalytics();
 
     void deleteTrip(Long tripId);
 

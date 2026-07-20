@@ -119,4 +119,12 @@ public final class ApiMessages {
     public static final String INVALID_JSON = "Malformed JSON request";
     public static final String DATABASE_ERROR = "Database operation failed.";
     public static final String INTERNAL_SERVER_ERROR = "An unexpected error occurred.";
+	public static final String EXPENSE_CATEGORY_ANALYTICS_RETRIEVED = null;
+	public static final String MONTHLY_EXPENSE_ANALYTICS_RETRIEVED = null;
+	
+	public static final String TRIP_STATUS_ANALYTICS_RETRIEVED =
+	        "Trip status analytics retrieved successfully";
+
+	public static final String TRIP_DESTINATION_ANALYTICS_RETRIEVED =
+	        "Trip destination analytics retrieved successfully";
 }

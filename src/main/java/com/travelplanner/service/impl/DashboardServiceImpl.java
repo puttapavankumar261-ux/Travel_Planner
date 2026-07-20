@@ -9,7 +9,10 @@ import org.springframework.stereotype.Service;
 
 import com.travelplanner.dto.DashboardResponseDto;
 import com.travelplanner.dto.DashboardSummaryDto;
-import com.travelplanner.entity.Expense;
+import com.travelplanner.dto.ExpenseCategoryDto;
+import com.travelplanner.dto.MonthlyExpenseDto;
+import com.travelplanner.dto.TripDestinationAnalyticsDto;
+import com.travelplanner.dto.TripStatusAnalyticsDto;
 import com.travelplanner.entity.Trip;
 import com.travelplanner.enums.ActivityStatus;
 import com.travelplanner.enums.TripStatus;
@@ -83,11 +86,8 @@ public class DashboardServiceImpl implements DashboardService {
         // Expense Summary
         // =====================================================
 
-        List<Expense> expenses = expenseRepository.findByTrip(trip);
-
-        double totalExpenses = expenses.stream()
-                .mapToDouble(Expense::getAmount)
-                .sum();
+        double totalExpenses =
+                expenseRepository.getTotalExpenseByTrip(trip);
 
         dashboard.setTotalExpenses(totalExpenses);
         dashboard.setRemainingBudget(
@@ -172,8 +172,8 @@ public class DashboardServiceImpl implements DashboardService {
         dto.setTotalTrips(tripRepository.count());
 
         dto.setUpcomingTrips(
-                tripRepository.countByTripStatus(TripStatus.UPCOMING));
-
+                tripRepository.countByTripStatus(TripStatus.PLANNED));
+        
         dto.setOngoingTrips(
                 tripRepository.countByTripStatus(TripStatus.ONGOING));
 
@@ -206,6 +206,64 @@ public class DashboardServiceImpl implements DashboardService {
         logger.info("Dashboard summary generated successfully.");
 
         return dto;
+    }
+
+    @Override
+    public List<ExpenseCategoryDto> getExpenseCategoryAnalytics() {
+
+        logger.info("Generating expense category analytics.");
+
+        List<ExpenseCategoryDto> analytics =
+                expenseRepository.getExpenseCategoryAnalytics();
+
+        logger.info("Expense category analytics generated successfully.");
+
+        return analytics;
+    }
+
+    @Override
+    public List<MonthlyExpenseDto> getMonthlyExpenseAnalytics() {
+
+        logger.info("Generating monthly expense analytics.");
+
+        List<MonthlyExpenseDto> analytics =
+                expenseRepository.getMonthlyExpenseAnalytics()
+                        .stream()
+                        .map(row -> new MonthlyExpenseDto(
+                                ((Number) row[0]).intValue(),
+                                ((Number) row[1]).intValue(),
+                                ((Number) row[2]).doubleValue()))
+                        .toList();
+
+        logger.info("Monthly expense analytics generated successfully.");
+
+        return analytics;
+    }
+    
+    @Override
+    public List<TripStatusAnalyticsDto> getTripStatusAnalytics() {
+
+        logger.info("Generating trip status analytics.");
+
+        List<TripStatusAnalyticsDto> analytics =
+                tripRepository.getTripStatusAnalytics();
+
+        logger.info("Trip status analytics generated successfully.");
+
+        return analytics;
+    }
+    
+    @Override
+    public List<TripDestinationAnalyticsDto> getTripDestinationAnalytics() {
+
+        logger.info("Generating destination analytics.");
+
+        List<TripDestinationAnalyticsDto> analytics =
+                tripRepository.getTripDestinationAnalytics();
+
+        logger.info("Destination analytics generated successfully.");
+
+        return analytics;
     }
 
 }
