@@ -10,6 +10,7 @@ import BookingWizard from "../modules/Users/Bookings/BookingWizard";
 
 import CreateTripWizard from "../modules/Users/Trips/CreateTrip/CreateTripWizard";
 import UserProfile from "../modules/Users/UserProfile/UserProfile";
+import NotificationModel from "../modules/admin/Notifications/NotificationModel";
 
 const UserRoutes = () => {
   return (
@@ -29,6 +30,7 @@ const UserRoutes = () => {
 
       {/* <Route path="profile" element={<Profile />} /> */}
       <Route path="userprofile" element={<UserProfile/>} />
+      <Route path="usernotifications" element={<NotificationModel/>} />
     </Routes>
   );
 };

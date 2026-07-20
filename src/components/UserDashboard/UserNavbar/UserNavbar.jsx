@@ -1,6 +1,8 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import "./UserNavbar.css";
 import Logo from "../../common/Logo";
+import NotificationDropdown from "../../../modules/Users/Notifications/NotificationModel";
+import { useState, useRef, useEffect } from "react";
 import {
   FaHome,
   FaSuitcase,
@@ -12,6 +14,12 @@ import {
 
 const UserNavbar = () => {
   const navigate = useNavigate();
+   const [showNotification, setShowNotification] = useState(false);
+  
+    const notificationRef = useRef(null);
+  
+    // Example notification count
+    const notificationCount = 5;
 
   return (
     <header className="user-navbar">
@@ -49,10 +57,27 @@ const UserNavbar = () => {
           + New Trip
         </button>
 
-        <button className="notification-btn">
+        {/* <button className="notification-btn" onClick={()=>navigate('/user/usernotifications')}>
           <FaBell />
           <span className="notification-dot"></span>
+        </button> */}
+
+         {/* Notification */}
+        <div className="notification-userwrapper" ref={notificationRef}>
+        <button className="notification-btn" onClick={() =>
+                      setShowNotification(!showNotification) }>
+          {/* <i className="bi bi-bell"></i> */}
+           <FaBell />
+           {notificationCount > 0 && (
+          <span className="nav-badge">
+            {notificationCount} </span> )}
         </button>
+         <NotificationDropdown
+                    open={showNotification}
+                    onClose={() => setShowNotification(false)}
+                  />
+        </div>
+        {/* END Notification */}
          
         <div className="user-profile" onClick={()=> navigate('/user/userprofile')}>
           <FaUserCircle className="profile-icon" />
