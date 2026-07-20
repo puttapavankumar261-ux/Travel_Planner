@@ -280,6 +280,22 @@ function Registration() {
                  </div>
             </div>
 
+             {/* upload image (Full Width) */}
+            <div className="upload-container">
+                 <label>Upload Image</label>
+                 <div className="input-box ">
+                   <i className="bi bi-person-circle"></i>
+                    <input
+                      type="file"
+                      name="imageUpload"
+                      id="profileImage"
+                      accept="image/*"
+                      onChange={handleChange}
+                      placeholder="Image Upload"
+                    />
+                 </div>
+            </div>
+
             <button type="submit" className="login-btn" style={{ marginTop: '20px' }} disabled={loading}>
               {loading ? 'Registering...' : 'Sign Up'}
             </button>
