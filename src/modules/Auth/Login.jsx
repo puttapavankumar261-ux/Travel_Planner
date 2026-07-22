@@ -26,6 +26,7 @@ function Login() {
     setError("");
 
     try {
+<<<<<<< HEAD
       const result = await authService.login(loginData);
 
       // Backend response:
@@ -56,6 +57,15 @@ function Login() {
         navigate("/admin/dashboard");
       } else {
         navigate("/user/dashboard");
+=======
+      const response = await authService.login(loginData);
+      localStorage.setItem("token", response.token);
+      const role = response.data.roleName;
+      if(role === "USER"){
+          navigate("/user/dashboard");
+      }else if(role === "ADMIN") {
+          navigate("/admin/dashboard");
+>>>>>>> 25029f4dedba30bc55d26cf4358179075af9c84a
       }
     } catch (err) {
       setError(
