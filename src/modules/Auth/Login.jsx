@@ -27,7 +27,12 @@ function Login() {
     try {
       const response = await authService.login(loginData);
       localStorage.setItem("token", response.token);
-      navigate("/user/dashboard");
+      const role = response.data.roleName;
+      if(role === "USER"){
+          navigate("/user/dashboard");
+      }else if(role === "ADMIN") {
+          navigate("/admin/dashboard");
+      }
     } catch (err) {
       setError("Login failed. Please check your credentials.");
       console.error(err);
