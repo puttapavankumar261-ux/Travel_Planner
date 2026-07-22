@@ -15,5 +15,7 @@ public interface ItineraryRepository extends JpaRepository<Itinerary, Long>,JpaS
     List<Itinerary> findByTrip(Trip trip);
 
     long countByTrip(Trip trip);
+    
+    List<Itinerary> findByTripTripId(Long tripId);
 
 }

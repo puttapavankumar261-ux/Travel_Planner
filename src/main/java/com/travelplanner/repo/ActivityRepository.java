@@ -11,16 +11,19 @@ import com.travelplanner.entity.Trip;
 import com.travelplanner.enums.ActivityStatus;
 
 @Repository
-public interface ActivityRepository extends JpaRepository<Activity, Long>,JpaSpecificationExecutor<Activity>{
+public interface ActivityRepository extends JpaRepository<Activity, Long>,
+JpaSpecificationExecutor<Activity> {
 
-    List<Activity> findByTrip(Trip trip);
+List<Activity> findByTrip(Trip trip);
 
-    long countByTrip(Trip trip);
+long countByTrip(Trip trip);
 
-    long countByTripAndActivityStatus(
-            Trip trip,
-            ActivityStatus activityStatus);
+long countByTripAndActivityStatus(
+    Trip trip,
+    ActivityStatus activityStatus);
 
-	Long countByActivityStatus(ActivityStatus planned);
+Long countByActivityStatus(ActivityStatus planned);
 
+// NEW
+List<Activity> findByTripTripId(Long tripId);
 }

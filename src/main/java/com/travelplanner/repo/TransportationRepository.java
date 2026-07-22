@@ -17,4 +17,6 @@ public interface TransportationRepository
 
     long countByTrip(Trip trip);
 
+    List<Transportation> findByTripTripId(Long tripId);
+    
 }

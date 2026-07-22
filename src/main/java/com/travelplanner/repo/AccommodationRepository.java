@@ -11,10 +11,13 @@ import com.travelplanner.entity.Trip;
 
 @Repository
 public interface AccommodationRepository
-        extends JpaRepository<Accommodation, Long>, JpaSpecificationExecutor<Accommodation> {
+extends JpaRepository<Accommodation, Long>,
+JpaSpecificationExecutor<Accommodation> {
 
-    List<Accommodation> findByTrip(Trip trip);
+List<Accommodation> findByTrip(Trip trip);
 
-    long countByTrip(Trip trip);
+long countByTrip(Trip trip);
 
+// NEW
+List<Accommodation> findByTripTripId(Long tripId);
 }

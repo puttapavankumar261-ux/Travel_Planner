@@ -18,6 +18,8 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long>,
         JpaSpecificationExecutor<Expense> {
 
     List<Expense> findByTrip(Trip trip);
+    
+    List<Expense> findByTripTripId(Long tripId);
 
     long countByTrip(Trip trip);
     
