@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import ProtectedRoute from "../components/auth/ProtectedRoute";
 import Login from "../modules/Auth/Login";
 import Registration from "../modules/Auth/Registration";
 import ForgotPassword from "../modules/Auth/ForgotPassword";
@@ -17,13 +17,23 @@ function AppRoutes() {
         <Route path="/register" element={<Registration />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
 
-        {/* Admin Module */}
+        <Route
+          path="/admin/*"
+          element={
+            <ProtectedRoute allowedRoles={["ADMIN"]}>
+              <AdminRoutes />
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path="/admin/*" element={<AdminRoutes />} />
-
-        {/* User Module */}
-
-        <Route path="/user/*" element={<UserRoutes />} />
+        <Route
+          path="/user/*"
+          element={
+            <ProtectedRoute allowedRoles={["USER", "ADMIN"]}>
+              <UserRoutes />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Future */}
 

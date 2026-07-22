@@ -1,30 +1,63 @@
+import { useEffect, useState } from "react";
 import "./BookingChart.css";
 
-import { ResponsiveContainer, AreaChart, Area, XAxis, Tooltip } from "recharts";
+import dashboardService from "../../../services/dashboardService";
 
-const data = [
-  { month: "Jan", bookings: 40 },
-  { month: "Feb", bookings: 62 },
-  { month: "Mar", bookings: 85 },
-  { month: "Apr", bookings: 72 },
-  { month: "May", bookings: 96 },
-  { month: "Jun", bookings: 118 },
-  { month: "Jul", bookings: 104 },
-  { month: "Aug", bookings: 128 },
-  { month: "Sep", bookings: 98 },
-  { month: "Oct", bookings: 122 },
-  { month: "Nov", bookings: 140 },
-  { month: "Dec", bookings: 160 },
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  XAxis,
+  Tooltip,
+  YAxis,
+  CartesianGrid,
+} from "recharts";
+
+const MONTHS = [
+  "",
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
 ];
 
 function BookingChart() {
+  const [chartData, setChartData] = useState([]);
+
+  useEffect(() => {
+    loadMonthlyExpenses();
+  }, []);
+
+  const loadMonthlyExpenses = async () => {
+    try {
+      const data = await dashboardService.getMonthlyExpenseAnalytics();
+
+      const formattedData = data.map((item) => ({
+        month: MONTHS[item.month],
+        amount: item.totalAmount,
+      }));
+
+      setChartData(formattedData);
+    } catch (error) {
+      console.error("Failed to load monthly expense analytics", error);
+    }
+  };
+
   return (
     <div className="booking-chart glass">
       <div className="chart-header">
         <div>
-          <h3>Monthly Booking Overview</h3>
+          <h3>Monthly Expense Overview</h3>
 
-          <p>Bookings made this year</p>
+          <p>Total expenses this year</p>
         </div>
 
         <button>This Year</button>
@@ -32,25 +65,33 @@ function BookingChart() {
 
       <div className="chart">
         <ResponsiveContainer width="100%" height={320}>
-          <AreaChart data={data}>
+          <AreaChart data={chartData}>
             <defs>
-              <linearGradient id="colorBooking" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="colorExpense" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.8} />
-
                 <stop offset="95%" stopColor="#3B82F6" stopOpacity={0} />
               </linearGradient>
             </defs>
 
+            <CartesianGrid strokeDasharray="3 3" />
+
             <XAxis dataKey="month" tick={{ fill: "#94A3B8" }} />
 
-            <Tooltip />
+            <YAxis tick={{ fill: "#94A3B8" }} />
+
+            <Tooltip
+              formatter={(value) => [
+                `₹${Number(value).toLocaleString("en-IN")}`,
+                "Expense",
+              ]}
+            />
 
             <Area
               type="monotone"
-              dataKey="bookings"
+              dataKey="amount"
               stroke="#3B82F6"
               strokeWidth={4}
-              fill="url(#colorBooking)"
+              fill="url(#colorExpense)"
             />
           </AreaChart>
         </ResponsiveContainer>

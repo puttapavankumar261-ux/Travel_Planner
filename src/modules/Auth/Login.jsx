@@ -24,12 +24,45 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
+
     try {
-      const response = await authService.login(loginData);
-      localStorage.setItem("token", response.token);
-      navigate("/user/dashboard");
+      const result = await authService.login(loginData);
+
+      // Backend response:
+      // {
+      //   success: true,
+      //   data: { ... }
+      // }
+
+      const userData = result.data;
+
+      // Save JWT
+      localStorage.setItem("token", userData.token);
+
+      // Save logged-in user
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          userId: userData.userId,
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          email: userData.email,
+          roleName: userData.roleName,
+        }),
+      );
+
+      // Navigate based on role
+      if (userData.roleName === "ADMIN") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/user/dashboard");
+      }
     } catch (err) {
-      setError("Login failed. Please check your credentials.");
+      setError(
+        err.response?.data?.message ||
+          "Login failed. Please check your credentials.",
+      );
+
       console.error(err);
     }
   };
@@ -55,8 +88,10 @@ function Login() {
 
         <h1>
           <div>plan every journey.</div>
-         
-          <div><span>explore without limits.</span></div>
+
+          <div>
+            <span>explore without limits.</span>
+          </div>
         </h1>
 
         {/* Description */}
@@ -153,7 +188,7 @@ function Login() {
         <div className="login-card">
           {/* Logo */}
 
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <div style={{ display: "flex", justifyContent: "center" }}>
             <Logo showTagline={false} className="login-card-logo" />
           </div>
 
@@ -163,64 +198,74 @@ function Login() {
 
           <form onSubmit={handleLogin}>
             {error && (
-              <div style={{ color: "#ef4444", marginBottom: "15px", fontSize: "14px" }}>
+              <div
+                style={{
+                  color: "#ef4444",
+                  marginBottom: "15px",
+                  fontSize: "14px",
+                }}
+              >
                 {error}
               </div>
             )}
 
             {/* Email */}
 
-          <label>Email Address</label>
+            <label>Email Address</label>
 
-          <div className="input-box">
-            <i className="bi bi-envelope"></i>
-            <input
-              type="email"
-              name="email"
-              value={loginData.email}
-              onChange={handleChange}
-              placeholder="Enter your email"
-            />{" "}
-          </div>
+            <div className="input-box">
+              <i className="bi bi-envelope"></i>
+              <input
+                type="email"
+                name="email"
+                value={loginData.email}
+                onChange={handleChange}
+                placeholder="Enter your email"
+              />{" "}
+            </div>
 
-          {/* Password */}
+            {/* Password */}
 
-          <label>Password</label>
+            <label>Password</label>
 
-          <div className="input-box">
-            <i className="bi bi-lock"></i>
+            <div className="input-box">
+              <i className="bi bi-lock"></i>
 
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              value={loginData.password}
-              onChange={handleChange}
-              placeholder="Enter your password"
-            />
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={loginData.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+              />
 
-            <button
-              type="button"
-              className="eye-btn"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              <i className={showPassword ? "bi bi-eye-slash" : "bi bi-eye"}></i>
+              <button
+                type="button"
+                className="eye-btn"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                <i
+                  className={showPassword ? "bi bi-eye-slash" : "bi bi-eye"}
+                ></i>
+              </button>
+            </div>
+
+            {/* Options */}
+
+            <div className="login-options">
+              <label>
+                <input type="checkbox" />
+                remember me
+              </label>
+
+              <Link to="/forgotpassword">forgot password?</Link>
+            </div>
+
+            {/* Login */}
+
+            <button type="submit" className="login-btn">
+              sign in
             </button>
-          </div>
-
-          {/* Options */}
-
-          <div className="login-options">
-            <label>
-              <input type="checkbox" />
-              remember me
-            </label>
-
-            <Link to="/forgotpassword">forgot password?</Link>
-          </div>
-
-          {/* Login */}
-
-          <button type="submit" className="login-btn">sign in</button>
           </form>
 
           {/* Divider */}
@@ -238,7 +283,7 @@ function Login() {
 
           {/* Register */}
 
-          <p className="register" style={{margin :'10px'}}>
+          <p className="register" style={{ margin: "10px" }}>
             new here?
             <Link to="/register"> create an account</Link>
           </p>
