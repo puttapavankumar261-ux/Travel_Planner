@@ -236,9 +236,12 @@
 .user-profile h4{
 
     color:white;
-
     font-size:15px;
+     transition: color 0.3s ease;
+}
 
+.user-profile:hover h4{
+   color:#3B82F6;
 }
 
 .user-profile span{

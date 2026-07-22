@@ -1,9 +1,9 @@
 /* ===========================================================
    NOTIFICATION DROPDOWN
-   Travel Planner Admin Dashboard
+   Travel Planner User Dashboard
 =========================================================== */
 
-.notification-dropdown {
+.notification-userdropdown {
 
     position: absolute;
 
@@ -28,6 +28,9 @@
         0 0 0 1px rgba(255,255,255,.03);
 
     animation: notificationOpen .25s ease;
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
 
     z-index: 100000000 !important;
 
@@ -89,7 +92,7 @@
 
 /* Top Triangle Arrow */
 
-.notification-dropdown .dropdown-arrow{
+.notification-userdropdown .dropdown-arrow{
     position: absolute;
     top: -12px;
     right: 221px;      /* Adjust to align with bell icon */
@@ -135,7 +138,7 @@
    Header
 =========================================================== */
 
-.notification-dropdown .notification-header{
+.notification-userdropdown .notification-header{
 
     display:flex;
 
@@ -154,7 +157,7 @@
 
 /* left side */
 
-.notification-dropdown .header-left{
+.notification-userdropdown .header-left{
 
     display:flex;
 
@@ -169,7 +172,7 @@
    Bell Icon
 =========================================================== */
 
-.notification-dropdown .bell-icon{
+.notification-userdropdown .bell-icon{
 
     width:48px;
 
@@ -192,7 +195,7 @@
 
 }
 
-.notification-dropdown .bell-icon i{
+.notification-userdropdown .bell-icon i{
 
     font-size:20px;
 
@@ -205,7 +208,7 @@
    Heading
 =========================================================== */
 
-.notification-dropdown .header-left h3{
+.notification-userdropdown .header-left h3{
 
     margin:0;
 
@@ -219,7 +222,7 @@
 
 }
 
-.notification-dropdown .header-left p{
+.notification-userdropdown .header-left p{
 
     margin-top:3px;
 
@@ -234,7 +237,7 @@
    Right Section
 =========================================================== */
 
-.notification-dropdown .header-right{
+.notification-userdropdown .header-right{
 
     display:flex;
 
@@ -249,7 +252,7 @@
    Mark All Button
 =========================================================== */
 
-.notification-dropdown .mark-read-btn{
+.notification-userdropdown .mark-read-btn{
 
     display:flex;
 
@@ -278,13 +281,13 @@
 
 }
 
-.notification-dropdown .mark-read-btn:hover{
+.notification-userdropdown .mark-read-btn:hover{
 
     background:#31445B;
 
 }
 
-.notification-dropdown .mark-read-btn i{
+.notification-userdropdown .mark-read-btn i{
 
     font-size:15px;
 
@@ -295,7 +298,7 @@
    Close Button
 =========================================================== */
 
-.notification-dropdown .close-btn{
+.notification-userdropdown .close-btn{
 
     width:38px;
 
@@ -319,7 +322,7 @@
 
 }
 
-.notification-dropdown .close-btn:hover{
+.notification-userdropdown .close-btn:hover{
 
     background:#D32F2F;
 
@@ -327,7 +330,7 @@
 
 }
 
-.notification-dropdown .close-btn i{
+.notification-userdropdown .close-btn i{
 
     color:white;
 
@@ -365,7 +368,7 @@
     NOTIFICATION LIST
 ==========================================================*/
 
-.notification-dropdown .notification-list{
+.notification-userdropdown .notification-list{
 
     max-height:480px;
 
@@ -379,7 +382,7 @@
     Notification Card
 ==========================================================*/
 
-.notification-dropdown .notification-card{
+.notification-userdropdown .notification-card{
 
     display:flex;
 
@@ -405,13 +408,13 @@
 
 }
 
-.notification-dropdown .notification-card:last-child{
+.notification-userdropdown .notification-card:last-child{
 
     margin-bottom:0;
 
 }
 
-.notification-dropdown .notification-card:hover{
+.notification-userdropdown .notification-card:hover{
 
     background:#253446;
 
@@ -429,7 +432,7 @@
     Unread Card
 ==========================================================*/
 
-.notification-dropdown .notification-card.unread{
+.notification-userdropdown .notification-card.unread{
 
     border-left:4px solid #4F8CFF;
 
@@ -441,7 +444,7 @@
     Notification Icon
 ==========================================================*/
 
-.notification-dropdown .notification-icon{
+.notification-userdropdown .notification-icon{
 
     /* width:52px;
 
@@ -468,7 +471,7 @@
 
 }
 
-.notification-dropdown .notification-icon i{
+.notification-userdropdown .notification-icon i{
 
     font-size:22px;
 
@@ -478,67 +481,67 @@
     Icon Colors
 ==========================================================*/
 
-.notification-dropdown .notification-icon.user{
+.notification-userdropdown .notification-icon.user{
 
     background:linear-gradient(135deg,#3B82F6,#2563EB);
 
 }
 
-.notification-dropdown .notification-icon.flight{
+.notification-userdropdown .notification-icon.flight{
 
     background:linear-gradient(135deg,#14B8A6,#0F766E);
 
 }
 
-.notification-dropdown .notification-icon.hotel{
+.notification-userdropdown .notification-icon.hotel{
 
     background:linear-gradient(135deg,#8B5CF6,#6D28D9);
 
 }
 
-.notification-dropdown .notification-icon.payment{
+.notification-userdropdown .notification-icon.payment{
 
     background:linear-gradient(135deg,#F59E0B,#D97706);
 
 }
 
-.notification-dropdown .notification-icon.train{
+.notification-userdropdown .notification-icon.train{
 
     background:linear-gradient(135deg,#EF4444,#B91C1C);
 
 }
 
-.notification-dropdown .notification-icon.bus{
+.notification-userdropdown .notification-icon.bus{
 
     background:linear-gradient(135deg,#06B6D4,#0E7490);
 
 }
 
-.notification-dropdown .notification-icon.package{
+.notification-userdropdown .notification-icon.package{
 
     background:linear-gradient(135deg,#10B981,#047857);
 
 }
 
-.notification-dropdown .notification-icon.refund { background: linear-gradient(135deg,#22C55E,#15803D); }
-.notification-dropdown .notification-icon.cancel { background: linear-gradient(135deg,#EF4444,#B91C1C); }
-.notification-dropdown .notification-icon.destination { background: linear-gradient(135deg,#06B6D4,#0891B2); }
-.notification-dropdown .notification-icon.report { background: linear-gradient(135deg,#8B5CF6,#6D28D9); }
-.notification-dropdown .notification-icon.revenue { background: linear-gradient(135deg,#F59E0B,#D97706); }
-.notification-dropdown .notification-icon.review { background: linear-gradient(135deg,#EC4899,#BE185D); }
-.notification-dropdown .notification-icon.support { background: linear-gradient(135deg,#0EA5E9,#0369A1); }
-.notification-dropdown .notification-icon.security { background: linear-gradient(135deg,#6366F1,#4338CA); }
-.notification-dropdown .notification-icon.alert { background: linear-gradient(135deg,#F97316,#EA580C); }
-.notification-dropdown .notification-icon.system { background: linear-gradient(135deg,#64748B,#475569); }
-.notification-dropdown .notification-icon.promotion { background: linear-gradient(135deg,#10B981,#047857); }
-.notification-dropdown .notification-icon.insurance { background: linear-gradient(135deg,#14B8A6,#0F766E); }
-.notification-dropdown .notification-icon.vendor { background: linear-gradient(135deg,#A855F7,#7E22CE); }
+.notification-userdropdown .notification-icon.refund { background: linear-gradient(135deg,#22C55E,#15803D); }
+.notification-userdropdown .notification-icon.cancel { background: linear-gradient(135deg,#EF4444,#B91C1C); }
+.notification-userdropdown .notification-icon.destination { background: linear-gradient(135deg,#06B6D4,#0891B2); }
+.notification-userdropdown .notification-icon.report { background: linear-gradient(135deg,#8B5CF6,#6D28D9); }
+.notification-userdropdown .notification-icon.revenue { background: linear-gradient(135deg,#F59E0B,#D97706); }
+.notification-userdropdown .notification-icon.review { background: linear-gradient(135deg,#EC4899,#BE185D); }
+.notification-userdropdown .notification-icon.support { background: linear-gradient(135deg,#0EA5E9,#0369A1); }
+.notification-userdropdown .notification-icon.security { background: linear-gradient(135deg,#6366F1,#4338CA); }
+.notification-userdropdown .notification-icon.alert { background: linear-gradient(135deg,#F97316,#EA580C); }
+.notification-userdropdown .notification-icon.system { background: linear-gradient(135deg,#64748B,#475569); }
+.notification-userdropdown .notification-icon.promotion { background: linear-gradient(135deg,#10B981,#047857); }
+.notification-userdropdown .notification-icon.insurance { background: linear-gradient(135deg,#14B8A6,#0F766E); }
+.notification-userdropdown .notification-icon.vendor { background: linear-gradient(135deg,#A855F7,#7E22CE); }
 
 /*=========================================================
     Notification Content
 ==========================================================*/
 
-.notification-dropdown .notification-content{
+.notification-userdropdown .notification-content{
 
     flex:1;
 
@@ -550,7 +553,7 @@
     First Row
 ==========================================================*/
 
-.notification-dropdown .notification-top{
+.notification-userdropdown .notification-top{
 
     display:flex;
 
@@ -566,7 +569,7 @@
     Title
 ==========================================================*/
 
-.notification-dropdown .notification-top h4{
+.notification-userdropdown .notification-top h4{
 
     flex:1;
 
@@ -586,7 +589,7 @@
     Time
 ==========================================================*/
 
-.notification-dropdown .notification-time{
+.notification-userdropdown .notification-time{
 
     width:88px;
 
@@ -608,7 +611,7 @@
     Message
 ==========================================================*/
 
-.notification-dropdown .notification-message{
+.notification-userdropdown .notification-message{
 
     margin-top:8px;
 
@@ -632,7 +635,7 @@
     Bottom Section
 ==========================================================*/
 
-.notification-dropdown .notification-bottom{
+.notification-userdropdown .notification-bottom{
 
     display:flex;
 
@@ -646,7 +649,7 @@
     Category Tag
 ==========================================================*/
 
-.notification-dropdown .notification-tag{
+.notification-userdropdown .notification-tag{
 
     display:inline-flex;
 
@@ -672,7 +675,7 @@
     USER
 ==========================================================*/
 
-.notification-dropdown .notification-tag.user{
+.notification-userdropdown .notification-tag.user{
 
     background:rgba(59,130,246,.18);
 
@@ -684,7 +687,7 @@
     FLIGHT
 ==========================================================*/
 
-.notification-dropdown .notification-tag.flight{
+.notification-userdropdown .notification-tag.flight{
 
     background:rgba(20,184,166,.18);
 
@@ -696,7 +699,7 @@
     HOTEL
 ==========================================================*/
 
-.notification-dropdown .notification-tag.hotel{
+.notification-userdropdown .notification-tag.hotel{
 
     background:rgba(139,92,246,.18);
 
@@ -708,7 +711,7 @@
     PAYMENT
 ==========================================================*/
 
-.notification-dropdown .notification-tag.payment{
+.notification-userdropdown .notification-tag.payment{
 
     background:rgba(245,158,11,.18);
 
@@ -720,7 +723,7 @@
     TRAIN
 ==========================================================*/
 
-.notification-dropdown .notification-tag.train{
+.notification-userdropdown .notification-tag.train{
 
     background:rgba(239,68,68,.18);
 
@@ -732,7 +735,7 @@
     BUS
 ==========================================================*/
 
-.notification-dropdown .notification-tag.bus{
+.notification-userdropdown .notification-tag.bus{
 
     background:rgba(6,182,212,.18);
 
@@ -744,7 +747,7 @@
     PACKAGE
 ==========================================================*/
 
-.notification-dropdown .notification-tag.package{
+.notification-userdropdown .notification-tag.package{
 
     background:rgba(16,185,129,.18);
 
@@ -757,79 +760,79 @@
     NOTIFICATION TAG COLORS
 ==========================================================*/
 
-.notification-dropdown .notification-tag.refund{
+.notification-userdropdown .notification-tag.refund{
     background:rgba(34,197,94,.15);
     color:#22C55E;
     border:1px solid rgba(34,197,94,.35);
 }
 
-.notification-dropdown .notification-tag.cancel{
+.notification-userdropdown .notification-tag.cancel{
     background:rgba(239,68,68,.15);
     color:#EF4444;
     border:1px solid rgba(239,68,68,.35);
 }
 
-.notification-dropdown .notification-tag.destination{
+.notification-userdropdown .notification-tag.destination{
     background:rgba(6,182,212,.15);
     color:#06B6D4;
     border:1px solid rgba(6,182,212,.35);
 }
 
-.notification-dropdown .notification-tag.report{
+.notification-userdropdown .notification-tag.report{
     background:rgba(139,92,246,.15);
     color:#8B5CF6;
     border:1px solid rgba(139,92,246,.35);
 }
 
-.notification-dropdown .notification-tag.revenue{
+.notification-userdropdown .notification-tag.revenue{
     background:rgba(245,158,11,.15);
     color:#F59E0B;
     border:1px solid rgba(245,158,11,.35);
 }
 
-.notification-dropdown .notification-tag.review{
+.notification-userdropdown .notification-tag.review{
     background:rgba(236,72,153,.15);
     color:#EC4899;
     border:1px solid rgba(236,72,153,.35);
 }
 
-.notification-dropdown .notification-tag.support{
+.notification-userdropdown .notification-tag.support{
     background:rgba(14,165,233,.15);
     color:#0EA5E9;
     border:1px solid rgba(14,165,233,.35);
 }
 
-.notification-dropdown .notification-tag.security{
+.notification-userdropdown .notification-tag.security{
     background:rgba(99,102,241,.15);
     color:#6366F1;
     border:1px solid rgba(99,102,241,.35);
 }
 
-.notification-dropdown .notification-tag.alert{
+.notification-userdropdown .notification-tag.alert{
     background:rgba(249,115,22,.15);
     color:#F97316;
     border:1px solid rgba(249,115,22,.35);
 }
 
-.notification-dropdown .notification-tag.system{
+.notification-userdropdown .notification-tag.system{
     background:rgba(100,116,139,.15);
     color:#64748B;
     border:1px solid rgba(100,116,139,.35);
 }
 
-.notification-dropdown .notification-tag.promotion{
+.notification-userdropdown .notification-tag.promotion{
     background:rgba(16,185,129,.15);
     color:#10B981;
     border:1px solid rgba(16,185,129,.35);
 }
 
-.notification-dropdown .notification-tag.insurance{
+.notification-userdropdown .notification-tag.insurance{
     background:rgba(20,184,166,.15);
     color:#14B8A6;
     border:1px solid rgba(20,184,166,.35);
 }
 
-.notification-dropdown .notification-tag.vendor{
+.notification-userdropdown .notification-tag.vendor{
     background:rgba(168,85,247,.15);
     color:#A855F7;
     border:1px solid rgba(168,85,247,.35);
@@ -839,7 +842,7 @@
     Unread Dot
 ==========================================================*/
 
-.notification-dropdown .unread-dot{
+.notification-userdropdown .unread-dot{
 
     width:10px;
 
@@ -859,7 +862,7 @@
     FOOTER
 ==========================================================*/
 
-.notification-dropdown .notification-footer{
+.notification-userdropdown .notification-footer{
 
     padding:16px 18px;
 
@@ -873,7 +876,7 @@
     VIEW ALL BUTTON
 ==========================================================*/
 
-.notification-dropdown .view-all-btn{
+.notification-userdropdown .view-all-btn{
 
     width:100%;
 
@@ -907,13 +910,13 @@
 
 }
 
-.notification-dropdown .view-all-btn i{
+.notification-userdropdown .view-all-btn i{
 
     font-size:16px;
 
 }
 
-.notification-dropdown .view-all-btn:hover{
+.notification-userdropdown .view-all-btn:hover{
 
     transform:translateY(-2px);
 
@@ -925,7 +928,7 @@
 
 }
 
-.notification-dropdown .view-all-btn:active{
+.notification-userdropdown .view-all-btn:active{
 
     transform:scale(.98);
 
@@ -935,13 +938,13 @@
     SCROLLBAR
 ==========================================================*/
 
-.notification-dropdown .notification-list::-webkit-scrollbar{
+.notification-userdropdown .notification-list::-webkit-scrollbar{
 
     width:8px;
 
 }
 
-.notification-dropdown .notification-list::-webkit-scrollbar-track{
+.notification-userdropdown .notification-list::-webkit-scrollbar-track{
 
     background:#18222F;
 
@@ -949,7 +952,7 @@
 
 }
 
-.notification-dropdown .notification-list::-webkit-scrollbar-thumb{
+.notification-userdropdown .notification-list::-webkit-scrollbar-thumb{
 
     background:#41556F;
 
@@ -957,7 +960,7 @@
 
 }
 
-.notification-dropdown .notification-list::-webkit-scrollbar-thumb:hover{
+.notification-userdropdown .notification-list::-webkit-scrollbar-thumb:hover{
 
     background:#5C728E;
 
@@ -965,7 +968,7 @@
 
 /* Firefox */
 
-.notification-dropdown .notification-list{
+.notification-userdropdown .notification-list{
 
     scrollbar-width:thin;
 
@@ -977,12 +980,12 @@
     SMOOTH EFFECTS
 ==========================================================*/
 
-.notification-dropdown .notification-card,
-.notification-dropdown .notification-icon,
-.notification-dropdown .notification-tag,
-.notification-dropdown .view-all-btn,
-.notification-dropdown .mark-read-btn,
-.notification-dropdown .close-btn{
+.notification-userdropdown .notification-card,
+.notification-userdropdown .notification-icon,
+.notification-userdropdown .notification-tag,
+.notification-userdropdown .view-all-btn,
+.notification-userdropdown .mark-read-btn,
+.notification-userdropdown .close-btn{
 
     transition:all .30s ease;
 
@@ -992,7 +995,7 @@
     ICON HOVER EFFECT
 ==========================================================*/
 
-.notification-dropdown .notification-card:hover .notification-icon{
+.notification-userdropdown .notification-card:hover .notification-icon{
 
     transform:scale(1.08) rotate(-5deg);
 
@@ -1002,7 +1005,7 @@
     TITLE COLOR
 ==========================================================*/
 
-.notification-dropdown .notification-card:hover h4{
+.notification-userdropdown .notification-card:hover h4{
 
     color:#FFFFFF;
 
@@ -1012,7 +1015,7 @@
     MESSAGE COLOR
 ==========================================================*/
 
-.notification-dropdown .notification-card:hover .notification-message{
+.notification-userdropdown .notification-card:hover .notification-message{
 
     color:#D8E4F2;
 
@@ -1022,7 +1025,7 @@
     TAG HOVER
 ==========================================================*/
 
-.notification-dropdown .notification-card:hover .notification-tag{
+.notification-userdropdown .notification-card:hover .notification-tag{
 
     transform:translateY(-1px);
 
@@ -1032,7 +1035,7 @@
     GLOW FOR UNREAD
 ==========================================================*/
 
-.notification-dropdown .notification-card.unread{
+.notification-userdropdown .notification-card.unread{
 
     box-shadow:
 
@@ -1040,7 +1043,7 @@
 
 }
 
-.notification-dropdown .notification-card.unread:hover{
+.notification-userdropdown .notification-card.unread:hover{
 
     box-shadow:
 
@@ -1056,7 +1059,7 @@
 
 @media (max-width:768px){
 
-    .notification-dropdown .notification-dropdown{
+    .notification-userdropdown .notification-dropdown{
 
         width:360px;
 
@@ -1064,7 +1067,7 @@
 
     }
 
-    .notification-dropdown .notification-top{
+    .notification-userdropdown .notification-top{
 
         flex-direction:column;
 
@@ -1072,7 +1075,7 @@
 
     }
 
-    .notification-dropdown .notification-time{
+    .notification-userdropdown .notification-time{
 
         width:auto;
 
@@ -1086,7 +1089,7 @@
 
 @media (max-width:576px){
 
-    .notification-dropdown .notification-dropdown{
+    .notification-userdropdown .notification-dropdown{
 
         position:fixed;
 
@@ -1104,19 +1107,19 @@
 
     }
 
-    .notification-dropdown .dropdown-arrow{
+    .notification-userdropdown .dropdown-arrow{
 
         display:none;
 
     }
 
-    .notification-dropdown .notification-list{
+    .notification-userdropdown .notification-list{
 
         max-height:55vh;
 
     }
 
-    .notification-dropdown .notification-card{
+    .notification-userdropdown .notification-card{
 
         padding:14px;
 
@@ -1124,7 +1127,7 @@
 
     }
 
-    .notification-dropdown .notification-icon{
+    .notification-userdropdown .notification-icon{
 
         width:46px;
 
@@ -1134,19 +1137,19 @@
 
     }
 
-    .notification-dropdown .notification-icon i{
+    .notification-userdropdown .notification-icon i{
 
         font-size:20px;
 
     }
 
-    .notification-dropdown .notification-top h4{
+    .notification-userdropdown .notification-top h4{
 
         font-size:14px;
 
     }
 
-    .notification-dropdown .notification-message{
+    .notification-userdropdown .notification-message{
 
         /* font-size:12px; */
         font-size: 10px;
@@ -1155,7 +1158,7 @@
 
     }
 
-    .notification-dropdown .notification-footer{
+    .notification-userdropdown .notification-footer{
 
         padding:14px;
 
@@ -1167,7 +1170,7 @@
     ACCESSIBILITY
 ==========================================================*/
 
-.notification-dropdown .notification-card:focus-within{
+.notification-userdropdown .notification-card:focus-within{
 
     outline:2px solid #4F8CFF;
 
@@ -1175,11 +1178,11 @@
 
 }
 
-.notification-dropdown .view-all-btn:focus,
+.notification-userdropdown .view-all-btn:focus,
 
-.notification-dropdown .mark-read-btn:focus,
+.notification-userdropdown .mark-read-btn:focus,
 
-.notification-dropdown .close-btn:focus{
+.notification-userdropdown .close-btn:focus{
 
     outline:2px solid #60A5FA;
 
@@ -1191,19 +1194,19 @@
     OPTIONAL FADE-IN FOR LIST ITEMS
 ==========================================================*/
 
-.notification-dropdown .notification-card{
+.notification-userdropdown .notification-card{
 
     animation:itemFade .25s ease both;
 
 }
 
-.notification-dropdown .notification-card:nth-child(1){ animation-delay:.02s; }
-.notification-dropdown .notification-card:nth-child(2){ animation-delay:.04s; }
-.notification-dropdown .notification-card:nth-child(3){ animation-delay:.06s; }
-.notification-dropdown .notification-card:nth-child(4){ animation-delay:.08s; }
-.notification-dropdown .notification-card:nth-child(5){ animation-delay:.10s; }
-.notification-dropdown .notification-card:nth-child(6){ animation-delay:.12s; }
-.notification-dropdown .notification-card:nth-child(7){ animation-delay:.14s; }
+.notification-userdropdown .notification-card:nth-child(1){ animation-delay:.02s; }
+.notification-userdropdown .notification-card:nth-child(2){ animation-delay:.04s; }
+.notification-userdropdown .notification-card:nth-child(3){ animation-delay:.06s; }
+.notification-userdropdown .notification-card:nth-child(4){ animation-delay:.08s; }
+.notification-userdropdown .notification-card:nth-child(5){ animation-delay:.10s; }
+.notification-userdropdown .notification-card:nth-child(6){ animation-delay:.12s; }
+.notification-userdropdown .notification-card:nth-child(7){ animation-delay:.14s; }
 
 @keyframes itemFade{
 
