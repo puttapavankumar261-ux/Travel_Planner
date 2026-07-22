@@ -1,6 +1,7 @@
 package com.travelplanner.config;
 
 import org.slf4j.Logger;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -18,13 +19,17 @@ public class DataInitializer implements CommandLineRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(DataInitializer.class);
 
+    private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
 
     public DataInitializer(RoleRepository roleRepository,
-                           UserRepository userRepository) {
-        this.roleRepository = roleRepository;
-        this.userRepository = userRepository;
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder) {
+
+           this.roleRepository = roleRepository;
+           this.userRepository = userRepository;
+           this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -74,7 +79,7 @@ public class DataInitializer implements CommandLineRunner {
         admin.setFirstName("System");
         admin.setLastName("Administrator");
         admin.setEmail("admin@travelplanner.com");
-        admin.setPassword("admin123");
+        admin.setPassword(passwordEncoder.encode("admin123"));
         admin.setMobileNumber("9999999999");
         admin.setGender(Gender.MALE);
         admin.setCountry("India");

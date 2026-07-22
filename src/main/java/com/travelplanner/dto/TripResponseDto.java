@@ -19,7 +19,7 @@ public class TripResponseDto {
     private Long tripId;
 
     private String title;
-
+    
     private String source;
 
     private String destination;

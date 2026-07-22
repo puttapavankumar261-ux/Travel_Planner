@@ -1,6 +1,7 @@
 package com.travelplanner.service.impl;
 
 import java.util.List;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.stereotype.Service;
 
@@ -27,12 +28,16 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private static final Logger logger =
             LoggerFactory.getLogger(UserServiceImpl.class);
+    private final PasswordEncoder passwordEncoder;
     public UserServiceImpl(UserRepository userRepo,
-                           RoleRepository roleRepo,
-                           UserMapper userMapper) {
-        this.userRepo = userRepo;
-        this.roleRepo = roleRepo;
-        this.userMapper = userMapper;
+            RoleRepository roleRepo,
+            UserMapper userMapper,
+            PasswordEncoder passwordEncoder) {
+
+           this.userRepo = userRepo;
+           this.roleRepo = roleRepo;
+           this.userMapper = userMapper;
+           this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -68,8 +73,10 @@ public class UserServiceImpl implements UserService {
 
         User user = userMapper.mapToUser(request, role);
 
-        User savedUser = userRepo.save(user);
+     // Encrypt Password
+     user.setPassword(passwordEncoder.encode(request.getPassword()));
 
+     User savedUser = userRepo.save(user);
         logger.info("User registered successfully with ID: {}",
                 savedUser.getUserId());
 
@@ -149,7 +156,7 @@ public class UserServiceImpl implements UserService {
         existingUser.setFirstName(request.getFirstName());
         existingUser.setLastName(request.getLastName());
         existingUser.setEmail(request.getEmail());
-        existingUser.setPassword(request.getPassword());
+        existingUser.setPassword(passwordEncoder.encode(request.getPassword()));
         existingUser.setMobileNumber(request.getMobileNumber());
         existingUser.setDateOfBirth(request.getDateOfBirth());
         existingUser.setGender(request.getGender());

@@ -55,8 +55,7 @@ public class User {
     private String email;
 
     @NotBlank(message = "Password is required")
-    @Size(min = 8, max = 20, message = "Password must contain 8 to 20 characters")
-    @Column(nullable = false)
+    @Size(max = 100, message = "Password exceeds maximum length")
     private String password;
 
     @NotBlank(message = "Mobile Number is required")
