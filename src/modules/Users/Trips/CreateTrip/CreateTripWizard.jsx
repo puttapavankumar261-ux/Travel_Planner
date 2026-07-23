@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CreateTrip.css';
+import tripService from '../../../../services/tripService';
 import Step1Basics from './Step1Basics';
 import Step2TravelStay from './Step2TravelStay';
 import Step3Details from './Step3Details';
@@ -60,9 +61,31 @@ const CreateTripWizard = () => {
     if (step > 1) setStep(step - 1);
   };
 
-  const handleFinish = () => {
-    console.log("Trip Data Submitted:", tripData);
-    navigate('/user/dashboard');
+  const handleFinish = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      const userId = user.userId || 1; // Fallback to 1 if not found
+
+      const payload = {
+        title: `${tripData.city || tripData.country} Trip`,
+        source: 'User Location',
+        destination: tripData.city || tripData.country || "Not Specified",
+        startDate: tripData.startDate || new Date().toISOString().split('T')[0],
+        endDate: tripData.endDate || new Date(Date.now() + 86400000 * 3).toISOString().split('T')[0],
+        budget: parseFloat(tripData.customBudget) || 10000.0,
+        description: `A trip to ${tripData.city || tripData.country} for ${tripData.adults} adults.`,
+        tripType: tripData.transportation === 'flight' ? 'FLIGHT' : 'TOUR',
+        tripStatus: 'PLANNED',
+        userId: userId
+      };
+
+      await tripService.createTrip(payload);
+      console.log("Trip Data Submitted to Backend Successfully");
+      navigate('/user/dashboard');
+    } catch (error) {
+      console.error("Error creating trip:", error);
+      alert("Failed to create trip. Please try again.");
+    }
   };
 
   const progressWidth = ((step - 1) / 3) * 100;
