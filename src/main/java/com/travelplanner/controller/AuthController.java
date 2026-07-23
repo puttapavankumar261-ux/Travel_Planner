@@ -1,6 +1,9 @@
 package com.travelplanner.controller;
 
 import org.springframework.http.ResponseEntity;
+import com.travelplanner.dto.UserRequestDto;
+import com.travelplanner.dto.UserResponseDto;
+import com.travelplanner.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import com.travelplanner.common.ApiResponse;
@@ -26,10 +29,29 @@ public class AuthController {
 
     private final AuthService authService;
     private final OtpService otpService;
+    private final UserService userService;
 
-    public AuthController(AuthService authService, OtpService otpService) {
+    public AuthController(
+            AuthService authService,
+            OtpService otpService,
+            UserService userService) {
+
         this.authService = authService;
         this.otpService = otpService;
+        this.userService = userService;
+    }
+    
+    @PostMapping("/register")
+    public ResponseEntity<ApiResponse<UserResponseDto>> register(
+            @Valid @RequestBody UserRequestDto request) {
+
+        UserResponseDto response = userService.registerUser(request);
+
+        return ResponseEntity.ok(
+                ApiResponseUtil.success(
+                        ApiMessages.REGISTRATION_SUCCESS,
+                        response)
+        );
     }
 
     @PostMapping("/login")

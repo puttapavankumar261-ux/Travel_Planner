@@ -127,4 +127,7 @@ public final class ApiMessages {
 
 	public static final String TRIP_DESTINATION_ANALYTICS_RETRIEVED =
 	        "Trip destination analytics retrieved successfully";
+	
+	public static final String REGISTRATION_SUCCESS =
+	        "User registered successfully.";
 }
