@@ -64,6 +64,7 @@ public class SecurityConfig {
 
                         // Public APIs
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/users").permitAll()
 
                         // Swagger
                         .requestMatchers(
@@ -118,9 +119,7 @@ public class SecurityConfig {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of(
-                "http://localhost:5173",
-                "http://localhost:5174"));
+        configuration.setAllowedOriginPatterns(List.of("*"));
 
         configuration.setAllowedMethods(List.of(
                 "GET",

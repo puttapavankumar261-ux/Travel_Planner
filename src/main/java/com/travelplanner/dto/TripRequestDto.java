@@ -41,6 +41,8 @@ public class TripRequestDto {
 
     private String description;
 
+    private String tripType;
+
     @NotNull(message = "Trip status is required")
     private TripStatus tripStatus;
 
