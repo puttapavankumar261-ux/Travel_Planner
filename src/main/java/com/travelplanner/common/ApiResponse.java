@@ -20,6 +20,18 @@ public class ApiResponse<T> {
         this.timestamp = LocalDateTime.now();
     }
 
+    // ---------- Static Factory Methods ----------
+
+    public static <T> ApiResponse<T> success(String message, T data) {
+        return new ApiResponse<>(true, message, data);
+    }
+
+    public static <T> ApiResponse<T> error(String message) {
+        return new ApiResponse<>(false, message, null);
+    }
+
+    // ---------- Getters & Setters ----------
+
     public boolean isSuccess() {
         return success;
     }

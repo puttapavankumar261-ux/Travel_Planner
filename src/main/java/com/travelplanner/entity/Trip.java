@@ -1,6 +1,11 @@
 package com.travelplanner.entity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
 
 import com.travelplanner.enums.TripStatus;
@@ -67,6 +72,12 @@ public class Trip {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+    
+    @OneToMany(
+            mappedBy = "trip",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<TripCompanion> companions = new ArrayList<>();
 
     @PrePersist
     public void onCreate() {

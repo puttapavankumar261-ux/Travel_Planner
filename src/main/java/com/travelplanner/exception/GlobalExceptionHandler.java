@@ -249,4 +249,13 @@ public class GlobalExceptionHandler {
         		ApiMessages.INTERNAL_SERVER_ERROR,
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    
+    @ExceptionHandler(TripCompanionNotFoundException.class)
+    public ResponseEntity<ApiResponse<Object>> handleTripCompanionNotFoundException(
+            TripCompanionNotFoundException ex) {
+
+        ApiResponse<Object> response = ApiResponse.error(ex.getMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
 }

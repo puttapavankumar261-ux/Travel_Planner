@@ -49,6 +49,22 @@ public final class ApiMessages {
     public static final String TRIP_NOT_FOUND = "Trip not found";
     public static final String TRIP_RETRIEVED = "Trip retrieved successfully";
     public static final String TRIPS_RETRIEVED = "Trips retrieved successfully";
+    
+    // ===============================
+    // Create Trip
+    // ===============================
+
+    public static final String CREATE_TRIP_SUCCESS =
+            "Trip and companions created successfully";
+
+    public static final String CREATE_TRIP_RETRIEVED =
+            "Trip details retrieved successfully";
+
+    public static final String CREATE_TRIP_UPDATED =
+            "Trip and companions updated successfully";
+
+    public static final String CREATE_TRIP_DELETED =
+            "Trip and companions deleted successfully";
 
     // ===============================
     // Itinerary
@@ -106,7 +122,7 @@ public final class ApiMessages {
     public static final String ACTIVITIES_RETRIEVED = "Activities retrieved successfully";
 
     // ===============================
-    // Dashboard
+    // Dashboard	
     // ===============================
 
     public static final String DASHBOARD_RETRIEVED = "Dashboard retrieved successfully";
@@ -119,8 +135,11 @@ public final class ApiMessages {
     public static final String INVALID_JSON = "Malformed JSON request";
     public static final String DATABASE_ERROR = "Database operation failed.";
     public static final String INTERNAL_SERVER_ERROR = "An unexpected error occurred.";
-	public static final String EXPENSE_CATEGORY_ANALYTICS_RETRIEVED = null;
-	public static final String MONTHLY_EXPENSE_ANALYTICS_RETRIEVED = null;
+    public static final String EXPENSE_CATEGORY_ANALYTICS_RETRIEVED =
+            "Expense category analytics retrieved successfully";
+
+    public static final String MONTHLY_EXPENSE_ANALYTICS_RETRIEVED =
+            "Monthly expense analytics retrieved successfully";
 	
 	public static final String TRIP_STATUS_ANALYTICS_RETRIEVED =
 	        "Trip status analytics retrieved successfully";
