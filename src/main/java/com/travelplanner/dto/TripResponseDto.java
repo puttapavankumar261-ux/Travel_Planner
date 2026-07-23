@@ -32,6 +32,8 @@ public class TripResponseDto {
 
     private String description;
 
+    private String tripType;
+
     private TripStatus tripStatus;
 
     private Long userId;

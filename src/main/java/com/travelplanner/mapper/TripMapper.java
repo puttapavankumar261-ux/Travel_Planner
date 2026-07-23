@@ -21,6 +21,7 @@ public class TripMapper {
         trip.setEndDate(dto.getEndDate());
         trip.setBudget(dto.getBudget());
         trip.setDescription(dto.getDescription());
+        trip.setTripType(dto.getTripType());
         trip.setTripStatus(dto.getTripStatus());
         trip.setUser(user);
 
@@ -39,6 +40,7 @@ public class TripMapper {
         response.setEndDate(trip.getEndDate());
         response.setBudget(trip.getBudget());
         response.setDescription(trip.getDescription());
+        response.setTripType(trip.getTripType());
         response.setTripStatus(trip.getTripStatus());
 
         response.setUserId(trip.getUser().getUserId());

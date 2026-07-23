@@ -64,6 +64,7 @@ public class SecurityConfig {
 
                         // Public APIs
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/users").permitAll()
 
                         // Swagger
                         .requestMatchers(

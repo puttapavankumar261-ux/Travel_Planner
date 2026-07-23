@@ -55,6 +55,9 @@ public class Trip {
     @Column(length = 1000)
     private String description;
 
+    @Column
+    private String tripType;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TripStatus tripStatus;
