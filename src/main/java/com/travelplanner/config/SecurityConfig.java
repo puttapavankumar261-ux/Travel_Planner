@@ -80,7 +80,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/trips/**",
                                 "/api/dashboard/**",
-                                "/api/expenses/**")
+                                "/api/expenses/**",
+                                "/api/accommodations/**")
                         .hasAnyRole("USER", "ADMIN")
 
                         .anyRequest()
