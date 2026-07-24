@@ -1,442 +1,364 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Filter } from "lucide-react";
+import userService from "../../../services/userService";
 import Navbar from "../../../components/Navbar/Navbar";
+
 import {
   Search,
   Mail,
   UserPlus,
   Download,
+  MoreVertical,
+  Edit2,
+  Eye,
+  Trash2,
 } from "lucide-react";
+
 import "./Users.css";
 
-const initialUsers = [
-  {
-    id: "USR-001",
-    name: "John Doe",
-    email: "john@example.com",
-    role: "Customer",
-    joined: "12 Jan 2025",
-    totalTrips: 4,
-    totalSpent: "₹3,40,000",
-    status: "Active",
-  },
-  {
-    id: "USR-002",
-    name: "Sarah Smith",
-    email: "sarah@example.com",
-    role: "Premium",
-    joined: "05 Mar 2025",
-    totalTrips: 7,
-    totalSpent: "₹8,20,000",
-    status: "Active",
-  },
-  {
-    id: "USR-003",
-    name: "Raj Kumar",
-    email: "raj@example.com",
-    role: "Customer",
-    joined: "20 Jul 2024",
-    totalTrips: 3,
-    totalSpent: "₹2,10,000",
-    status: "Inactive",
-  },
-];
-
 const Users = () => {
-  const [users, setUsers] = useState(initialUsers);
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [role, setRole] = useState("All");
 
-  const [showForm, setShowForm] = useState(false);
+  // Pagination
+  const rowsPerPage = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [loadingUser, setLoadingUser] = useState(false);
 
   const [newUser, setNewUser] = useState({
-    id: "",
-    name: "",
+    loginProvider: "LOCAL",
+    firstName: "",
+    lastName: "",
     email: "",
-    role: "Customer",
-    joined: "",
-    totalTrips: 0,
-    totalSpent: "",
-    status: "Active",
+    password: "",
+    mobileNumber: "",
+    dateOfBirth: "",
+    gender: "MALE",
+    country: "",
+    preferredLanguage: "English",
+    preferredCurrency: "INR",
+    roleId: 2,
   });
+
+  const loadUsers = async () => {
+    try {
+      setLoading(true);
+
+      const data = await userService.getUsers();
+
+      setUsers(data);
+    } catch (error) {
+      console.error("Failed to load Users:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadUsers();
+  }, []);
+
+  // Reset page when search or role changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, role]);
 
   const filteredUsers = users.filter((user) => {
     const matchSearch =
-      user.name.toLowerCase().includes(search.toLowerCase()) ||
-      user.email.toLowerCase().includes(search.toLowerCase()) ||
-      user.id.toLowerCase().includes(search.toLowerCase());
+      user.firstName?.toLowerCase().includes(search.toLowerCase()) ||
+      user.lastName?.toLowerCase().includes(search.toLowerCase()) ||
+      user.email?.toLowerCase().includes(search.toLowerCase()) ||
+      user.userId?.toString().includes(search);
 
-    const matchRole =
-      role === "All" ? true : user.role === role;
+    const matchRole = role === "All" ? true : user.roleName === role;
 
     return matchSearch && matchRole;
   });
 
-  const deleteUser = (id) => {
-    if (window.confirm("Delete this user?")) {
-      setUsers(users.filter((user) => user.id !== id));
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredUsers.length / rowsPerPage);
+
+  const indexOfLastUser = currentPage * rowsPerPage;
+  const indexOfFirstUser = indexOfLastUser - rowsPerPage;
+
+  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+
+  // Page change
+  const goToPage = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
     }
   };
+ 
+  const handleView = async (id) => {
+    try {
+      setLoadingUser(true);
+      const view = await userService.getUserById(id);
+      console.log(view);
 
-  const addUser = () => {
-    if (
-      !newUser.id ||
-      !newUser.name ||
-      !newUser.email
-    ) {
-      alert("Please fill all required fields");
-      return;
+      setSelectedUser(view);
+
+      setShowViewModal(true);
+    } catch (err) {
+      console.error(err);
+
+      alert("Unable to load user.");
+    } finally {
+      setLoadingUser(false);
     }
-
-    setUsers([...users, newUser]);
-
-    setNewUser({
-      id: "",
-      name: "",
-      email: "",
-      role: "Customer",
-      joined: "",
-      totalTrips: 0,
-      totalSpent: "",
-      status: "Active",
-    });
-
-    setShowForm(false);
   };
-
   return (
     <div className="dashboard-page">
       <Navbar />
 
       <div className="dashboard-wrapper users-wrapper">
-
         <div className="users-header">
-
           <div>
             <h2>User Management</h2>
-            <p>
-              Manage all registered customers of Travel Planner
-            </p>
+            <p>Manage all registered customers of Travel Planner</p>
           </div>
-
-          <div className="header-buttons">
-
-            <button className="export-btn">
-              <Download size={18} />
-              Export
-            </button>
-
-            <button
-              className="add-btn"
-              onClick={() => setShowForm(true)}
-            >
-              <UserPlus size={18} />
-              Add User
-            </button>
-
-          </div>
-
         </div>
 
         <div className="users-stats">
-
           <div className="stat-card">
             <h3>{users.length}</h3>
             <span>Total Users</span>
           </div>
 
           <div className="stat-card">
-            <h3>
-              {
-                users.filter(
-                  (u) => u.status === "Active"
-                ).length
-              }
-            </h3>
-            <span>Active Users</span>
+            <h3>{users.filter((user) => user.roleName === "ADMIN").length}</h3>
+            <span>Admin Users</span>
           </div>
 
           <div className="stat-card">
-            <h3>
-              {
-                users.filter(
-                  (u) => u.role === "Premium"
-                ).length
-              }
-            </h3>
-            <span>Premium Users</span>
+            <h3>{users.filter((user) => user.roleName === "USER").length}</h3>
+            <span>Customer Users</span>
           </div>
-
         </div>
 
         <div className="toolbar">
-
           <div className="search-box">
-
             <Search size={18} />
 
             <input
               placeholder="Search user..."
               value={search}
-              onChange={(e) =>
-                setSearch(e.target.value)
-              }
+              onChange={(e) => setSearch(e.target.value)}
             />
-
           </div>
-
-          <select
-            value={role}
-            onChange={(e) =>
-              setRole(e.target.value)
-            }
-          >
-            <option>All</option>
-            <option>Customer</option>
-            <option>Premium</option>
-          </select>
-
         </div>
 
-        {showForm && (
-
-          <div className="user-form">
-
-            <input
-              placeholder="User ID"
-              value={newUser.id}
-              onChange={(e) =>
-                setNewUser({
-                  ...newUser,
-                  id: e.target.value,
-                })
-              }
-            />
-
-            <input
-              placeholder="Name"
-              value={newUser.name}
-              onChange={(e) =>
-                setNewUser({
-                  ...newUser,
-                  name: e.target.value,
-                })
-              }
-            />
-
-            <input
-              placeholder="Email"
-              value={newUser.email}
-              onChange={(e) =>
-                setNewUser({
-                  ...newUser,
-                  email: e.target.value,
-                })
-              }
-            />
-
-            <select
-              value={newUser.role}
-              onChange={(e) =>
-                setNewUser({
-                  ...newUser,
-                  role: e.target.value,
-                })
-              }
-            >
-              <option>Customer</option>
-              <option>Premium</option>
-            </select>
-                        <input
-              placeholder="Joined Date"
-              value={newUser.joined}
-              onChange={(e) =>
-                setNewUser({
-                  ...newUser,
-                  joined: e.target.value,
-                })
-              }
-            />
-
-            <input
-              placeholder="Total Trips"
-              type="number"
-              value={newUser.totalTrips}
-              onChange={(e) =>
-                setNewUser({
-                  ...newUser,
-                  totalTrips: Number(e.target.value),
-                })
-              }
-            />
-
-            <input
-              placeholder="Total Spent"
-              value={newUser.totalSpent}
-              onChange={(e) =>
-                setNewUser({
-                  ...newUser,
-                  totalSpent: e.target.value,
-                })
-              }
-            />
-
-            <select
-              value={newUser.status}
-              onChange={(e) =>
-                setNewUser({
-                  ...newUser,
-                  status: e.target.value,
-                })
-              }
-            >
-              <option>Active</option>
-              <option>Inactive</option>
-            </select>
-
-            <button
-              className="save-btn"
-              onClick={addUser}
-            >
-              Save User
-            </button>
-
-          </div>
-        )}
-
         <div className="table-container">
-
           <table className="users-table">
-
             <thead>
-
               <tr>
-                <th>User</th>
-                <th>Role</th>
-                <th>Joined</th>
-                <th>Trips</th>
-                <th>Total Spent</th>
-                <th>Status</th>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Gender</th>
+                <th>Mobile Number</th>
+                <th>country</th>
+
                 <th>Actions</th>
               </tr>
-
             </thead>
 
             <tbody>
-
-              {filteredUsers.map((user) => (
-
-                <tr key={user.id}>
-
-                  <td>
-
-                    <div className="profile">
-
-                      <div className="avatar">
-                        {user.name.charAt(0)}
-                      </div>
-
-                      <div>
-
-                        <h4>{user.name}</h4>
-
-                        <p>
-                          <Mail size={14} />
-                          {user.email}
-                        </p>
-
-                        <small>{user.id}</small>
-
-                      </div>
-
-                    </div>
-
-                  </td>
-
-                  <td>
-
-                    <span
-                      className={
-                        user.role === "Premium"
-                          ? "premium"
-                          : "customer"
-                      }
-                    >
-                      {user.role}
-                    </span>
-
-                  </td>
-
-                  <td>{user.joined}</td>
-
-                  <td>{user.totalTrips}</td>
-
-                  <td>{user.totalSpent}</td>
-
-                  <td>
-
-                    <span
-                      className={
-                        user.status === "Active"
-                          ? "active"
-                          : "inactive"
-                      }
-                    >
-                      {user.status}
-                    </span>
-
-                  </td>
-
-                  <td>
-
-                    <div className="actions">
-                      <button className="view-btn">
-                        <i className="bi bi-box-arrow-up-right"></i>
-                        <span>View</span>
-                      </button>
-
-                      <button className="edit-btn">
-                        <i className="bi bi-pencil-square"></i>
-                        <span>Edit</span>
-                      </button>
-
-                      <button
-                        className="delete-btn"
-                        onClick={() => deleteUser(user.id)}
-                      >
-                        <i className="bi bi-trash"></i>
-                        <span>Delete</span>
-                      </button>
-                    </div>
-
-                  </td>
-
-                </tr>
-
-              ))}
-
-              {filteredUsers.length === 0 && (
-
+              {loading ? (
                 <tr>
+                  <td colSpan="7" className="no-data">
+                    Loading users...
+                  </td>
+                </tr>
+              ) : currentUsers.length > 0 ? (
+                currentUsers.map((user) => (
+                  // {filteredUsers.map((user) => (
 
-                  <td
-                    colSpan="7"
-                    className="no-data"
-                  >
+                  <tr key={user.UserId}>
+                    <td>
+                      <span className="user-id">{user.userId}</span>
+                    </td>
+                    <td>
+                      <span className="user-details">
+                        {user.firstName + " " + user.lastName}
+                      </span>
+                    </td>
+                    <td>
+                      <span className="user-details">{user.email}</span>
+                    </td>
+                    <td>
+                      <span className="user-details">{user.gender}</span>
+                    </td>
+                    <td>
+                      <span className="user-details">{user.mobileNumber}</span>
+                    </td>
+                    <td>
+                      <span className="user-details">{user.country}</span>
+                    </td>
+
+                    <td>
+                      <div className="actions">
+                        <button
+                          className="view-btn"
+                          onClick={() => handleView(user.userId)}
+                        >
+                          <i className="bi bi-box-arrow-up-right"></i>
+                          <span>View</span>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="7" className="no-data">
                     No users found
                   </td>
-
                 </tr>
-
               )}
-
             </tbody>
-
           </table>
-
         </div>
 
-      </div>
+        {/* Pagination */}
 
+        <div className="pagination">
+          <span className="text-muted">
+            Showing {filteredUsers.length === 0 ? 0 : indexOfFirstUser + 1}
+            {" - "}
+            {Math.min(indexOfLastUser, filteredUsers.length)}
+            {" of "}
+            {filteredUsers.length}
+            {" entries"}
+          </span>
+
+          <div className="page-buttons">
+            {/* Prev */}
+
+            <button
+              className={`page-btn ${currentPage === 1 ? "disabled" : ""}`}
+              disabled={currentPage === 1}
+              onClick={() => goToPage(currentPage - 1)}
+            >
+              Prev
+            </button>
+
+            {/* Page Numbers */}
+
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button
+                key={index}
+                className={`page-btn ${
+                  currentPage === index + 1 ? "active" : ""
+                }`}
+                onClick={() => goToPage(index + 1)}
+              >
+                {index + 1}
+              </button>
+            ))}
+
+            {/* Next */}
+
+            <button
+              className={`page-btn ${
+                currentPage === totalPages || totalPages === 0 ? "disabled" : ""
+              }`}
+              disabled={currentPage === totalPages || totalPages === 0}
+              onClick={() => goToPage(currentPage + 1)}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+
+        {showViewModal && (
+          <div
+            className="modal-overlay"
+            onClick={() => setShowViewModal(false)}
+          >
+            <div
+              className="view-user-modal"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="modal-header">
+                <h2>User Details</h2>
+                <button
+                  className="close-btn"
+                  onClick={() => setShowViewModal(false)}
+                >
+                  ×
+                </button>
+              </div>
+
+              <div className="modal-body">
+                <div className="detail-row">
+                  <span>First Name</span>
+                  <p>{selectedUser?.firstName}</p>
+                </div>
+
+                <div className="detail-row">
+                  <span>Last Name</span>
+                  <p>{selectedUser?.lastName}</p>
+                </div>
+
+                <div className="detail-row">
+                  <span>Email</span>
+                  <p>{selectedUser?.email}</p>
+                </div>
+
+                <div className="detail-row">
+                  <span>Mobile Number</span>
+                  <p>{selectedUser?.mobileNumber}</p>
+                </div>
+
+                <div className="detail-row">
+                  <span>Gender</span>
+                  <p>{selectedUser?.gender}</p>
+                </div>
+
+                <div className="detail-row">
+                  <span>Date of Birth</span>
+                  <p>{selectedUser?.dateOfBirth}</p>
+                </div>
+
+                <div className="detail-row">
+                  <span>Country</span>
+                  <p>{selectedUser?.country}</p>
+                </div>
+
+                <div className="detail-row">
+                  <span>Preferred Language</span>
+                  <p>{selectedUser?.preferredLanguage}</p>
+                </div>
+
+                <div className="detail-row">
+                  <span>Preferred Currency</span>
+                  <p>{selectedUser?.preferredCurrency}</p>
+                </div>
+
+                <div className="detail-row">
+                  <span>Role</span>
+                  <p>{selectedUser?.roleName}</p>
+                </div>
+              </div>
+
+              <div className="modal-footer">
+                <button
+                  className="close-modal-btn"
+                  onClick={() => setShowViewModal(false)}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
