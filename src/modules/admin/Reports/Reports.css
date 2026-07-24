@@ -1,6 +1,7 @@
 .reports-container {
   padding: 24px;
   animation: fadeIn 0.4s ease-out;
+}
 
 /* Filters */
 .reports-filters {
