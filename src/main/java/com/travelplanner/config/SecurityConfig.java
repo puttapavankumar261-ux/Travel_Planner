@@ -79,6 +79,7 @@ public class SecurityConfig {
 
                         // User + Admin APIs
                         .requestMatchers(
+                                "/api/users/**",
                                 "/api/trips/**",
                                 "/api/dashboard/**",
                                 "/api/expenses/**",
