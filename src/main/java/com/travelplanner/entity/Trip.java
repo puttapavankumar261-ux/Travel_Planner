@@ -1,6 +1,7 @@
 package com.travelplanner.entity;
 
 import java.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,4 +93,7 @@ public class Trip {
     public void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+    
+    @OneToMany(mappedBy = "trip")
+    private List<Booking> bookings = new ArrayList<>();
 }

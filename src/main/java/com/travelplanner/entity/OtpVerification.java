@@ -44,5 +44,10 @@ public class OtpVerification {
 
     @Column(nullable = false)
     private boolean verified;
+    
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
+    private LocalDateTime verifiedAt;
 
 }

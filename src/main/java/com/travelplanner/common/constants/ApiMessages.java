@@ -149,4 +149,7 @@ public final class ApiMessages {
 	
 	public static final String REGISTRATION_SUCCESS =
 	        "User registered successfully.";
+	
+	public static final String ACCOUNT_NOT_VERIFIED =
+	        "Please verify your email before logging in.";
 }

@@ -1,5 +1,5 @@
 package com.travelplanner.service.impl;
-
+import com.travelplanner.exception.AccountNotVerifiedException;
 import java.time.LocalDateTime;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.slf4j.Logger;
@@ -23,6 +23,7 @@ public class AuthServiceImpl implements AuthService {
     private static final Logger logger =
             LoggerFactory.getLogger(AuthServiceImpl.class);
     private final JwtService jwtService;
+    
 
     private final UserRepository userRepo;
     private final PasswordEncoder passwordEncoder;
@@ -30,10 +31,10 @@ public class AuthServiceImpl implements AuthService {
             PasswordEncoder passwordEncoder,
             JwtService jwtService) {
 
-this.userRepo = userRepo;
-this.passwordEncoder = passwordEncoder;
-this.jwtService = jwtService;
-}
+             this.userRepo = userRepo;
+             this.passwordEncoder = passwordEncoder;
+             this.jwtService = jwtService;
+    }
 
     @Override
     public LoginResponseDto login(LoginRequestDto request) {
@@ -75,6 +76,16 @@ this.jwtService = jwtService;
 
             throw new AccountLockedException(
                     ApiMessages.ACCOUNT_LOCKED);
+        }
+
+        // NEW: Check email verification
+        if (!user.isAccountVerified()) {
+
+            logger.warn("Login failed. Email not verified for: {}",
+                    request.getEmail());
+
+            throw new AccountNotVerifiedException(
+                    ApiMessages.ACCOUNT_NOT_VERIFIED);
         }
 
         logger.info("Login successful for user ID: {}",

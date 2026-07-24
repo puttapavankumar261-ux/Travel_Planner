@@ -2,10 +2,16 @@ package com.travelplanner.enums;
 
 public enum PaymentMethod {
 
-    CASH,
-    CARD,
     UPI,
+
+    CREDIT_CARD,
+
+    DEBIT_CARD,
+
     NET_BANKING,
-    OTHER
+
+    WALLET,
+
+    CASH
 
 }

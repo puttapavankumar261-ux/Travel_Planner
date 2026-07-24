@@ -1,6 +1,7 @@
 package com.travelplanner.service.impl;
 
 import java.util.List;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.stereotype.Service;
@@ -18,6 +19,9 @@ import com.travelplanner.repo.UserRepository;
 import com.travelplanner.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.travelplanner.dto.OtpRequestDto;
+import com.travelplanner.enums.OtpPurpose;
+import com.travelplanner.service.OtpService;
 
 import com.travelplanner.common.constants.ApiMessages;
 @Service
@@ -29,15 +33,18 @@ public class UserServiceImpl implements UserService {
     private static final Logger logger =
             LoggerFactory.getLogger(UserServiceImpl.class);
     private final PasswordEncoder passwordEncoder;
+    private final OtpService otpService;
     public UserServiceImpl(UserRepository userRepo,
             RoleRepository roleRepo,
             UserMapper userMapper,
-            PasswordEncoder passwordEncoder) {
+            PasswordEncoder passwordEncoder,
+            OtpService otpService) {
 
-           this.userRepo = userRepo;
-           this.roleRepo = roleRepo;
-           this.userMapper = userMapper;
-           this.passwordEncoder = passwordEncoder;
+        this.userRepo = userRepo;
+        this.roleRepo = roleRepo;
+        this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
+        this.otpService = otpService;
     }
 
     @Override
@@ -73,12 +80,26 @@ public class UserServiceImpl implements UserService {
 
         User user = userMapper.mapToUser(request, role);
 
-     // Encrypt Password
-     user.setPassword(passwordEncoder.encode(request.getPassword()));
+        // Encrypt Password
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-     User savedUser = userRepo.save(user);
+        // New users must verify their email
+        user.setAccountVerified(false);
+
+        User savedUser = userRepo.save(user);
+
         logger.info("User registered successfully with ID: {}",
                 savedUser.getUserId());
+
+        // Generate and send OTP automatically
+        OtpRequestDto otpRequest = new OtpRequestDto();
+        otpRequest.setEmail(savedUser.getEmail());
+        otpRequest.setPurpose(OtpPurpose.REGISTRATION);
+
+        otpService.generateAndSendOtp(otpRequest);
+
+        logger.info("Verification OTP sent successfully to {}",
+                savedUser.getEmail());
 
         return userMapper.mapToUserResponse(savedUser);
     }
@@ -188,6 +209,27 @@ public class UserServiceImpl implements UserService {
         userRepo.delete(user);
 
         logger.info("User deleted successfully with ID: {}", userId);
+    }
+    
+    @Override
+    public void updatePassword(String email, String newPassword) {
+
+        logger.info("Updating password for email: {}", email);
+
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(() -> {
+
+                    logger.warn("User not found with email: {}", email);
+
+                    return new UserNotFoundException(
+                            "User not found with email : " + email);
+                });
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+
+        userRepo.save(user);
+
+        logger.info("Password updated successfully for email: {}", email);
     }
 
 }

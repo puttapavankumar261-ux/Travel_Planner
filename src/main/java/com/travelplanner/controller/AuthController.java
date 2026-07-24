@@ -101,18 +101,25 @@ public class AuthController {
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<ApiResponse<String>> resetPassword(@Valid @RequestBody ResetPasswordDto requestDto) {
-        OtpVerificationDto verificationDto = new OtpVerificationDto(requestDto.getEmail(), requestDto.getOtp(), OtpPurpose.PASSWORD_RESET);
-        
-        // Verify the OTP first
+    public ResponseEntity<ApiResponse<String>> resetPassword(
+            @Valid @RequestBody ResetPasswordDto requestDto) {
+
+        OtpVerificationDto verificationDto =
+                new OtpVerificationDto(
+                        requestDto.getEmail(),
+                        requestDto.getOtp(),
+                        OtpPurpose.PASSWORD_RESET);
+
         otpService.verifyOtp(verificationDto);
-        
-        // In a real application, you'd encode the password and save the User entity here.
-        // For example: userService.updatePassword(requestDto.getEmail(), passwordEncoder.encode(requestDto.getNewPassword()));
-        
+
+        userService.updatePassword(
+                requestDto.getEmail(),
+                requestDto.getNewPassword());
+
         return ResponseEntity.ok(
-                ApiResponseUtil.success("Password has been reset successfully", null)
-        );
+                ApiResponseUtil.success(
+                        "Password has been reset successfully",
+                        null));
     }
 
 }
