@@ -72,10 +72,15 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/swagger-ui.html")
                         .permitAll()
-
+                        
+                     // User profile update
+                        .requestMatchers("/api/users/profile/**")
+                        .hasRole("USER")
+                        
                         // Admin APIs
                         .requestMatchers("/api/users/**")
                         .hasRole("ADMIN")
+                        
 
                         // User + Admin APIs
                         .requestMatchers(

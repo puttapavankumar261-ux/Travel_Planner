@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
+import com.travelplanner.dto.UpdateProfileRequestDto;
 import com.travelplanner.common.ApiResponse;
 import com.travelplanner.common.ApiResponseUtil;
 import com.travelplanner.common.constants.ApiMessages;
@@ -67,6 +67,20 @@ public class UserController {
                         response));
     }
 
+ // UPDATE PROFILE
+@PutMapping("/profile/{userId}")
+public ResponseEntity<ApiResponse<UserResponseDto>> updateProfile(
+        @PathVariable Long userId,
+        @Valid @RequestBody UpdateProfileRequestDto request) {
+
+    UserResponseDto response = userService.updateProfile(userId, request);
+
+    return ResponseEntity.ok(
+            ApiResponseUtil.success(
+                    "Profile Updated Successfully",
+                    response));
+	}
+    
     // Update User
     @PutMapping("/{userId}")
     public ResponseEntity<ApiResponse<UserResponseDto>> updateUser(

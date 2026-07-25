@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.stereotype.Service;
-
+import com.travelplanner.dto.UpdateProfileRequestDto;
 import com.travelplanner.dto.UserRequestDto;
 import com.travelplanner.dto.UserResponseDto;
 import com.travelplanner.entity.Role;
@@ -196,6 +196,45 @@ public class UserServiceImpl implements UserService {
 
         return userMapper.mapToUserResponse(updatedUser);
     }
+    
+    @Override
+    public UserResponseDto updateProfile(
+            Long userId,
+            UpdateProfileRequestDto request) {
+
+        logger.info("Updating profile for user ID: {}", userId);
+
+        User existingUser = userRepo.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(
+                        "User not found with ID : " + userId));
+
+        if (!existingUser.getEmail().equals(request.getEmail())
+                && userRepo.existsByEmail(request.getEmail())) {
+            throw new UserAlreadyExistsException("Email already exists.");
+        }
+
+        if (!existingUser.getMobileNumber().equals(request.getMobileNumber())
+                && userRepo.existsByMobileNumber(request.getMobileNumber())) {
+            throw new UserAlreadyExistsException("Mobile Number already exists.");
+        }
+
+        existingUser.setFirstName(request.getFirstName());
+        existingUser.setLastName(request.getLastName());
+        existingUser.setEmail(request.getEmail());
+        existingUser.setMobileNumber(request.getMobileNumber());
+        existingUser.setDateOfBirth(request.getDateOfBirth());
+        existingUser.setGender(request.getGender());
+        existingUser.setCountry(request.getCountry());
+        existingUser.setPreferredLanguage(request.getPreferredLanguage());
+        existingUser.setPreferredCurrency(request.getPreferredCurrency());
+
+        User updatedUser = userRepo.save(existingUser);
+
+        logger.info("Profile updated successfully for user ID: {}", userId);
+
+        return userMapper.mapToUserResponse(updatedUser);
+    }
+    
     @Override
     public void deleteUser(Long userId) {
 
