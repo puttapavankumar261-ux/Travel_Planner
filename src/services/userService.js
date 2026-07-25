@@ -8,6 +8,18 @@ const getUsers = async (page = 0, size = 10) => {
   return response.data.data;
 };
 
+const createUser = async (user) => {
+  const response = await axiosInstance.post("/api/users", user)
+
+  return response.data.data;
+};
+
+const deleteUser = async (userId) => {
+    const response = await axiosInstance.delete(`/api/users/${userId}`);
+    console.log(response);
+    return response.data;
+};
+
 // Get user by id
 const getUserById = async (id) => {
   const response = await axiosInstance.get(`/api/users/${id}`);
@@ -22,5 +34,7 @@ const addUser = async (user) => {
 export default {
   getUsers,
   getUserById,
-  addUser
+  addUser,
+  createUser,
+  deleteUser
 };

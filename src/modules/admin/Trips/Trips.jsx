@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import tripService from "../../../services/tripService";
 import Navbar from "../../../components/Navbar/Navbar";
-import { Search, Filter, MoreVertical, Edit2, Eye, Trash2 } from "lucide-react";
+import { Search, Filter, MoreVertical, Edit2, Eye, Trash2, Info } from "lucide-react";
 import "./Trips.css";
+import Pagination from "../Pagination/Pagination.jsx";
 const getStatusBadge = (status) => {
   switch (status) {
     case "PLANNED":
@@ -26,11 +27,79 @@ const getStatusBadge = (status) => {
 };
 
 const Trips = () => {
-  const [trips, setTrips] = useState([]);
-  const [loading, setLoading] = useState(true);
+const [trips, setTrips] = useState([]);
+//const [users, setUsers] = useState([]);
+const [loading, setLoading] = useState(true);
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
+const [searchTerm, setSearchTerm] = useState("");
+const [statusFilter, setStatusFilter] = useState("");
+
+const rowsPerPage = 10;
+const [currentPage, setCurrentPage] = useState(1);
+
+const [showTripModal, setShowTripModal] = useState(false);
+const [selectedTrip, setSelectedTrip] = useState(null);
+const [loadingUser, setLoadingUser] = useState(false);
+const [showCancelModal, setShowCancelModal] = useState(false);
+const [cancelTrip, setCancelTrip] = useState(null);
+const [cancelReason, setCancelReason] = useState("");
+ 
+
+const handleView = async (tripId) => {
+    try {
+      setLoadingUser(true);
+      const view = await tripService.getTripById(tripId);
+      console.log(view);
+      const user = await tripService.getUserById(view.userId);
+       console.log(user);
+      
+      const tripDetails = {
+          ...view,
+          ...user
+      };
+      setSelectedTrip(tripDetails);
+      setShowTripModal(true);
+    } catch (err) {
+      console.error(err);
+
+      alert("Unable to load user.");
+    } finally {
+      setLoadingUser(false);
+    }
+  };
+
+const closeModal = () => {
+    setShowTripModal(false);
+    setSelectedTrip(null);
+};
+
+const handleCancelTrip = async (tripId) => {
+  try {
+    setLoadingUser(true);
+
+    const trip = await tripService.getTripById(tripId);
+    const user = await tripService.getUserById(trip.userId);
+
+    setCancelTrip({
+      ...trip,
+      ...user,
+    });
+
+    setCancelReason("");
+    setShowCancelModal(true);
+  } catch (err) {
+    console.error(err);
+    alert("Unable to load trip details.");
+  } finally {
+    setLoadingUser(false);
+  }
+};
+
+const closeCancelModal = () => {
+    setShowCancelModal(false);
+    setCancelTrip(null);
+    setCancelReason("");
+};
 
   const loadTrips = async () => {
     try {
@@ -46,9 +115,42 @@ const Trips = () => {
     }
   };
 
+  
+
   useEffect(() => {
     loadTrips();
   }, []);
+
+const submitCancellation = async () => {
+
+    if (!cancelReason.trim()) {
+        alert("Please enter cancellation reason.");
+        return;
+    }
+
+    try {
+
+        const request = {
+            tripId: cancelTrip.tripId,
+            cancellationReason: cancelReason
+        };
+
+        console.log(request);
+
+        // await tripService.cancelTrip(request);
+
+        alert("Trip cancelled successfully.");
+
+        closeCancelModal();
+
+        loadTrips();
+
+    } catch (err) {
+        console.error(err);
+        alert("Unable to cancel trip.");
+    }
+
+};
 
   const filteredTrips = trips.filter((trip) => {
     const matchesSearch =
@@ -62,6 +164,18 @@ const Trips = () => {
     return matchesSearch && matchesStatus;
   });
 
+  // Pagination calculations
+        const totalPages = Math.ceil(filteredTrips.length / rowsPerPage);
+
+        const indexOfLastTrip = currentPage * rowsPerPage;
+        const indexOfFirstTrip = indexOfLastTrip - rowsPerPage;
+
+        const currentTrips = filteredTrips.slice(indexOfFirstTrip, indexOfLastTrip);
+    // Pagination.Pagination(filteredTrips);
+
+       useEffect(() => {
+            setCurrentPage(1);
+        }, [searchTerm, statusFilter]);
   return (
   <div className="dashboard-page">
     <Navbar />
@@ -91,22 +205,7 @@ const Trips = () => {
           </p>
         </div>
 
-        <button
-          className="btn-primary"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            padding: "10px 20px",
-            background: "#3B82F6",
-            color: "white",
-            border: "none",
-            borderRadius: "10px",
-            cursor: "pointer",
-          }}
-        >
-          <Filter size={18} /> Export Data
-        </button>
+      
       </div>
 
       <div className="trips-glass-container glass-panel">
@@ -158,12 +257,12 @@ const Trips = () => {
                     Loading...
                   </td>
                 </tr>
-              ) : (
-                filteredTrips.map((trip) => (
+              ) : currentTrips.length > 0 ? (
+                currentTrips.map((trip) => (
                   <tr key={trip.tripId}>
                     <td>
                       <span className="trip-id">
-                        TRP-{trip.tripId}
+                        {trip.tripId}
                       </span>
                     </td>
 
@@ -200,31 +299,35 @@ const Trips = () => {
                     </td>
 
                     <td>
-                      <div className="action-buttons">
-                        <button
-                          className="icon-btn-small"
-                          title="View Details"
-                        >
-                          <Eye size={18} />
-                        </button>
+                          <div className="actions">
+                                  <button
+                                    className="view-btn"
+                                    onClick={() => handleView(trip.tripId)}
+                                  >
+                                    <i className="bi bi-box-arrow-up-right"></i>
+                                    <span>View</span>
+                                  </button>
+                                
 
-                        <button
-                          className="icon-btn-small"
-                          title="Edit Trip"
-                        >
-                          <Edit2 size={18} />
-                        </button>
+                                  <button
+                                  className="cancel-trip"
+                                  onClick={() => handleCancelTrip(trip.tripId)}
+                                  >
+                                 <i className="bi bi-info-circle"></i>
+                                  <span>Cancel Trip</span>
+                                  </button>
 
-                        <button
-                          className="icon-btn-small danger"
-                          title="Delete Trip"
-                        >
-                          <Trash2 size={18} />
-                        </button>
-                      </div>
+                          </div>
+
                     </td>
                   </tr>
                 ))
+             ) : (
+                <tr>
+                  <td colSpan="7" className="no-data">
+                    No users found
+                  </td>
+                </tr>
               )}
             </tbody>
           </table>
@@ -235,8 +338,20 @@ const Trips = () => {
             </div>
           )}
         </div>
+      
+   
+      <Pagination
+          totalPages={totalPages}
+          rowsPerPage={rowsPerPage}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          indexOfLastModule= {indexOfLastTrip}
+          indexOfFirstModule = {indexOfFirstTrip}
+          currentModules = {currentTrips}
+          filteredModules = {filteredTrips}
 
-        <div className="pagination">
+      />
+        {/* <div className="pagination">
           <span className="text-muted">
             Showing {filteredTrips.length} of {trips.length} entries
           </span>
@@ -246,7 +361,304 @@ const Trips = () => {
             <button className="page-btn active">1</button>
             <button className="page-btn">Next</button>
           </div>
+        </div> */}
+
+        {showTripModal && selectedTrip && (
+    <div className="trip-modal-overlay">
+
+        <div className="trip-modal">
+
+            <div className="trip-modal-header">
+
+                <h2>
+                    Trip Details
+                </h2>
+
+                <button
+                    className="close-btn"
+                    onClick={closeModal}
+                >
+                    ✕
+                </button>
+
+            </div>
+
+            {/* <div className="trip-details-grid">
+
+                <div className="detail-item">
+                    <label>Trip ID</label>
+                    <p>TRP-{selectedTrip.tripId}</p>
+                </div>
+
+                <div className="detail-item">
+                    <label>User Name</label>
+                    <p>{selectedTrip.userName}</p>
+                </div>
+
+                <div className="detail-item">
+                    <label>Source</label>
+                    <p>{selectedTrip.source}</p>
+                </div>
+
+                <div className="detail-item">
+                    <label>Destination</label>
+                    <p>{selectedTrip.destination}</p>
+                </div>
+
+                <div className="detail-item">
+                    <label>Start Date</label>
+                    <p>{selectedTrip.startDate}</p>
+                </div>
+
+                <div className="detail-item">
+                    <label>End Date</label>
+                    <p>{selectedTrip.endDate}</p>
+                </div>
+
+                <div className="detail-item">
+                    <label>Budget</label>
+                    <p>
+                        ₹{Number(selectedTrip.budget).toLocaleString("en-IN")}
+                    </p>
+                </div>
+
+                <div className="detail-item">
+                    <label>Status</label>
+                    <p>{selectedTrip.tripStatus}</p>
+                </div>
+
+                <div className="detail-item full-width">
+                    <label>Description</label>
+                    <p>{selectedTrip.description}</p>
+                </div>
+
+            </div> */}
+            <div className="trip-modal-body">
+            <div className="trip-details-grid">
+
+    {/* <div className="detail-item">
+        <label>Trip ID</label>
+        <p>{selectedTrip.tripId}</p>
+    </div> */}
+
+    <div className="detail-item">
+        <label>Title</label>
+        <p>{selectedTrip.title}</p>
+    </div>
+
+    <div className="detail-item">
+        <label>Destination</label>
+        <p>{selectedTrip.destination}</p>
+    </div>
+
+    <div className="detail-item full-width">
+        <label>Description</label>
+        <p>{selectedTrip.description}</p>
+    </div>
+
+    <div className="detail-item">
+        <label>Source</label>
+        <p>{selectedTrip.source}</p>
+    </div>
+
+    <div className="detail-item">
+        <label>Destination</label>
+        <p>{selectedTrip.destination}</p>
+    </div>
+
+    <div className="detail-item">
+        <label>Start Date</label>
+        <p>{selectedTrip.startDate}</p>
+    </div>
+
+    <div className="detail-item">
+        <label>End Date</label>
+        <p>{selectedTrip.endDate}</p>
+    </div>
+
+    <div className="detail-item">
+        <label>Budget</label>
+        <p>₹{Number(selectedTrip.budget).toLocaleString()}</p>
+    </div>
+
+    <div className="detail-item">
+        <label>Status</label>
+        <p>{selectedTrip.tripStatus}</p>
+    </div>
+
+    <div className="detail-item">
+        <label>Created At</label>
+        <p>{selectedTrip.createdAt}</p>
+    </div>
+
+    <div className="detail-item">
+        <label>Updated At</label>
+        <p>{selectedTrip.updatedAt}</p>
+    </div>
+
+</div>
+
+<h3 className="section-title">
+    User Information
+</h3>
+
+<div className="trip-details-grid">
+
+    <div className="detail-item">
+        <label>User ID</label>
+        <p>{selectedTrip.userId}</p>
+    </div>
+
+    <div className="detail-item">
+        <label>First Name</label>
+        <p>{selectedTrip.firstName}</p>
+    </div>
+
+    <div className="detail-item">
+        <label>Last Name</label>
+        <p>{selectedTrip.lastName}</p>
+    </div>
+
+    <div className="detail-item">
+        <label>Email</label>
+        <p>{selectedTrip.email}</p>
+    </div>
+
+    <div className="detail-item">
+        <label>Mobile Number</label>
+        <p>{selectedTrip.mobileNumber}</p>
+    </div>
+
+    <div className="detail-item">
+        <label>Role</label>
+        <p>{selectedTrip.roleName}</p>
+    </div>
+
+</div> </div>
+
+            <div className="trip-modal-footer">
+
+                <button
+                    className="close-modal-btn"
+                    onClick={closeModal}
+                >
+                    Close
+                </button>
+
+            </div>
+
         </div>
+
+    </div>
+        )}
+
+
+        {showCancelModal && cancelTrip && (
+
+<div className="trip-modal-overlay">
+
+    <div className="cancel-modal">
+
+        <div className="trip-modal-header">
+
+            <h2>
+                Cancel Trip
+            </h2>
+
+            <button
+                className="close-btn"
+                onClick={closeCancelModal}
+            >
+                ✕
+            </button>
+
+        </div>
+
+        <div className="trip-modal-body">
+
+            <div className="cancel-grid">
+
+                <div className="detail-item">
+                    <label>First Name</label>
+                    <input
+                        type="text"
+                        value={cancelTrip.firstName}
+                        readOnly
+                    />
+                </div>
+
+                <div className="detail-item">
+                    <label>Email</label>
+                    <input
+                        type="text"
+                        value={cancelTrip.email}
+                        readOnly
+                    />
+                </div>
+
+                <div className="detail-item">
+                    <label>Mobile Number</label>
+                    <input
+                        type="text"
+                        value={cancelTrip.mobileNumber}
+                        readOnly
+                    />
+                </div>
+
+                <div className="detail-item">
+                    <label>Destination</label>
+                    <input
+                        type="text"
+                        value={cancelTrip.destination}
+                        readOnly
+                    />
+                </div>
+
+                <div className="detail-item full-width">
+
+                    <label>
+                        Cancellation Reason
+                    </label>
+
+                    <textarea
+                        rows="6"
+                        placeholder="Enter cancellation reason..."
+                        value={cancelReason}
+                        onChange={(e) =>
+                            setCancelReason(e.target.value)
+                        }
+                    />
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div className="trip-modal-footer">
+
+            <button
+                className="secondary-btn"
+                onClick={closeCancelModal}
+            >
+                Close
+            </button>
+
+            <button
+                className="danger-btn"
+                onClick={submitCancellation}
+            >
+                Submit Cancellation
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+)}
+        
       </div>
     </div>
   </div>

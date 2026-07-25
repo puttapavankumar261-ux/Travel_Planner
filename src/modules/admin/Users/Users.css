@@ -249,13 +249,13 @@
 
 /* User Profile */
 
-.profile {
+.users-table .profile {
     display: flex;
     align-items: center;
     gap: 15px;
 }
 
-.avatar {
+.users-table .avatar {
     width: 50px;
     height: 50px;
     min-width: 50px;
@@ -269,11 +269,11 @@
     font-weight: bold;
 }
 
-.profile h4 {
+.users-table .profile h4 {
     margin: 0;
 }
 
-.profile p {
+.users-table .profile p {
     margin: 5px 0;
     display: flex;
     gap: 5px;
@@ -282,14 +282,14 @@
     font-size: 14px;
 }
 
-.profile small {
+.users-table .profile small {
     color: #64748b;
 }
 
 
 /* Badges */
 
-.customer,
+/* .customer,
 .premium,
 .active,
 .inactive {
@@ -297,9 +297,9 @@
     border-radius: 20px;
     font-size: 13px;
     font-weight: 600;
-}
+} */
 
-.customer {
+/* .customer {
     background: rgba(59, 130, 246, .15);
     color: #3b82f6;
 }
@@ -307,9 +307,9 @@
 .premium {
     background: rgba(234, 179, 8, .15);
     color: #facc15;
-}
+} */
 
-.active {
+/* .active {
     background: rgba(34, 197, 94, .15);
     color: #22c55e;
 }
@@ -317,17 +317,17 @@
 .inactive {
     background: rgba(239, 68, 68, .15);
     color: #ef4444;
-}
+} */
 
 
 /* Actions */
 
-.actions {
+.users-table .actions {
     display: flex;
     gap: 12px;
 }
 
-.actions button {
+.users-table .actions button {
     height: 38px;
     padding: 0 14px;
     border: none;
@@ -343,19 +343,19 @@
     font-weight: 500;
 }
 
-.actions button i {
+.users-table .actions button i {
     font-size: 14px;
     display: inline-flex;
     align-items: center;
 }
 
-.view-btn {
+.users-table .view-btn {
     background: rgba(59, 130, 246, 0.15);
     border: 1px solid rgba(59, 130, 246, 0.3) !important;
     color: #60a5fa !important;
 }
 
-.view-btn:hover {
+.users-table .view-btn:hover {
     background: #2563eb;
     color: white !important;
 }
@@ -390,7 +390,7 @@
 } */
 
 
-.no-data {
+.users-table .no-data {
     text-align: center;
     padding: 30px;
     color: #94a3b8;

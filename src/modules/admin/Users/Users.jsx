@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Filter } from "lucide-react";
 import userService from "../../../services/userService";
 import Navbar from "../../../components/Navbar/Navbar";
+import Pagination from "../Pagination/Pagination.jsx";
 
 import {
   Search,
@@ -29,21 +30,6 @@ const Users = () => {
   const [showViewModal, setShowViewModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(false);
-
-  const [newUser, setNewUser] = useState({
-    loginProvider: "LOCAL",
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    mobileNumber: "",
-    dateOfBirth: "",
-    gender: "MALE",
-    country: "",
-    preferredLanguage: "English",
-    preferredCurrency: "INR",
-    roleId: 2,
-  });
 
   const loadUsers = async () => {
     try {
@@ -88,12 +74,7 @@ const Users = () => {
 
   const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
 
-  // Page change
-  const goToPage = (page) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
+  
  
   const handleView = async (id) => {
     try {
@@ -227,54 +208,17 @@ const Users = () => {
 
         {/* Pagination */}
 
-        <div className="pagination">
-          <span className="text-muted">
-            Showing {filteredUsers.length === 0 ? 0 : indexOfFirstUser + 1}
-            {" - "}
-            {Math.min(indexOfLastUser, filteredUsers.length)}
-            {" of "}
-            {filteredUsers.length}
-            {" entries"}
-          </span>
+        <Pagination
+          totalPages={totalPages}
+          rowsPerPage={rowsPerPage}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          indexOfLastModule= {indexOfLastUser}
+          indexOfFirstModule = {indexOfFirstUser}
+          currentModules = {currentUsers}
+          filteredModules = {filteredUsers}
 
-          <div className="page-buttons">
-            {/* Prev */}
-
-            <button
-              className={`page-btn ${currentPage === 1 ? "disabled" : ""}`}
-              disabled={currentPage === 1}
-              onClick={() => goToPage(currentPage - 1)}
-            >
-              Prev
-            </button>
-
-            {/* Page Numbers */}
-
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={index}
-                className={`page-btn ${
-                  currentPage === index + 1 ? "active" : ""
-                }`}
-                onClick={() => goToPage(index + 1)}
-              >
-                {index + 1}
-              </button>
-            ))}
-
-            {/* Next */}
-
-            <button
-              className={`page-btn ${
-                currentPage === totalPages || totalPages === 0 ? "disabled" : ""
-              }`}
-              disabled={currentPage === totalPages || totalPages === 0}
-              onClick={() => goToPage(currentPage + 1)}
-            >
-              Next
-            </button>
-          </div>
-        </div>
+      />
 
         {showViewModal && (
           <div
