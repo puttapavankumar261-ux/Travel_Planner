@@ -94,9 +94,36 @@ public class OtpServiceImpl implements OtpService {
                 NotificationType.EMAIL
         );
     }
-
+    
     @Override
-    public boolean verifyOtp(OtpVerificationDto dto) {
+public boolean verifyOtp(OtpVerificationDto dto) {
+
+    OtpVerification otpEntity = otpRepository
+            .findByEmailAndOtpAndPurpose(
+                    dto.getEmail(),
+                    dto.getOtp(),
+                    dto.getPurpose())
+            .orElseThrow(() ->
+                    new InvalidOtpException(
+                            "Invalid email or OTP"));
+
+    if (otpEntity.getExpiryTime().isBefore(LocalDateTime.now())) {
+        throw new OtpExpiredException("OTP has expired");
+    }
+
+    if (otpEntity.isVerified()) {
+        throw new InvalidOtpException("OTP already verified");
+    }
+
+    otpEntity.setVerified(true);
+    otpEntity.setVerifiedAt(LocalDateTime.now());
+
+    otpRepository.save(otpEntity);
+
+    return true;
+}
+    @Override
+    public boolean verifyOtpTest(OtpVerificationDto dto) {
 
         OtpVerification otpEntity = otpRepository
                 .findByEmailAndOtpAndPurpose(
@@ -112,24 +139,24 @@ public class OtpServiceImpl implements OtpService {
         }
 
      // Mark OTP as verified
-        otpEntity.setVerified(true);
-        otpEntity.setVerifiedAt(LocalDateTime.now());
-        otpRepository.save(otpEntity);
+        // otpEntity.setVerified(true);
+        // otpEntity.setVerifiedAt(LocalDateTime.now());
+        // otpRepository.save(otpEntity);
 
-        // Only verify the user account for REGISTRATION OTPs
-        if (dto.getPurpose() == OtpPurpose.REGISTRATION) {
+        // // Only verify the user account for REGISTRATION OTPs
+        // if (dto.getPurpose() == OtpPurpose.REGISTRATION) {
 
-            User user = userRepository.findByEmail(dto.getEmail())
-                    .orElseThrow(() ->
-                            new UserNotFoundException(
-                                    "User not found with email: "
-                                            + dto.getEmail()));
+        //     User user = userRepository.findByEmail(dto.getEmail())
+        //             .orElseThrow(() ->
+        //                     new UserNotFoundException(
+        //                             "User not found with email: "
+        //                                     + dto.getEmail()));
 
-            user.setAccountVerified(true);
+        //     user.setAccountVerified(true);
 
-            userRepository.save(user);
-        }
+        //     userRepository.save(user);
+        // }
 
-        return true;
+        // return true;
     }
 }
