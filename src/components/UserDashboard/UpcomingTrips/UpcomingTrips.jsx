@@ -1,28 +1,33 @@
 import "./UpcomingTrips.css";
-import { FaMapMarkerAlt, FaCalendarAlt, FaChevronRight } from "react-icons/fa";
+import {
+  FaMapMarkerAlt,
+  FaCalendarAlt,
+  FaChevronRight,
+} from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
-const upcomingTrips = [
-  {
-    id: 1,
-    destination: "Ooty",
-    departure: "15 Aug 2026",
-    daysLeft: "18 Days Left",
-  },
-  {
-    id: 2,
-    destination: "Delhi",
-    departure: "28 Aug 2026",
-    daysLeft: "31 Days Left",
-  },
-  {
-    id: 3,
-    destination: "Jaipur",
-    departure: "10 Sep 2026",
-    daysLeft: "44 Days Left",
-  },
-];
+const UpcomingTrips = ({ trips = [] }) => {
+  const navigate = useNavigate();
 
-const UpcomingTrips = () => {
+  // Only upcoming/planned trips
+  const upcomingTrips = trips.filter(
+    (trip) =>
+      trip.tripStatus === "PLANNED" ||
+      trip.tripStatus === "ONGOING"
+  );
+
+  const calculateDaysLeft = (startDate) => {
+    const today = new Date();
+    const tripDate = new Date(startDate);
+
+    const diff = Math.ceil(
+      (tripDate - today) / (1000 * 60 * 60 * 24)
+    );
+
+    if (diff <= 0) return "Started";
+    return `${diff} Days Left`;
+  };
+
   return (
     <div className="upcoming-trips">
       <div className="section-header">
@@ -31,39 +36,56 @@ const UpcomingTrips = () => {
           <p>Your next adventures</p>
         </div>
 
-        <button className="view-all-btn">
+        <button
+          className="view-all-btn"
+          onClick={() => navigate("/user/trips")}
+        >
           View All
           <FaChevronRight />
         </button>
       </div>
 
       <div className="upcoming-list">
-        {upcomingTrips.map((trip) => (
-          <div className="upcoming-card" key={trip.id}>
-            <div className="upcoming-left">
-              <div className="upcoming-icon">
-                <FaMapMarkerAlt />
-              </div>
+        {upcomingTrips.length === 0 ? (
+          <p style={{ color: "#bbb", textAlign: "center", padding: "20px" }}>
+            No Upcoming Trips
+          </p>
+        ) : (
+          upcomingTrips.map((trip) => (
+            <div className="upcoming-card" key={trip.tripId}>
+              <div className="upcoming-left">
+                <div className="upcoming-icon">
+                  <FaMapMarkerAlt />
+                </div>
 
-              <div className="upcoming-info">
-                <h3>{trip.destination}</h3>
+                <div className="upcoming-info">
+                  <h3>{trip.destination}</h3>
 
-                <div className="upcoming-meta">
-                  <span>
-                    <FaCalendarAlt />
-                    {trip.departure}
-                  </span>
+                  <div className="upcoming-meta">
+                    <span>
+                      <FaCalendarAlt />
+                      {trip.startDate}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="upcoming-right">
-              <span className="days-left">{trip.daysLeft}</span>
+              <div className="upcoming-right">
+                <span className="days-left">
+                  {calculateDaysLeft(trip.startDate)}
+                </span>
 
-              <button>View</button>
+                <button
+                  onClick={() =>
+                    navigate(`/user/trips/${trip.tripId}`)
+                  }
+                >
+                  View
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );

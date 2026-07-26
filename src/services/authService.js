@@ -1,5 +1,11 @@
 import axiosInstance from "../utils/axiosInstance";
-
+import axios from 'axios'; 
+const api = axios.create({
+  baseURL: "http://localhost:8080/api",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 const login = async (loginData) => {
 
     const response = await axiosInstance.post(

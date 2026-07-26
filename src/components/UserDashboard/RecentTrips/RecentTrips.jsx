@@ -1,30 +1,8 @@
 import "./RecentTrips.css";
 
-const trips = [
-  {
-    id: 1,
-    destination: "Goa",
-    date: "15 Jul - 20 Jul",
-    budget: "₹18,000",
-    status: "Upcoming",
-  },
-  {
-    id: 2,
-    destination: "Kerala",
-    date: "10 Aug - 16 Aug",
-    budget: "₹24,000",
-    status: "Planned",
-  },
-  {
-    id: 3,
-    destination: "Manali",
-    date: "02 Sep - 08 Sep",
-    budget: "₹30,000",
-    status: "Upcoming",
-  },
-];
 
-const RecentTrips = () => {
+
+const RecentTrips = ({ trips = [] }) => {
   return (
     <div className="recent-trips">
       <div className="section-header">
@@ -41,7 +19,7 @@ const RecentTrips = () => {
 
       <div className="trip-list">
         {trips.map((trip) => (
-          <div className="recent-trip-card" key={trip.id}>
+          <div className="recent-trip-card" key={trip.tripId}>
             <div className="trip-left">
               <div className="trip-icon">
                 <i className="bi bi-geo-alt"></i>
@@ -53,20 +31,20 @@ const RecentTrips = () => {
                 <div className="trip-meta">
                   <span>
                     <i className="bi bi-calendar3"></i>
-                    {trip.date}
+                    {trip.startDate} - {trip.endDate}
                   </span>
 
                   <span>
                     <i className="bi bi-wallet2"></i>
-                    {trip.budget}
+                    ₹{trip.budget?.toLocaleString()}
                   </span>
                 </div>
               </div>
             </div>
 
             <div className="trip-right">
-              <span className={`status ${trip.status.toLowerCase()}`}>
-                {trip.status}
+              <span className={`status ${trip.tripStatus.toLowerCase()}`}>
+                {trip.tripStatus}
               </span>
 
               <button>View</button>
