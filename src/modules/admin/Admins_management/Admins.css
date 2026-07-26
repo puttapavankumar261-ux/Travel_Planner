@@ -1,4 +1,4 @@
-/* Page */
+Page
 
 .admin-wrapper {
     padding: 110px 35px 35px;
@@ -288,4 +288,199 @@
     border-radius: 8px;
     cursor: pointer;
     font-weight: 600;
+}
+
+.delete-btn{
+    background:rgba(239,68,68,.15) !important;
+    border:1px solid rgba(239,68,68,.35) !important;
+    color:#ef4444 !important;
+}
+
+
+.delete-btn:hover {
+    background: #ef4444 !important;
+    color : #fff !important;
+}
+
+
+
+/****************************************************/
+
+/***************************************************/
+
+/* =======================================================
+   CREATE ADMIN FORM
+======================================================= */
+
+.adminadd-form {
+    margin: 30px 0;
+    padding: 35px;
+    background: linear-gradient(180deg,#111827,#0f172a);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 18px;
+    box-shadow: 0 15px 40px rgba(0,0,0,.35);
+}
+
+.save-btn{
+
+    min-width:170px;
+
+    height:48px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+
+    color:#fff;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+}
+
+.save-btn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 10px 20px rgba(37,99,235,.35);
+
+}
+
+.cancel-btn{
+
+    min-width:150px;
+
+    height:48px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#374151;
+
+    color:#fff;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.cancel-btn:hover{
+
+    background:#4b5563;
+
+    transform:translateY(-2px);
+
+}
+
+@media(max-width:900px){
+
+    .form-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .form-buttons{
+
+        flex-direction:column;
+
+    }
+
+    .save-btn,
+    .cancel-btn{
+
+        width:100%;
+
+    }
+
+}
+
+/**************************************************
+             Delete Admin 
+***************************************************/
+
+/* Delete Modal */
+
+.delete-modal{
+    width:420px;
+    background:#161b22;
+    border-radius:18px;
+    padding:35px;
+    border:1px solid rgba(255,255,255,.08);
+    text-align:center;
+    animation:popup .25s ease;
+}
+
+.delete-icon{
+    width:75px;
+    height:75px;
+    border-radius:50%;
+    margin:auto;
+    background:rgba(239,68,68,.15);
+    color:#ef4444;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    margin-bottom:20px;
+}
+
+.delete-modal h2{
+    color:#fff;
+    margin-bottom:15px;
+}
+
+.delete-modal p{
+    color:#d1d5db;
+    font-size:15px;
+    line-height:24px;
+}
+
+.delete-modal strong{
+    color:#fff;
+}
+
+.delete-warning{
+    margin-top:15px;
+    color:#fca5a5;
+    font-size:14px;
+}
+
+.delete-actions{
+    margin-top:30px;
+    display:flex;
+    justify-content:center;
+    gap:15px;
+}
+
+.confirm-delete-btn{
+    background:#dc2626;
+    color:#fff;
+    border:none;
+    padding:12px 24px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:600;
+    min-width:150px;
+}
+
+.confirm-delete-btn:hover{
+    background:#b91c1c;
+}
+
+.confirm-delete-btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
 }

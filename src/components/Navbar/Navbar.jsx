@@ -16,12 +16,13 @@ function Navbar() {
 
       <nav className="nav-links">
         <NavLink to="/admin/dashboard">Dashboard</NavLink>
+        <NavLink to="/admin/admins">Admins</NavLink>
         <NavLink to="/admin/users">Users</NavLink>
         <NavLink to="/admin/trips">Trips</NavLink>
         <NavLink to="/admin/bookings">Bookings</NavLink>
         <NavLink to="/admin/reports">Reports</NavLink>
-        <NavLink to="/admin/settings">Settings</NavLink>
-        <NavLink to="/admin/admins">Admins</NavLink>
+        {/* <NavLink to="/admin/settings">Settings</NavLink> */}
+        
       </nav>
 
       <div className="nav-actions">
