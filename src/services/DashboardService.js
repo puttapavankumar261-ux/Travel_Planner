@@ -5,8 +5,14 @@ const getDashboardSummary = async () => {
   return response.data.data;
 };
 
+const getMonthlyExpenseAnalytics = async () => {
+  const response = await axiosInstance.get("/api/dashboard/expense/monthly");
+  return response.data.data;
+};
+
 const dashboardService = {
   getDashboardSummary,
+  getMonthlyExpenseAnalytics,
 };
 
 export default dashboardService;

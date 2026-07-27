@@ -22,60 +22,45 @@ function Login() {
   };
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    setError("");
+  e.preventDefault();
+  setError("");
 
-    try {
-<<<<<<< HEAD
-      const result = await authService.login(loginData);
+  try {
+    const result = await authService.login(loginData);
 
-      // Backend response:
-      // {
-      //   success: true,
-      //   data: { ... }
-      // }
+    const userData = result.data;
 
-      const userData = result.data;
+    // Save JWT
+    localStorage.setItem("token", userData.token);
 
-      // Save JWT
-      localStorage.setItem("token", userData.token);
+    // Save logged-in user
+    localStorage.setItem(
+      "user",
+      JSON.stringify({
+        userId: userData.userId,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        email: userData.email,
+        roleName: userData.roleName,
+      })
+    );
 
-      // Save logged-in user
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          userId: userData.userId,
-          firstName: userData.firstName,
-          lastName: userData.lastName,
-          email: userData.email,
-          roleName: userData.roleName,
-        }),
-      );
-
-      // Navigate based on role
-      if (userData.roleName === "ADMIN") {
-        navigate("/admin/dashboard");
-      } else {
-        navigate("/user/dashboard");
-=======
-      const response = await authService.login(loginData);
-      localStorage.setItem("token", response.token);
-      const role = response.data.roleName;
-      if(role === "USER"){
-          navigate("/user/dashboard");
-      }else if(role === "ADMIN") {
-          navigate("/admin/dashboard");
->>>>>>> 25029f4dedba30bc55d26cf4358179075af9c84a
-      }
-    } catch (err) {
-      setError(
-        err.response?.data?.message ||
-          "Login failed. Please check your credentials.",
-      );
-
-      console.error(err);
+    // Redirect based on role
+    if (userData.roleName === "ADMIN") {
+      navigate("/admin/dashboard");
+    } else {
+      navigate("/user/dashboard");
     }
-  };
+
+  } catch (err) {
+    setError(
+      err.response?.data?.message ||
+      "Login failed. Please check your credentials."
+    );
+
+    console.error(err);
+  }
+};
 
   return (
     <div
@@ -301,6 +286,6 @@ function Login() {
       </div>
     </div>
   );
-}
+};
 
 export default Login;
