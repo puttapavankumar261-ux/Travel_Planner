@@ -26,7 +26,7 @@ public class NotificationServiceImpl implements NotificationService {
         switch (type) {
             case EMAIL:
                 EmailRequestDto emailRequest = new EmailRequestDto(recipient, subject, message);
-                emailService.sendEmail(emailRequest);
+                emailService.sendHtmlEmail(emailRequest);
                 break;
             case SMS:
                 log.warn("SMS notification is not yet implemented. Message: {}", message);
