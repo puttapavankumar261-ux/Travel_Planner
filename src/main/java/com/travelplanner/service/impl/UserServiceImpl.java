@@ -84,8 +84,9 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         // New users must verify their email
-        user.setAccountVerified(false);
-
+        // user.setAccountVerified(false);
+       
+        user.setAccountVerified(true);
         User savedUser = userRepo.save(user);
 
         logger.info("User registered successfully with ID: {}",

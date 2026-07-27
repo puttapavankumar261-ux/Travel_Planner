@@ -31,7 +31,8 @@ public class UserMapper {
 	    user.setLoginProvider(LoginProvider.LOCAL);
 
 	    user.setAccountEnabled(true);
-	    user.setAccountVerified(false);
+	    // user.setAccountVerified(false);
+		 user.setAccountVerified(dto.getAccountVerified());
 	    user.setAccountLocked(false);
 
 	    return user;
@@ -55,7 +56,7 @@ public class UserMapper {
         response.setCreatedAt(user.getCreatedAt());
         response.setUpdatedAt(user.getUpdatedAt());
         response.setRoleName(user.getRole().getRoleName());
-
+        //response.setAccountVerified(user.getAccountVerified());
         return response;
     }
     
