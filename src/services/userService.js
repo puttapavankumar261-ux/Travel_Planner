@@ -38,11 +38,19 @@ const addUser = async (user) => {
     return response.data.data;
 };
 
+const updateUser = async (userId, userData) => {
+
+    const response = await axiosInstance.put(`/api/users/${userId}`, userData);
+
+    return response.data.data;
+};
+
 export default {
   getUsers,
   getUserById,
   addUser,
   updateProfile,
   createUser,
-  deleteUser
+  deleteUser,
+  updateUser
 };

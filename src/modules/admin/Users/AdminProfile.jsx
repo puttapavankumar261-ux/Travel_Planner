@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../../components/Navbar/Navbar";
 import StatCard from "../../../components/Dashboard/StatCard/StatCard";
 import { Users, Plane, Calendar, IndianRupee } from "lucide-react";
+import userService from "../../../services/userService";
 import {
   Search,
   Mail,
@@ -14,25 +15,25 @@ import {
 import "./AdminProfile.css";
 import adminlogo from "./images/profileimage.png";
 const AdminProfile = () => {
-  const [profile, setProfile] = useState({
-    firstName: "Pavan",
-    lastName: "Kumar",
-    email: "admin@travelplanner.com",
-    mobile: "+91 9876543210",
-    dob: "20 Jan 1998",
-    gender: "Male",
+//   const [profile, setProfile] = useState({
+//     firstName: "Pavan",
+//     lastName: "Kumar",
+//     email: "admin@travelplanner.com",
+//     mobile: "+91 9876543210",
+//     dob: "20 Jan 1998",
+//     gender: "Male",
 
-    username: "admin",
-    role: "Super Administrator",
-    employeeId: "ADM001",
-    status: "Active",
+//     username: "admin",
+//     role: "Super Administrator",
+//     employeeId: "ADM001",
+//     status: "Active",
 
-    address: "Whitefield",
-    city: "Bangalore",
-    state: "Karnataka",
-    country: "India",
-    zip: "560066",
-  });
+//     address: "Whitefield",
+//     city: "Bangalore",
+//     state: "Karnataka",
+//     country: "India",
+//     zip: "560066",
+//   });
 
   const permissions = [
     "User Management",
@@ -40,60 +41,124 @@ const AdminProfile = () => {
     "Booking Management",
     "Payment Management",
     "Reports",
-    "Settings",
+    "userProfile",
   ];
 
-  const recentLogins = [
-    {
-      device: "Windows 11",
-      browser: "Chrome",
-      ip: "192.168.1.20",
-      location: "Bangalore",
-      date: "10 Jul 2026 09:30 AM",
-    },
-    {
-      device: "Android",
-      browser: "Chrome",
-      ip: "192.168.1.50",
-      location: "Hyderabad",
-      date: "09 Jul 2026 07:15 PM",
-    },
-    {
-      device: "MacBook",
-      browser: "Safari",
-      ip: "192.168.1.60",
-      location: "Chennai",
-      date: "08 Jul 2026 08:10 AM",
-    },
-  ];
+//   const recentLogins = [
+//     {
+//       device: "Windows 11",
+//       browser: "Chrome",
+//       ip: "192.168.1.20",
+//       location: "Bangalore",
+//       date: "10 Jul 2026 09:30 AM",
+//     },
+//     {
+//       device: "Android",
+//       browser: "Chrome",
+//       ip: "192.168.1.50",
+//       location: "Hyderabad",
+//       date: "09 Jul 2026 07:15 PM",
+//     },
+//     {
+//       device: "MacBook",
+//       browser: "Safari",
+//       ip: "192.168.1.60",
+//       location: "Chennai",
+//       date: "08 Jul 2026 08:10 AM",
+//     },
+//   ];
 
-const stats = [
-    {
-      title: "Total Users",
-      value: "1250",
-      icon: <Users size={30} />,
-      color: "linear-gradient(135deg,#2563EB,#3B82F6)",
-    },
-    {
-      title: "Total Trips",
-      value: "325",
-      icon: <Plane size={30} />,
-      color: "linear-gradient(135deg,#10B981,#22C55E)",
-    },
-    {
-      title: "Bookings",
-      value: "95",
-      icon: <Calendar size={30} />,
-      color: "linear-gradient(135deg,#8B5CF6,#A855F7)",
-    },
-    {
-      title: "Revenue",
-      value: "₹8,45,000",
-      icon: <IndianRupee size={30} />,
-      color: "linear-gradient(135deg,#F59E0B,#FB923C)",
-    },
-  ];
+// const stats = [
+//     {
+//       title: "Total Users",
+//       value: "1250",
+//       icon: <Users size={30} />,
+//       color: "linear-gradient(135deg,#2563EB,#3B82F6)",
+//     },
+//     {
+//       title: "Total Trips",
+//       value: "325",
+//       icon: <Plane size={30} />,
+//       color: "linear-gradient(135deg,#10B981,#22C55E)",
+//     },
+//     {
+//       title: "Bookings",
+//       value: "95",
+//       icon: <Calendar size={30} />,
+//       color: "linear-gradient(135deg,#8B5CF6,#A855F7)",
+//     },
+//     {
+//       title: "Revenue",
+//       value: "₹8,45,000",
+//       icon: <IndianRupee size={30} />,
+//       color: "linear-gradient(135deg,#F59E0B,#FB923C)",
+//     },
+//   ];
 
+const loggedUser = JSON.parse(
+    localStorage.getItem("user"),
+    localStorage.getItem("password"),
+    localStorage.getItem("token")
+);
+
+const userId = loggedUser?.userId;
+const password = loggedUser?.password;
+const token = loggedUser?.token;
+const [admin, setAdmin] = useState();
+const [isEditing, setIsEditing] = useState(false);
+
+
+const handleSave = async () => {
+    try {
+        await userService.updateUser(admin.userId, {
+            firstName: admin.firstName,
+            lastName: admin.lastName,
+            email: admin.email,
+            password :token || "admin123",
+            mobileNumber: admin.mobileNumber,
+            gender : admin.gender,
+            dateOfBirth :admin.dateOfBirth || "1998-05-12",
+            preferredLanguage : admin.preferredLanguage,
+            preferredCurrency : admin.preferredCurrency,
+            roleName : admin.roleName,
+            roleId : admin.roleId || 1,
+            country : admin.country
+        });
+
+        alert("Profile updated successfully.");
+
+        setIsEditing(false);
+
+        adminUser(admin.userId);
+
+    } catch (error) {
+
+        console.error(error);
+        alert("Failed to update profile.");
+
+    }
+};
+const adminUser = async (userId) => {
+    try{
+       const uadmin = await userService.getUserById(userId);
+       //console.log(uadmin)
+        setAdmin(uadmin);
+    } catch (error) {
+        console.error("Failed to load Users:", error);
+    } 
+}
+
+useEffect(() => {
+
+    if(userId){
+        adminUser(userId);
+    }
+
+}, [userId]);
+
+
+//  console.log(admin);
+//  return false;
   return (
     <div className="dashboard-page">
       <Navbar />
@@ -123,16 +188,16 @@ const stats = [
                 /> */}
 
                 <h2>
-                    {profile.firstName} {profile.lastName}
+                    {admin?.firstName +" "+ admin?.lastName}
                 </h2>
 
                 <p className="role">
-                    {profile.role}
+                    {admin?.roleName}
                 </p>
 
-                <span className="status active">
+                {/* <span className="status active">
                     ● {profile.status}
-                </span>
+                </span> */}
 
                 <hr />
 
@@ -140,24 +205,31 @@ const stats = [
 
                     <div className="info-row">
                     <i className="bi bi-envelope-fill"></i>
-                    <span>{profile.email}</span>
+                    <span>{admin?.email}</span>
                     </div>
 
                     <div className="info-row">
                     <i className="bi bi-telephone-fill"></i>
-                    <span>{profile.mobile}</span>
+                    <span>{admin?.mobileNumber}</span>
                     </div>
 
-                    <div className="info-row">
+                    {/* <div className="info-row">
                     <i className="bi bi-person-badge-fill"></i>
                     <span>{profile.employeeId}</span>
-                    </div>
+                    </div> */}
 
                 </div>
 
-                <button className="profile-edit-btn">
+                {/* <button className="profile-edit-btn">
                     <i className="bi bi-pencil-square"></i>
                     Edit Profile
+                </button> */}
+                <button
+                className="profile-edit-btn"
+                onClick={() => setIsEditing(!isEditing)}
+                >
+                <i className="bi bi-pencil-square"></i>
+                {isEditing ? "Cancel" : "Edit"}
                 </button>
 
                 </div>
@@ -184,22 +256,7 @@ const stats = [
 
                 </div>
 
-                {/*  Quick Stats    */}
-
-                <div className="profile-card quick-stats">
-                    <h3>
-                        <i className="bi bi-bar-chart-line-fill"></i>
-                        Quick Admin Stats
-                    </h3>
-                    
-                    <div className="stats-grid">
-                        {/* <div className="stats-grid"> */}
-                            {stats.map((card) => (
-                                <StatCard key={card.title} {...card} />
-                            ))}
-                        {/* </div> */}
-                    </div>
-                </div>
+                
 
             </aside>
 
@@ -211,143 +268,178 @@ const stats = [
 
                 <div className="content-card">
 
-                <div className="card-header">
-
-                    <h3>
-                    Personal Information
-                    </h3>
-
-                    <button className="edit-small-btn">
-                    Edit
-                    </button>
-
-                </div>
-
-                <div className="profile-grid">
-
-                    <div className="form-group">
-                    <label>First Name</label>
-                    <input
-                        type="text"
-                        value={profile.firstName}
-                        readOnly
-                    />
-                    </div>
-
-                    <div className="form-group">
-                    <label>Last Name</label>
-                    <input
-                        type="text"
-                        value={profile.lastName}
-                        readOnly
-                    />
-                    </div>
-
-                    <div className="form-group">
-                    <label>Email Address</label>
-                    <input
-                        type="email"
-                        value={profile.email}
-                        readOnly
-                    />
-                    </div>
-
-                    <div className="form-group">
-                    <label>Mobile Number</label>
-                    <input
-                        type="text"
-                        value={profile.mobile}
-                        readOnly
-                    />
-                    </div>
-
-                    <div className="form-group">
-                    <label>Date of Birth</label>
-                    <input
-                        type="text"
-                        value={profile.dob}
-                        readOnly
-                    />
-                    </div>
-
-                    <div className="form-group">
-                    <label>Gender</label>
-                    <input
-                        type="text"
-                        value={profile.gender}
-                        readOnly
-                    />
-                    </div>
-
-                </div>
-
-                </div>
-
-                {/* ===================================================== */}
-                {/* will continue from here with:                  */}
-                {/* Account Information                                   */}
-                {/* Security Settings                                     */}
-                {/* Contact Details                                       */}
-                {/* Recent Login Activity Table                           */}
-                {/* Export Default                                        */}
-                {/* ===================================================== */}
-
-
-                        {/* ================= ACCOUNT + SECURITY ================= */}
-
-                <div className="two-column">
-
-                {/* Account Information */}
-
-                <div className="content-card">
-
                     <div className="card-header">
-                    <h3>Account Information</h3>
+
+                        <h3>
+                        Personal Information
+                        </h3>
+
+                        {/* <button className="edit-small-btn">
+                        Edit
+                        </button> */}
+                        <button
+                        className="edit-small-btn"
+                        onClick={() => setIsEditing(!isEditing)}
+                        >
+                        {isEditing ? "Cancel" : "Edit"}
+                        </button>
+
                     </div>
 
                     <div className="profile-grid">
 
-                    <div className="form-group">
-                        <label>Username</label>
+                        <div className="form-group">
+                        <label>First Name</label>
+                        {/* <input
+                            type="text"
+                            value={admin?.firstName}
+                            readOnly
+                        /> */}
                         <input
                         type="text"
-                        value={profile.username}
-                        readOnly
+                        value={admin?.firstName || ""}
+                        readOnly={!isEditing}
+                        onChange={(e) =>
+                        setAdmin({
+                        ...admin,
+                        firstName: e.target.value,
+                        })
+                        }
                         />
-                    </div>
+                        </div>
 
-                    <div className="form-group">
-                        <label>Role</label>
+                         
+
+                        <div className="form-group">
+                        <label>Last Name</label>
+                        {/* <input
+                            type="text"
+                            value={admin?.lastName}
+                            readOnly
+                        /> */}
+                            <input
+                            type="text"
+                            value={admin?.lastName || ""}
+                            readOnly={!isEditing}
+                            onChange={(e) =>
+                            setAdmin({
+                            ...admin,
+                            lastName: e.target.value,
+                            })
+                            }
+                            />
+                        </div>
+
+                        <div className="form-group">
+                        <label>Email Address</label>
+                        {/* <input
+                            type="email"
+                            value={admin?.email}
+                            readOnly
+                        /> */}
+                            <input
+                            type="email"
+                            value={admin?.email || ""}
+                            readOnly={!isEditing}
+                            onChange={(e) =>
+                            setAdmin({
+                            ...admin,
+                            email: e.target.value,
+                            })
+                            }
+                            />
+                        </div>
+
+                        <div className="form-group">
+                        <label>Mobile Number</label>
+                        {/* <input
+                            type="text"
+                            value={admin?.mobileNumber}
+                            readOnly
+                        /> */}
+
+                            <input
+                            type="text"
+                            value={admin?.mobileNumber || ""}
+                            readOnly={!isEditing}
+                            onChange={(e) =>
+                            setAdmin({
+                            ...admin,
+                            mobileNumber: e.target.value,
+                            })
+                            }
+                            />
+                        </div>
+
+                        <div className="form-group">
+                        <label>Date of Birth</label>
                         <input
-                        type="text"
-                        value={profile.role}
-                        readOnly
+                            type="text"
+                            value={admin?.dateOfBirth || "1998-05-12"}
+                            readOnly
                         />
-                    </div>
+                        </div>
 
-                    <div className="form-group">
-                        <label>Employee ID</label>
+                        <div className="form-group">
+                        <label>Gender</label>
                         <input
-                        type="text"
-                        value={profile.employeeId}
-                        readOnly
+                            type="text"
+                            value={admin?.gender || ""}
+                            readOnly
                         />
-                    </div>
-
-                    <div className="form-group">
-                        <label>Status</label>
-
+                        </div>
+                        <div className="form-group">
+                            <label>Role</label>
+                            <input
+                            type="text"
+                            value={admin?.roleName || ""}
+                            readOnly
+                            />
+                        </div>
+                        <div className="form-group">
+                        <label>Country</label>
                         <input
-                        type="text"
-                        value={profile.status}
-                        readOnly
+                            type="text"
+                            value={admin?.country || ""}
+                            readOnly
                         />
-                    </div>
+                        </div>
 
                     </div>
+
+                    {isEditing && (
+                    <div
+                    style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginTop: "20px",
+                    gap: "10px",
+                    }}
+                    >
+                    <button
+                    className="outline-btn"
+                    onClick={() => {
+                    setIsEditing(false);
+                    adminUser(userId); // Reload original data
+                    }}
+                    >
+                    Cancel
+                    </button>
+
+                    <button
+                    className="profile-edit-btn"
+                    onClick={handleSave}
+                    >
+                    Save Changes
+                    </button>
+                    </div>
+                    )}
 
                 </div>
 
+            
+
+                {/* =================  SECURITY ================= */}
                 {/* Security */}
 
                 <div className="content-card">
@@ -358,39 +450,39 @@ const stats = [
 
                     <div className="security-section">
 
-                    <div className="security-row">
+                            <div className="security-row">
 
-                        <div>
+                                <div>
 
-                        <h4>Password</h4>
+                                <h4>Password</h4>
 
-                        <p>**************</p>
+                                <p>**************</p>
 
-                        </div>
+                                </div>
 
-                        <button className="outline-btn">
-                        Change Password
-                        </button>
+                                <button className="outline-btn">
+                                Change Password
+                                </button>
 
-                    </div>
+                            </div>
 
-                    <div className="security-row">
+                            {/* <div className="security-row">
 
-                        <div>
+                                <div>
 
-                        <h4>Two Factor Authentication</h4>
+                                <h4>Two Factor Authentication</h4>
 
-                        <p>Disabled</p>
+                                <p>Disabled</p>
 
-                        </div>
+                                </div>
 
-                        <button className="primary-btn">
-                        Enable
-                        </button>
+                                <button className="primary-btn">
+                                Enable
+                                </button>
 
-                    </div>
+                            </div> */}
 
-                    <div className="security-row">
+                            {/* <div className="security-row">
 
                         <div>
 
@@ -402,118 +494,17 @@ const stats = [
 
                         </div>
 
-                    </div>
+                            </div> */}
 
                     </div>
 
                 </div>
 
-                </div>
+              
 
-                {/* ================= CONTACT DETAILS ================= */}
+                
 
-                <div className="content-card">
-
-                <div className="card-header">
-                    <h3>Contact Details</h3>
-                </div>
-
-                <div className="profile-grid">
-
-                    <div className="form-group full-width">
-
-                    <label>Address</label>
-
-                    <input
-                        type="text"
-                        value={profile.address}
-                        readOnly
-                    />
-
-                    </div>
-
-                    <div className="form-group">
-
-                    <label>City</label>
-
-                    <input
-                        type="text"
-                        value={profile.city}
-                        readOnly
-                    />
-
-                    </div>
-
-                    <div className="form-group">
-
-                    <label>State</label>
-
-                    <input
-                        type="text"
-                        value={profile.state}
-                        readOnly
-                    />
-
-                    </div>
-
-                    <div className="form-group">
-
-                    <label>Country</label>
-
-                    <input
-                        type="text"
-                        value={profile.country}
-                        readOnly
-                    />
-
-                    </div>
-
-                    <div className="form-group">
-
-                    <label>Zip Code</label>
-
-                    <input
-                        type="text"
-                        value={profile.zip}
-                        readOnly
-                    />
-
-                    </div>
-
-                </div>
-
-                </div>
-
-                {/* ================= LOGIN HISTORY ================= */}
-                <div className="content-card">
-                  <div className="card-header">
-                    <h3>Recent Login Activity</h3>
-                  </div>
-                  <div className="table-responsive">
-                    <table className="login-table">
-                      <thead>
-                        <tr>
-                          <th>Device</th>
-                          <th>Browser</th>
-                          <th>IP Address</th>
-                          <th>Location</th>
-                          <th>Date</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {recentLogins.map((login, index) => (
-                          <tr key={index}>
-                            <td>{login.device}</td>
-                            <td>{login.browser}</td>
-                            <td>{login.ip}</td>
-                            <td>{login.location}</td>
-                            <td>{login.date}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
+              
 
             </main>
 

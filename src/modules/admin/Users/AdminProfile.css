@@ -660,6 +660,21 @@
     color:#fff;
 }
 
+.right-content .content-card .outline-btn{
+    padding: "8px 18px";
+    margin-top: 20px;
+    margin-bottom: 18px;
+    min-width: 90px;
+    /* height: 40px; */
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 8px;
+    /* border: 1px solid rgb(107, 114, 128); */
+    /* background: transparent; */
+    /* color: rgb(209, 213, 219); */
+    cursor: pointer;
+}
+
 /* =====================================================
    CONTACT DETAILS
 ===================================================== */
