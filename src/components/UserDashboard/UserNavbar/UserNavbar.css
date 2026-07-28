@@ -267,3 +267,16 @@
     }
 
 }
+.logout-btn {
+  background: transparent;
+  border: none;
+  color: #ef4444;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 15px;
+}
+
+.logout-btn:hover {
+  color: #dc2626;
+}

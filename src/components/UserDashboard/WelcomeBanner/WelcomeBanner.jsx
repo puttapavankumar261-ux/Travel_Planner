@@ -13,7 +13,7 @@ const WelcomeBanner = ({ userName }) => {
           unforgettable memories.
         </p>
 
-        <button className="plan-trip-btn">Plan New Trip</button>
+      
       </div>
     </section>
   );

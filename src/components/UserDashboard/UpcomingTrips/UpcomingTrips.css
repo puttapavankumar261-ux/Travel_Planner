@@ -5,7 +5,11 @@
     border-radius:18px !important;
     padding:16px !important;
     box-shadow:0 20px 40px rgba(0,0,0,.25);
-    height:100%;
+    display: flex;
+    flex-direction: column;
+    max-height: 380px; /* Locks main container height */
+    height: 380px;     /* Matches height with Recent Trips */
+    overflow: hidden;
 }
 
 /* ================= HEADER ================= */
@@ -48,12 +52,25 @@
     color:white;
 }
 
-/* ================= LIST ================= */
+/* ================= LIST (Scrollable for max 3 items) ================= */
 
 .upcoming-trips .upcoming-list{
     display:flex;
     flex-direction:column;
     gap:12px;
+    max-height: 270px; /* Shows exactly ~3 trips, remaining scroll */
+    overflow-y: auto;
+    padding-right: 6px;
+}
+
+/* Custom Scrollbar for list */
+.upcoming-trips .upcoming-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+.upcoming-trips .upcoming-list::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.2);
+    border-radius: 4px;
 }
 
 /* ================= CARD ================= */
@@ -82,6 +99,7 @@
     display:flex;
     align-items:center;
     gap:12px;
+    flex: 1; /* Occupies available space to force right alignment */
 }
 
 .upcoming-trips .upcoming-icon{
@@ -125,6 +143,7 @@
     align-items:center;
     justify-content:flex-end;
     gap:10px;
+    margin-left: auto; /* Locks elements to the right corner */
 }
 
 .upcoming-trips .days-left{
@@ -134,8 +153,42 @@
     border-radius:30px;
     font-size:11px !important;
     font-weight:600;
+    white-space: nowrap;
+}
+.trip-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
 }
 
+.trip-actions button {
+  min-width: 90px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.view-btn {
+  background: #2563eb;
+  color: #fff;
+}
+
+.view-btn:hover {
+  background: #1d4ed8;
+}
+
+.cancel-btn {
+  background: #ef4444;
+  color: #fff;
+}
+
+.cancel-btn:hover {
+  background: #dc2626;
+}
 .upcoming-trips .upcoming-right button{
     background:#2563eb !important;
     color:white !important;
@@ -148,6 +201,7 @@
     transition:.3s !important;
     display: inline-flex !important;
     align-items: center !important;
+    white-space: nowrap;
 }
 
 .upcoming-trips .upcoming-right button:hover{
@@ -159,25 +213,17 @@
 @media(max-width:900px){
 
     .upcoming-card{
-
         flex-direction:column;
-
         align-items:flex-start;
-
         gap:18px;
-
     }
 
     .upcoming-right{
-
         width:100%;
-
         flex-direction:row;
-
         justify-content:space-between;
-
         align-items:center;
-
+        margin-left: 0;
     }
 
 }

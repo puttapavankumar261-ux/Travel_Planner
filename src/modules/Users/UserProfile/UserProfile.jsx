@@ -76,31 +76,25 @@ const fetchTravellers = async () => {
             const companions =
                 await tripCompanionService.getCompanions(trip.tripId);
 
-            console.log("Companions:", companions);
-
-            if (Array.isArray(companions)) {
-                allCompanions = [
-                    ...allCompanions,
-                    ...companions
-                ];
-            }
+            allCompanions = [...allCompanions, ...companions];
         }
 
         const uniqueTravellers = allCompanions.filter(
-            (traveller, index, self) =>
-                index === self.findIndex(
-                    t =>
-                        t.firstName === traveller.firstName &&
-                        t.lastName === traveller.lastName &&
-                        t.relationship === traveller.relationship &&
-                        t.age === traveller.age
-                )
-        );
+  (traveller, index, self) =>
+    index ===
+      self.findIndex(
+        t =>
+          t.firstName === traveller.firstName &&
+          t.lastName === traveller.lastName &&
+          t.relationship === traveller.relationship &&
+          t.age === traveller.age
+      )
+);
 
-        setTravellers(uniqueTravellers);
+setTravellers(uniqueTravellers);
 
     } catch (err) {
-        console.error("Error fetching travellers:", err);
+        console.error(err);
     }
 };
 useEffect(() => {

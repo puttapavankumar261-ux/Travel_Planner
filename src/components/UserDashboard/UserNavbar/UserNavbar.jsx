@@ -26,7 +26,12 @@ const UserNavbar = () => {
       const loggedUser = JSON.parse(localStorage.getItem("user"));
       setUser(loggedUser);
     }, []);
-  
+  const handleLogout = () => {
+  localStorage.removeItem("user");
+  localStorage.removeItem("token");
+
+  navigate("/");
+};
   return (
     <header className="user-navbar">
       {/* Logo */}
@@ -67,7 +72,12 @@ const UserNavbar = () => {
           <FaBell />
           <span className="notification-dot"></span>
         </button> */}
-
+  <button 
+    className="logout-btn"
+    onClick={handleLogout}
+  >
+    Logout
+  </button>
          {/* Notification */}
         <div className="notification-userwrapper" ref={notificationRef}>
         <button className="notification-btn" onClick={() =>

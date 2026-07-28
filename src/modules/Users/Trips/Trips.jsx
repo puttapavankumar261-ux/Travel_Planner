@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import tripService from "../../../services/tripService";
 import "./Trips.css";
 
 import BackgroundSlider from "../../../components/UserDashboard/BackgroundSlider/BackgroundSlider";
@@ -14,7 +15,7 @@ import keralaVideo from "../../../assets/videos/Trips/kerala.mp4";
 import manaliVideo from "../../../assets/videos/Trips/manali.mp4";
 import ootyVideo from "../../../assets/videos/Trips/ooty.mp4";
 
-const trips = [
+const staticTrips = [
   {
     destination: "Goa",
     video: goaVideo,
@@ -424,8 +425,68 @@ const trips = [
 ];
 
 const Trips = () => {
+
+  const [trips, setTrips] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedTrip, setSelectedTrip] = useState(null);
+
+
+  useEffect(() => {
+
+    const fetchTrips = async () => {
+
+  try {
+
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    const response = await tripService.getTripsByUser(user.userId);
+
+
+    const mergedTrips = response.map((dbTrip) => {
+
+      const existingTrip = staticTrips.find(
+        (trip) =>
+          trip.destination.toLowerCase() ===
+          dbTrip.destination.toLowerCase()
+      );
+
+
+      return {
+        ...existingTrip,
+
+        ...dbTrip,
+
+        tripId: dbTrip.tripId,
+
+        destination: dbTrip.destination,
+
+        startDate: dbTrip.startDate,
+
+        endDate: dbTrip.endDate,
+
+        budget: `₹${dbTrip.budget}`,
+
+        status: dbTrip.tripStatus
+      };
+
+    });
+
+
+    setTrips(mergedTrips);
+
+
+  } catch(error) {
+
+    console.error("Error fetching trips:", error);
+
+  }
+
+};
+
+
+    fetchTrips();
+
+  }, []);
   
   const itemsPerPage = 3;
   const totalPages = Math.ceil(trips.length / itemsPerPage);
@@ -453,7 +514,7 @@ const Trips = () => {
         <div className="trip-grid">
           {currentTrips.map((trip, index) => (
             <TripCard
-              key={index}
+              key={trip.tripId}
               destination={trip.destination}
               video={trip.video}
               startDate={trip.startDate}

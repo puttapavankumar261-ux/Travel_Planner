@@ -1,82 +1,69 @@
 import "./RecentTrips.css";
+import { useNavigate } from "react-router-dom";
 
-import { useState, useEffect } from "react";
-import tripService from "../../../services/tripService";
+const RecentTrips = ({ trips = [] }) => {
+  const navigate = useNavigate();
 
-const RecentTrips = () => {
-  const [trips, setTrips] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchTrips = async () => {
-      try {
-        const response = await tripService.getTrips(0, 5); // Fetch latest 5 trips
-        if (response && response.content) {
-            setTrips(response.content);
-        } else if (Array.isArray(response)) {
-            setTrips(response);
-        }
-      } catch (error) {
-        console.error("Failed to fetch recent trips", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchTrips();
-  }, []);
+  // Show only completed trips
+  const recentTrips = trips.filter(
+    (trip) => trip.tripStatus === "COMPLETED"
+  );
 
   return (
     <div className="recent-trips">
       <div className="section-header">
         <div>
           <h2>Recent Trips</h2>
-          <p>Your latest travel plans</p>
+          <p>Your latest completed trips</p>
         </div>
 
-        <button className="view-all-btn">
-          View All
-          <i className="bi bi-chevron-right" style={{ marginLeft: "6px" }}></i>
-        </button>
+        
       </div>
 
       <div className="trip-list">
-        {loading ? (
-          <p style={{ padding: '20px' }}>Loading trips...</p>
-        ) : trips.length === 0 ? (
-          <p style={{ padding: '20px' }}>No recent trips found.</p>
-        ) : trips.map((trip) => (
-          <div className="recent-trip-card" key={trip.id}>
-            <div className="trip-left">
-              <div className="trip-icon">
-                <i className="bi bi-geo-alt"></i>
-              </div>
+        {recentTrips.length === 0 ? (
+          <p style={{ padding: "20px", textAlign: "center" }}>
+            No completed trips found.
+          </p>
+        ) : (
+          recentTrips.map((trip) => (
+            <div className="recent-trip-card" key={trip.tripId}>
+              <div className="trip-left">
+                <div className="trip-icon">
+                  <i className="bi bi-geo-alt"></i>
+                </div>
 
-              <div className="trip-info">
-                <h3>{trip.destination || trip.title}</h3>
+                <div className="trip-info">
+                  <h3>{trip.destination || trip.title}</h3>
 
-                <div className="trip-meta">
-                  <span>
-                    <i className="bi bi-calendar3"></i>
-                    {trip.startDate} - {trip.endDate}
-                  </span>
+                  <div className="trip-meta">
+                    <span>
+                      <i className="bi bi-calendar3"></i>
+                      {trip.startDate} - {trip.endDate}
+                    </span>
 
-                  <span>
-                    <i className="bi bi-wallet2"></i>
-                    ₹{trip.budget}
-                  </span>
+                    <span>
+                      <i className="bi bi-wallet2"></i>
+                      ₹{trip.budget?.toLocaleString()}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="trip-right">
-              <span className={`status ${(trip.tripStatus || 'PLANNED').toLowerCase()}`}>
-                {trip.tripStatus || 'PLANNED'}
-              </span>
+              <div className="trip-right">
+                <span className={`status ${trip.tripStatus.toLowerCase()}`}>
+                  {trip.tripStatus}
+                </span>
 
-              <button>View</button>
+                <button
+                  onClick={() => navigate(`/user/trips/${trip.tripId}`)}
+                >
+                  View
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );
