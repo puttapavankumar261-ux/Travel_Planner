@@ -57,8 +57,6 @@ function Registration() {
         const verifyOtp = async () => {
           setLoading(true);
           try{
-            alert(registerData.email);
-            alert(otp);
             await authService.verifyOtp(registerData.email, otp);
             registerData.accountVerified = true;
             setStep(3);
@@ -104,7 +102,7 @@ function Registration() {
             //await userService.register(registerData);
             navigate("/");
           }catch(err){
-            setError("Registration failed.");
+            setError(err.response?.data?.message || "Registration failed.");
           }finally{
             setLoading(false);
           }
@@ -211,12 +209,11 @@ function Registration() {
                   <h2>create account</h2>
                   <p className="subtitle">sign up to start planning your trips</p>
 
-                  {/* <form onSubmit={handleRegister}>
-                    {error && (
-                      <div style={{ color: "#ef4444", marginBottom: "15px", fontSize: "14px", padding: '10px', background: 'rgba(239, 68, 68, 0.1)', borderRadius: '8px' }}>
-                        {error}
-                      </div>
-                    )} */}
+                  {error && (
+                    <div style={{ color: "#ef4444", marginBottom: "15px", fontSize: "14px", padding: '10px', background: 'rgba(239, 68, 68, 0.1)', borderRadius: '8px' }}>
+                      {error}
+                    </div>
+                  )}
 
                       {step===1 && (
                       <>

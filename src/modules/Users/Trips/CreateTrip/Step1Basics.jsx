@@ -22,6 +22,21 @@ const Step1Basics = ({ data, setData }) => {
     <div className="step-content">
       <h3 className="step-title">the basics</h3>
       
+      {/* Traveler Name */}
+      <div className="flex-row" style={{ marginBottom: '20px' }}>
+        <div className="form-group" style={{ flex: 1 }}>
+          <label>Traveler's Name <span style={{color: '#EF4444'}}>*</span></label>
+          <input 
+            type="text" 
+            name="travelerName" 
+            value={data.travelerName || ''} 
+            onChange={handleChange} 
+            placeholder="e.g. John Doe"
+            style={{ width: '100%', padding: '12px 14px', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '10px', color: 'white', outline: 'none', marginTop: '6px' }}
+          />
+        </div>
+      </div>
+      
       {/* Destination */}
       <div className="flex-row">
         <div className="form-group">

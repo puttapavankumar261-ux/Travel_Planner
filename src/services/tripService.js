@@ -9,7 +9,7 @@ const getTrips = async (page = 0, size = 10) => {
 };
 
 const createTrip = async (tripData) => {
-  const response = await axiosInstance.post("/api/trips", tripData);
+  const response = await axiosInstance.post("/api/create-trip", tripData);
   return response.data.data;
 };
 
@@ -25,9 +25,15 @@ const getUserById = async (userId) => {
   return response.data.data;
 };
 
+const updateTrip = async (id, tripData) => {
+  const response = await axiosInstance.put(`/api/trips/${id}`, tripData);
+  return response.data.data;
+};
+
 export default {
   getTrips,
   createTrip,
   getTripById,
-  getUserById
+  getUserById,
+  updateTrip
 };

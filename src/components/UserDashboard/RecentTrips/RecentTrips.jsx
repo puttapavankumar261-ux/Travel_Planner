@@ -1,30 +1,30 @@
 import "./RecentTrips.css";
 
-const trips = [
-  {
-    id: 1,
-    destination: "Goa",
-    date: "15 Jul - 20 Jul",
-    budget: "₹18,000",
-    status: "Upcoming",
-  },
-  {
-    id: 2,
-    destination: "Kerala",
-    date: "10 Aug - 16 Aug",
-    budget: "₹24,000",
-    status: "Planned",
-  },
-  {
-    id: 3,
-    destination: "Manali",
-    date: "02 Sep - 08 Sep",
-    budget: "₹30,000",
-    status: "Upcoming",
-  },
-];
+import { useState, useEffect } from "react";
+import tripService from "../../../services/tripService";
 
 const RecentTrips = () => {
+  const [trips, setTrips] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTrips = async () => {
+      try {
+        const response = await tripService.getTrips(0, 5); // Fetch latest 5 trips
+        if (response && response.content) {
+            setTrips(response.content);
+        } else if (Array.isArray(response)) {
+            setTrips(response);
+        }
+      } catch (error) {
+        console.error("Failed to fetch recent trips", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTrips();
+  }, []);
+
   return (
     <div className="recent-trips">
       <div className="section-header">
@@ -40,7 +40,11 @@ const RecentTrips = () => {
       </div>
 
       <div className="trip-list">
-        {trips.map((trip) => (
+        {loading ? (
+          <p style={{ padding: '20px' }}>Loading trips...</p>
+        ) : trips.length === 0 ? (
+          <p style={{ padding: '20px' }}>No recent trips found.</p>
+        ) : trips.map((trip) => (
           <div className="recent-trip-card" key={trip.id}>
             <div className="trip-left">
               <div className="trip-icon">
@@ -48,25 +52,25 @@ const RecentTrips = () => {
               </div>
 
               <div className="trip-info">
-                <h3>{trip.destination}</h3>
+                <h3>{trip.destination || trip.title}</h3>
 
                 <div className="trip-meta">
                   <span>
                     <i className="bi bi-calendar3"></i>
-                    {trip.date}
+                    {trip.startDate} - {trip.endDate}
                   </span>
 
                   <span>
                     <i className="bi bi-wallet2"></i>
-                    {trip.budget}
+                    ₹{trip.budget}
                   </span>
                 </div>
               </div>
             </div>
 
             <div className="trip-right">
-              <span className={`status ${trip.status.toLowerCase()}`}>
-                {trip.status}
+              <span className={`status ${(trip.tripStatus || 'PLANNED').toLowerCase()}`}>
+                {trip.tripStatus || 'PLANNED'}
               </span>
 
               <button>View</button>
