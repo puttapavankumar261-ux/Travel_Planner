@@ -2,6 +2,7 @@ package com.travelplanner.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.travelplanner.enums.TripStatus;
 
@@ -32,6 +33,8 @@ public class TripResponseDto {
 
     private String description;
 
+    private String travelerName;
+
     private String tripType;
 
     private TripStatus tripStatus;
@@ -44,4 +47,9 @@ public class TripResponseDto {
 
     private LocalDateTime updatedAt;
 
+    private List<AccommodationResponseDto> accommodations;
+
+    private List<TransportationResponseDto> transportations;
+
+    private List<BookingResponseDto> bookings;
 }

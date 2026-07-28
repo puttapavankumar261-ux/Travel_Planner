@@ -16,6 +16,8 @@ import com.travelplanner.entity.Trip;
 import com.travelplanner.entity.TripCompanion;
 import com.travelplanner.entity.User;
 import com.travelplanner.exception.UserNotFoundException;
+import com.travelplanner.mapper.AccommodationMapper;
+import com.travelplanner.mapper.TransportationMapper;
 import com.travelplanner.mapper.TripCompanionMapper;
 import com.travelplanner.mapper.TripMapper;
 import com.travelplanner.repo.TripRepository;
@@ -35,6 +37,8 @@ public class CreateTripServiceImpl implements CreateTripService {
     private final UserRepository userRepository;
     private final TripMapper tripMapper;
     private final TripCompanionMapper tripCompanionMapper;
+    private final AccommodationMapper accommodationMapper;
+    private final TransportationMapper transportationMapper;
     private final EmailService emailService;
 
     @Override
@@ -55,7 +59,7 @@ public class CreateTripServiceImpl implements CreateTripService {
         if (request.getCompanions() != null &&
                 !request.getCompanions().isEmpty()) {
 
-            for (TripCompanionRequestDto dto : request.getCompanions()) {
+            for (com.travelplanner.dto.TripCompanionRequestDto dto : request.getCompanions()) {
 
                 TripCompanion companion =
                         tripCompanionMapper.toEntity(dto, trip);
@@ -64,16 +68,43 @@ public class CreateTripServiceImpl implements CreateTripService {
             }
         }
 
+        if (request.getAccommodations() != null &&
+                !request.getAccommodations().isEmpty()) {
+
+            for (com.travelplanner.dto.AccommodationRequestDto dto : request.getAccommodations()) {
+
+                com.travelplanner.entity.Accommodation acc =
+                        accommodationMapper.mapToAccommodation(dto, trip);
+
+                trip.getAccommodations().add(acc);
+            }
+        }
+
+        if (request.getTransportations() != null &&
+                !request.getTransportations().isEmpty()) {
+
+            for (com.travelplanner.dto.TransportationRequestDto dto : request.getTransportations()) {
+
+                com.travelplanner.entity.Transportation trans =
+                        transportationMapper.mapToTransportation(dto, trip);
+
+                trip.getTransportations().add(trans);
+            }
+        }
+
         // Single save - CascadeType.ALL persists companions
         Trip savedTrip = tripRepository.save(trip);
         
-        EmailRequestDto emailRequest = new EmailRequestDto();
-        emailRequest.setTo(user.getEmail());
-        emailRequest.setSubject("Trip Created Successfully");
-        emailRequest.setBody(
-                EmailTemplateUtil.tripCreated(user, savedTrip));
-
-        emailService.sendHtmlEmail(emailRequest);
+        try {
+            EmailRequestDto emailRequest = new EmailRequestDto();
+            emailRequest.setTo(user.getEmail());
+            emailRequest.setSubject("Booking Confirmation - " + savedTrip.getTitle());
+            emailRequest.setBody(
+                    EmailTemplateUtil.tripCreated(user, savedTrip));
+            emailService.sendHtmlEmail(emailRequest);
+        } catch (Exception e) {
+            System.err.println("[WARN] Failed to send trip creation email: " + e.getMessage());
+        }
 
         // Prepare companion response
         for (TripCompanion companion : savedTrip.getCompanions()) {

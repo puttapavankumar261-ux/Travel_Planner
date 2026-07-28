@@ -51,6 +51,13 @@ public class GlobalExceptionHandler {
     // Custom Exceptions
     // =====================================================
 
+    @ExceptionHandler(EmailSendingException.class)
+    public ResponseEntity<ApiResponse<Object>> handleEmailSendingException(
+            EmailSendingException ex) {
+
+        return buildErrorResponse("Email service is temporarily unavailable. Please try again later.", HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
     @ExceptionHandler(RoleAlreadyExistsException.class)
     public ResponseEntity<ApiResponse<Object>> handleRoleAlreadyExistsException(
             RoleAlreadyExistsException ex) {

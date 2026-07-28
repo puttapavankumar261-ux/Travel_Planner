@@ -33,8 +33,12 @@ public class TransportationMapper {
         transportation.setSeatNumber(dto.getSeatNumber());
         transportation.setTicketNumber(dto.getTicketNumber());
 
-        // Generated in Service Layer
-        transportation.setBookingReference(dto.getBookingReference());
+        // Auto-generate booking reference if not provided
+        String ref = dto.getBookingReference();
+        if (ref == null || ref.isEmpty()) {
+            ref = "TRN-" + System.currentTimeMillis();
+        }
+        transportation.setBookingReference(ref);
 
         transportation.setTransportStatus(dto.getTransportStatus());
         transportation.setFare(dto.getFare());

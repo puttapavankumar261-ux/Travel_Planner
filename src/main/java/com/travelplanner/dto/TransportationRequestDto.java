@@ -22,7 +22,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class TransportationRequestDto {
 
-    @NotNull(message = "Trip ID is required")
+    // Optional when creating via Trip Wizard - service sets this from the created trip
     private Long tripId;
 
     @NotNull(message = "Transport Type is required")
@@ -38,14 +38,12 @@ public class TransportationRequestDto {
     private String destination;
 
     @NotNull(message = "Departure Date is required")
-    @FutureOrPresent(message = "Departure Date cannot be in the past")
     private LocalDate departureDate;
 
     @NotNull(message = "Departure Time is required")
     private LocalTime departureTime;
 
     @NotNull(message = "Arrival Date is required")
-    @FutureOrPresent(message = "Arrival Date cannot be in the past")
     private LocalDate arrivalDate;
 
     @NotNull(message = "Arrival Time is required")
