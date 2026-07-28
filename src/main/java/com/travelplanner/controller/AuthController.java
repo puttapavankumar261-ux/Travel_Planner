@@ -12,6 +12,7 @@ import com.travelplanner.common.constants.ApiMessages;
 import com.travelplanner.dto.LoginRequestDto;
 import com.travelplanner.dto.LoginResponseDto;
 import com.travelplanner.dto.LogoutResponseDto;
+import com.travelplanner.dto.EmailCheckRequestDto;
 import com.travelplanner.dto.ForgotPasswordRequestDto;
 import com.travelplanner.dto.OtpRequestDto;
 import com.travelplanner.dto.OtpVerificationDto;
@@ -51,6 +52,26 @@ public class AuthController {
                 ApiResponseUtil.success(
                         ApiMessages.REGISTRATION_SUCCESS,
                         response)
+        );
+    }
+    
+    @PostMapping("/check-email")
+    public ResponseEntity<ApiResponse<String>> checkEmail(
+            @Valid @RequestBody EmailCheckRequestDto request) {
+
+        if (userService.existsByEmail(request.getEmail())) {
+
+            return ResponseEntity.status(409)
+                    .body(ApiResponseUtil.error(
+                            "Email already exists. Please login or use another email."
+                    ));
+        }
+
+        return ResponseEntity.ok(
+                ApiResponseUtil.success(
+                        "Email is available.",
+                        null
+                )
         );
     }
 

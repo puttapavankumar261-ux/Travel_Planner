@@ -52,55 +52,58 @@ public class UserServiceImpl implements UserService {
 
         logger.info("Registering user with email: {}", request.getEmail());
 
+        // Check duplicate email
         if (userRepo.existsByEmail(request.getEmail())) {
 
-            logger.warn("Registration failed. Email already exists: {}",
-                    request.getEmail());
+            logger.warn("Registration failed. Email already exists: {}", request.getEmail());
 
-            throw new UserAlreadyExistsException("Email already exists.");
+            throw new UserAlreadyExistsException(
+                    "Email already exists. Please use another email or login with your existing account."
+            );
         }
 
+        // Check duplicate mobile number
         if (userRepo.existsByMobileNumber(request.getMobileNumber())) {
 
-            logger.warn("Registration failed. Mobile number already exists: {}",
-                    request.getMobileNumber());
+            logger.warn("Registration failed. Mobile number already exists: {}", request.getMobileNumber());
 
-            throw new UserAlreadyExistsException("Mobile Number already exists.");
+            throw new UserAlreadyExistsException(
+                    "Mobile number already exists. Please use another mobile number."
+            );
         }
 
+        // Fetch Role
         Role role = roleRepo.findById(request.getRoleId())
                 .orElseThrow(() -> {
 
-                    logger.warn("Role not found with ID: {}",
-                            request.getRoleId());
+                    logger.warn("Role not found with ID: {}", request.getRoleId());
 
                     return new RoleNotFoundException(
                             "Role not found with ID : " + request.getRoleId());
                 });
 
+        // Map DTO to Entity
         User user = userMapper.mapToUser(request, role);
 
         // Encrypt Password
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        // New users must verify their email
-        // user.setAccountVerified(false);
-       
-        user.setAccountVerified(true);
+        // Account should remain unverified until OTP verification
+        user.setAccountVerified(false);
+
+        // Save User
         User savedUser = userRepo.save(user);
 
-        logger.info("User registered successfully with ID: {}",
-                savedUser.getUserId());
+        logger.info("User registered successfully with ID: {}", savedUser.getUserId());
 
-        // Generate and send OTP automatically
+        // Generate OTP
         OtpRequestDto otpRequest = new OtpRequestDto();
         otpRequest.setEmail(savedUser.getEmail());
         otpRequest.setPurpose(OtpPurpose.REGISTRATION);
 
         otpService.generateAndSendOtp(otpRequest);
 
-        logger.info("Verification OTP sent successfully to {}",
-                savedUser.getEmail());
+        logger.info("Verification OTP sent successfully to {}", savedUser.getEmail());
 
         return userMapper.mapToUserResponse(savedUser);
     }
@@ -231,6 +234,14 @@ public class UserServiceImpl implements UserService {
         userRepo.save(user);
 
         logger.info("Password updated successfully for email: {}", email);
+    }
+    
+    @Override
+    public boolean existsByEmail(String email) {
+
+        logger.info("Checking email availability : {}", email);
+
+        return userRepo.existsByEmail(email);
     }
 
 }

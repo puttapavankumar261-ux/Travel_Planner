@@ -96,34 +96,7 @@ public class OtpServiceImpl implements OtpService {
     }
     
     @Override
-public boolean verifyOtp(OtpVerificationDto dto) {
-
-    OtpVerification otpEntity = otpRepository
-            .findByEmailAndOtpAndPurpose(
-                    dto.getEmail(),
-                    dto.getOtp(),
-                    dto.getPurpose())
-            .orElseThrow(() ->
-                    new InvalidOtpException(
-                            "Invalid email or OTP"));
-
-    if (otpEntity.getExpiryTime().isBefore(LocalDateTime.now())) {
-        throw new OtpExpiredException("OTP has expired");
-    }
-
-    if (otpEntity.isVerified()) {
-        throw new InvalidOtpException("OTP already verified");
-    }
-
-    otpEntity.setVerified(true);
-    otpEntity.setVerifiedAt(LocalDateTime.now());
-
-    otpRepository.save(otpEntity);
-
-    return true;
-}
-    @Override
-    public boolean verifyOtpTest(OtpVerificationDto dto) {
+    public boolean verifyOtp(OtpVerificationDto dto) {
 
         OtpVerification otpEntity = otpRepository
                 .findByEmailAndOtpAndPurpose(
@@ -131,32 +104,33 @@ public boolean verifyOtp(OtpVerificationDto dto) {
                         dto.getOtp(),
                         dto.getPurpose())
                 .orElseThrow(() ->
-                        new InvalidOtpException(
-                                "Invalid email, OTP, or purpose"));
+                        new InvalidOtpException("Invalid email or OTP"));
 
         if (otpEntity.getExpiryTime().isBefore(LocalDateTime.now())) {
             throw new OtpExpiredException("OTP has expired");
         }
 
-     // Mark OTP as verified
-        // otpEntity.setVerified(true);
-        // otpEntity.setVerifiedAt(LocalDateTime.now());
-        // otpRepository.save(otpEntity);
+        if (otpEntity.isVerified()) {
+            throw new InvalidOtpException("OTP already verified");
+        }
 
-        // // Only verify the user account for REGISTRATION OTPs
-        // if (dto.getPurpose() == OtpPurpose.REGISTRATION) {
+        otpEntity.setVerified(true);
+        otpEntity.setVerifiedAt(LocalDateTime.now());
 
-        //     User user = userRepository.findByEmail(dto.getEmail())
-        //             .orElseThrow(() ->
-        //                     new UserNotFoundException(
-        //                             "User not found with email: "
-        //                                     + dto.getEmail()));
+        otpRepository.save(otpEntity);
 
-        //     user.setAccountVerified(true);
+        if (dto.getPurpose() == OtpPurpose.REGISTRATION) {
 
-        //     userRepository.save(user);
-        // }
+            User user = userRepository.findByEmail(dto.getEmail())
+                    .orElseThrow(() ->
+                            new UserNotFoundException(
+                                    "User not found with email: " + dto.getEmail()));
 
-        // return true;
+            user.setAccountVerified(true);
+
+            userRepository.save(user);
+        }
+
+        return true;
     }
 }

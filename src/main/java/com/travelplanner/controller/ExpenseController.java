@@ -17,6 +17,7 @@ import com.travelplanner.common.ApiResponse;
 import com.travelplanner.common.ApiResponseUtil;
 import com.travelplanner.common.constants.ApiMessages;
 import com.travelplanner.common.constants.PaginationConstants;
+import com.travelplanner.dto.ExpenseCategoryDto;
 import com.travelplanner.dto.ExpenseRequestDto;
 import com.travelplanner.dto.ExpenseResponseDto;
 import com.travelplanner.dto.PageResponseDto;
@@ -134,6 +135,29 @@ public class ExpenseController {
                 ApiResponseUtil.success(
                         "Trip Expenses Retrieved Successfully",
                         response));
+    }
+    
+    @GetMapping("/trip/{tripId}/total")
+    public ResponseEntity<ApiResponse<Double>> getTotalExpenseByTrip(
+            @PathVariable Long tripId) {
+
+        Double total = expenseService.getTotalExpenseByTrip(tripId);
+
+        return ResponseEntity.ok(
+                ApiResponseUtil.success(
+                        "Total Expense Retrieved Successfully",
+                        total));
+    }
+    
+    @GetMapping("/trip/{tripId}/categories")
+    public ResponseEntity<ApiResponse<List<ExpenseCategoryDto>>> getCategorySummary(
+            @PathVariable Long tripId) {
+
+        return ResponseEntity.ok(
+                ApiResponseUtil.success(
+                        "Expense Category Summary",
+                        expenseService.getExpenseCategorySummary(tripId)
+                ));
     }
 
     // Update Expense

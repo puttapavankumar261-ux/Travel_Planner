@@ -61,5 +61,16 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long>,
            FROM Expense e
            """)
     Double getTotalExpenses();
+    
+    @Query("""
+    		SELECT new com.travelplanner.dto.ExpenseCategoryDto(
+    		    e.expenseCategory,
+    		    SUM(e.amount)
+    		)
+    		FROM Expense e
+    		WHERE e.trip.tripId = :tripId
+    		GROUP BY e.expenseCategory
+    		""")
+    		List<ExpenseCategoryDto> getExpenseCategorySummary(Long tripId);
 
 }

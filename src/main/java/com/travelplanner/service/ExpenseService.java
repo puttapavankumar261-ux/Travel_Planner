@@ -3,6 +3,7 @@ package com.travelplanner.service;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.travelplanner.dto.ExpenseCategoryDto;
 import com.travelplanner.dto.ExpenseRequestDto;
 import com.travelplanner.dto.ExpenseResponseDto;
 import com.travelplanner.dto.PageResponseDto;
@@ -37,5 +38,7 @@ public interface ExpenseService {
     void deleteExpense(Long expenseId);
 
     Double getTotalExpenseByTrip(Long tripId);
+    
+    List<ExpenseCategoryDto> getExpenseCategorySummary(Long tripId);
 
 }
