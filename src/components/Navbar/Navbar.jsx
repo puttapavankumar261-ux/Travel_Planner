@@ -1,15 +1,29 @@
-import { NavLink } from "react-router-dom";
+import { NavLink,useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import Logo from "../common/Logo";
 import NotificationDropdown from "../../modules/admin/Notifications/NotificationModel";
 import { useState, useRef, useEffect } from "react";
 function Navbar() {
+  const navigate = useNavigate();
   const [showNotification, setShowNotification] = useState(false);
 
   const notificationRef = useRef(null);
 
   // Example notification count
   const notificationCount = 5;
+
+  const handleLogout = () => {
+
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    localStorage.removeItem("password");
+
+    // optional clear everything
+    // localStorage.clear();
+
+    navigate("/");
+
+  };
   return (
     <header className="navbar glass">
       <Logo showTagline={false} />
@@ -26,9 +40,13 @@ function Navbar() {
       </nav>
 
       <div className="nav-actions">
-        <button className="icon-btn">
-          <i className="bi bi-search"></i>
-        </button>
+      <button 
+      className="logout-btn"
+      onClick={handleLogout}
+      >
+      <i className="bi bi-box-arrow-right"></i>
+      Logout
+      </button>
         {/* Notification */}
         <div className="notification-wrapper" ref={notificationRef}>
         <button className="icon-btn notification" onClick={() =>
