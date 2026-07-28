@@ -1,0 +1,83 @@
+import axiosInstance from "../utils/axiosInstance";
+
+const API_URL = "/api/expenses";
+
+/**
+ * Create Expense
+ */
+const createExpense = async (expenseData) => {
+    const response = await axiosInstance.post(API_URL, expenseData);
+    return response.data.data;
+};
+
+/**
+ * Get Expense By Id
+ */
+const getExpenseById = async (expenseId) => {
+    const response = await axiosInstance.get(`${API_URL}/${expenseId}`);
+    return response.data.data;
+};
+
+/**
+ * Get Expenses By Trip
+ */
+const getExpensesByTrip = async (tripId) => {
+    const response = await axiosInstance.get(`${API_URL}/trip/${tripId}`);
+    return response.data.data;
+};
+
+/**
+ * Get All Expenses
+ */
+const getAllExpenses = async (
+    page = 0,
+    size = 10,
+    sortBy = "expenseDate",
+    direction = "desc"
+) => {
+
+    const response = await axiosInstance.get(API_URL, {
+        params: {
+            page,
+            size,
+            sortBy,
+            direction,
+        },
+    });
+
+    return response.data.data;
+};
+
+/**
+ * Update Expense
+ */
+const updateExpense = async (expenseId, expenseData) => {
+
+    const response = await axiosInstance.put(
+        `${API_URL}/${expenseId}`,
+        expenseData
+    );
+
+    return response.data.data;
+};
+
+/**
+ * Delete Expense
+ */
+const deleteExpense = async (expenseId) => {
+
+    const response = await axiosInstance.delete(
+        `${API_URL}/${expenseId}`
+    );
+
+    return response.data;
+};
+
+export default {
+    createExpense,
+    getExpenseById,
+    getExpensesByTrip,
+    getAllExpenses,
+    updateExpense,
+    deleteExpense,
+};
