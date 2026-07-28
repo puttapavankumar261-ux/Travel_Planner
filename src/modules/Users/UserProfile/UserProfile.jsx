@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import tripService from "../../../services/tripService";
+import userService from "../../../services/userService";
 import userprofileimg from "./images/profileimage.png";
 import "./UserProfile.css";
-
+import tripCompanionService from "../../../services/tripCompanionService";
 import BackgroundSlider from "../../../components/UserDashboard/BackgroundSlider/BackgroundSlider";
 import UserNavbar from "../../../components/UserDashboard/UserNavbar/UserNavbar";
 
@@ -33,88 +35,285 @@ import {
   FaCog
 } from "react-icons/fa";
 
+    const UserProfile = () => {
+        const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+        const [trips, setTrips] = useState([]);
+        const [showEditProfile, setShowEditProfile] = useState(false);
+        const [editProfile, setEditProfile] = useState({
+        firstName: user?.firstName || "",
+        lastName: user?.lastName || "",
+        email: user?.email || "",
+        mobileNumber: user?.mobileNumber || "",
+        gender: user?.gender || "",
+        dateOfBirth: user?.dateOfBirth || "",
+        country: user?.country || "",
+        preferredLanguage: user?.preferredLanguage || "",
+        preferredCurrency: user?.preferredCurrency || "",
+    });
 
 
-const UserProfile = () => {
 
-  const stats = [
-    {
-      icon: <FaPlaneDeparture />,
-      title: "Upcoming Trips",
-      value: "04",
-      color: "#0077ff"
-    },
-    {
-      icon: <FaCheckCircle />,
-      title: "Completed Trips",
-      value: "26",
-      color: "#27ae60"
-    },
-    {
-      icon: <FaTimesCircle />,
-      title: "Cancelled Trips",
-      value: "02",
-      color: "#e74c3c"
-    },
-    {
-      icon: <FaWallet />,
-      title: "Wallet Balance",
-      value: "₹5,250",
-      color: "#f39c12"
+       
+         
+
+  const fetchTrips = async () => {
+    try {
+      const tripData = await tripService.getTripsByUser(user.userId);
+      setTrips(tripData);
+    } catch (error) {
+      console.error("Error fetching trips:", error);
     }
-  ];
+  };
+const fetchTravellers = async () => {
+    try {
 
-  const travellers = [
-  {
-    id: 1,
-    name: "Pavan",
-    relation: "Self",
-    age: 28,
-    gender: "male"
-  },
-  {
-    id: 2,
-    name: "Ramu",
-    relation: "Father",
-    age: 58,
-    gender: "Male"
-  },
-  {
-    id: 3,
-    name: "Lakshmi",
-    relation: "Mother",
-    age: 54,
-    gender: "Female"
+        const trips = await tripService.getTripsByUser(user.userId);
+
+        let allCompanions = [];
+
+        for (const trip of trips) {
+
+            const companions =
+                await tripCompanionService.getCompanions(trip.tripId);
+
+            console.log("Companions:", companions);
+
+            if (Array.isArray(companions)) {
+                allCompanions = [
+                    ...allCompanions,
+                    ...companions
+                ];
+            }
+        }
+
+        const uniqueTravellers = allCompanions.filter(
+            (traveller, index, self) =>
+                index === self.findIndex(
+                    t =>
+                        t.firstName === traveller.firstName &&
+                        t.lastName === traveller.lastName &&
+                        t.relationship === traveller.relationship &&
+                        t.age === traveller.age
+                )
+        );
+
+        setTravellers(uniqueTravellers);
+
+    } catch (err) {
+        console.error("Error fetching travellers:", err);
+    }
+};
+useEffect(() => {
+  if (user?.userId) {
+    fetchTrips();
+    fetchTravellers();
   }
+}, [user]);
+ const stats = [
+  {
+    icon: <FaPlaneDeparture />,
+    title: "Upcoming Trips",
+    value: trips.filter(
+      trip =>
+        trip.tripStatus === "PLANNED" ||
+        trip.tripStatus === "ONGOING"
+    ).length,
+    color: "#0077ff",
+  },
+  {
+    icon: <FaCheckCircle />,
+    title: "Completed Trips",
+    value: trips.filter(
+      trip => trip.tripStatus === "COMPLETED"
+    ).length,
+    color: "#27ae60",
+  },
+  {
+    icon: <FaTimesCircle />,
+    title: "Cancelled Trips",
+    value: trips.filter(
+      trip => trip.tripStatus === "CANCELLED"
+    ).length,
+    color: "#e74c3c",
+  },
+  {
+    icon: <FaWallet />,
+    title: "Travel Budget",
+    value: `₹${trips
+      .reduce((sum, trip) => sum + (trip.budget || 0), 0)
+      .toLocaleString()}`,
+    color: "#f39c12",
+  },
 ];
 
-  const bookings = [
-  {
-    id: "BK1001",
-    route: "Bangalore → Goa",
-    date: "22 Aug 2026",
-    status: "Confirmed"
-  },
-  {
-    id: "BK1002",
-    route: "Delhi → Jaipur",
-    date: "18 Jul 2026",
-    status: "Completed"
-  },
-  {
-    id: "BK1003",
-    route: "Mysore → Ooty",
-    date: "10 Jun 2026",
-    status: "Cancelled"
+  const calculateAge = (dob) => {
+  if (!dob) return "N/A";
+  const birthDate = new Date(dob);
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const month = today.getMonth() - birthDate.getMonth();
+  if (
+    month < 0 ||
+    (month === 0 && today.getDate() < birthDate.getDate())
+  ) {
+    age--;
   }
-];
+  return age;
+};
+const calculateRewardPoints = () => {
+  let points = 0;
+
+  trips.forEach((trip) => {
+    if (trip.tripStatus === "COMPLETED") {
+      points += 300;
+    } else if (trip.tripStatus === "CANCELLED") {
+      points -= 100;
+    }
+  });
+
+  return Math.max(points, 0); // Prevent negative points
+};
+    const [travellers, setTravellers] = useState([]);
+
+  const rewardPoints = calculateRewardPoints();
+
+const isPremium = rewardPoints >= 1000;
+const handleProfileChange = (e) => {
+    setEditProfile({
+        ...editProfile,
+        [e.target.name]: e.target.value,
+    });
+};
+
+const handleUpdateProfile = async () => {
+    try {
+        const updatedUser = await userService.updateProfile(
+            user.userId,
+            editProfile
+        );
+
+        setUser(updatedUser);
+
+            localStorage.setItem("user", JSON.stringify(updatedUser));
+
+            alert("Profile Updated Successfully");
+
+            setShowEditProfile(false);
+
+    } catch (error) {
+        console.error(error);
+        alert("Failed to update profile");
+    }
+};
 
   return (
+    
     <div className="user-profile-page">
-           <BackgroundSlider />
+        
+    <BackgroundSlider />
+    
+    {showEditProfile && (
+        <div className="modal-overlay">
+
+            <div className="modal">
+                    
+        
+                <h2>Edit Profile</h2>
+    <input
+    type="text"
+    name="firstName"
+    value={editProfile.firstName}
+    onChange={handleProfileChange}
+    placeholder="First Name"
+    />
+    <input
+    type="text"
+    name="lastName"
+    value={editProfile.lastName}
+    onChange={handleProfileChange}
+    placeholder="Last Name"
+    />          
+
+    <input
+    type="email"
+    name="email"
+    value={editProfile.email}
+    onChange={handleProfileChange}
+    placeholder="Email"
+/>
+
+<input
+    type="text"
+    name="mobileNumber"
+    value={editProfile.mobileNumber}
+    onChange={handleProfileChange}
+    placeholder="Mobile Number"
+/>
+
+<select
+    name="gender"
+    value={editProfile.gender}
+    onChange={handleProfileChange}
+>
+    <option value="">Select Gender</option>
+    <option value="MALE">Male</option>
+    <option value="FEMALE">Female</option>
+    <option value="OTHER">Other</option>
+</select>
+
+<input
+    type="date"
+    name="dateOfBirth"
+    value={editProfile.dateOfBirth}
+    onChange={handleProfileChange}
+/>
+
+<input
+    type="text"
+    name="country"
+    value={editProfile.country}
+    onChange={handleProfileChange}
+    placeholder="Country"
+/>
+<input
+    type="text"
+    name="preferredLanguage"
+    value={editProfile.preferredLanguage}
+    onChange={handleProfileChange}
+    placeholder="Preferred Language"
+/>
+
+
+<input
+    type="text"
+    name="preferredCurrency"
+    value={editProfile.preferredCurrency}
+    onChange={handleProfileChange}
+    placeholder="Preferred Currency"
+/>
+    <div className="modal-buttons">
+
+    <button onClick={handleUpdateProfile}>
+        Save
+    </button>
+
+    <button onClick={() => setShowEditProfile(false)}>
+        Cancel
+    </button>
+
+    </div>
+            </div>
+
+        </div>
+    )}
+
+
+<UserNavbar />
+
+
+
     <div className="user-profile-container">
-       
-        <UserNavbar />
+
       {/* ================= HEADER ================= */}
       <div className="summary-grid">
       <div className="profile-header">
@@ -142,33 +341,38 @@ const UserProfile = () => {
 
             <h4>Welcome Back,</h4>
 
-            <h1>Pavan</h1>
+            <h2>
+    {user ? `${user.firstName} ${user.lastName}` : "Guest"}
+  </h2>
 
-            <p>pavan@gmail.com</p>
+            <p>{user?.email}</p>
 
-            <p>+91 9876543210</p>
+            <p>{user?.mobileNumber}</p>
 
           </div>
 
           <div className="membership">
 
-            <div className="premium">
+            <div className={`premium ${isPremium ? "active-premium" : ""}`}>
 
               <FaStar />
 
-              <span>Premium Member</span>
+              <span> {isPremium ? "Premium Member" : "Regular Member"}</span>
 
             </div>
 
-            <h3>Reward Points : 2350</h3>
+            <h3> Reward Points : {rewardPoints}</h3>
 
-            <button className="edit-btn">
-
-              <FaEdit />
-
-              Edit Profile
-
-            </button>
+            <button
+ className="edit-btn"
+ onClick={() => {
+    console.log("Edit clicked");
+    setShowEditProfile(true);
+ }}
+>
+    <FaEdit />
+    Edit Profile
+</button>
 
           </div>
 
@@ -220,15 +424,7 @@ const UserProfile = () => {
                 <div className="card-header">
 
                     <h2>Personal Information</h2>
-
-                    <button className="small-edit-btn">
-
-                        <FaEdit />
-
-                        Edit
-
-                    </button>
-
+  
                 </div>
 
                 <div className="info-grid">
@@ -241,7 +437,7 @@ const UserProfile = () => {
 
                             <label>Full Name</label>
 
-                            <p>Pavan</p>
+                            <p>{user.firstName} {user.lastName}</p>
 
                         </div>
 
@@ -255,7 +451,7 @@ const UserProfile = () => {
 
                             <label>Email</label>
 
-                            <p>pavan@gmail.com</p>
+                            <p>{user.email}</p>
 
                         </div>
 
@@ -269,7 +465,7 @@ const UserProfile = () => {
 
                             <label>Mobile</label>
 
-                            <p>+91 9876543210</p>
+                            <p>{user?.mobileNumber || "Not Provided"}</p>
 
                         </div>
 
@@ -283,7 +479,7 @@ const UserProfile = () => {
 
                             <label>Gender</label>
 
-                            <p>Male</p>
+                            <p>{user?.gender || "Not Specified"}</p>
 
                         </div>
 
@@ -297,7 +493,7 @@ const UserProfile = () => {
 
                             <label>Date of Birth</label>
 
-                            <p>20 June 1995</p>
+                            <p>{user?.dateOfBirth || "Not Provided"}</p>
 
                         </div>
 
@@ -309,15 +505,9 @@ const UserProfile = () => {
 
                         <div>
 
-                            <label>Address</label>
+                            <label>Country</label>
 
-                            <p>
-
-                                Whitefield<br/>
-
-                                Bangalore, Karnataka
-
-                            </p>
+                            <p>{user?.country || "Whitefield, Bangalore, Karnataka"}</p>
 
                         </div>
 
@@ -341,13 +531,7 @@ const UserProfile = () => {
 
                     </h2>
 
-                    <button className="add-btn">
-
-                        <FaPlus />
-
-                        Add Traveller
-
-                    </button>
+                    
 
                 </div>
 
@@ -357,22 +541,22 @@ const UserProfile = () => {
                         travellers.map((traveller)=>(
                             <div
                                 className="traveller-row"
-                                key={traveller.id}
+                                key={traveller.companionId}
                             >
 
                                 <div className="traveller-avatar">
 
-                                    {traveller.name.charAt(0)}
+                                    {traveller.firstName?.charAt(0)}
 
                                 </div>
 
                                 <div className="traveller-info">
 
-                                    <h4>{traveller.name}</h4>
+                                    <h4>{traveller.firstName} {traveller.lastName}</h4>
 
                                     <p>
 
-                                        {traveller.relation}
+                                        {traveller.relationship}
 
                                         {" | "}
 
@@ -386,12 +570,7 @@ const UserProfile = () => {
 
                                 </div>
 
-                                <button className="edit-traveller">
-
-                                    <FaEdit />
-                                    <span>Edit</span>
-                                </button>
-
+                               
                             </div>
                         ))
                     }
@@ -402,77 +581,7 @@ const UserProfile = () => {
 
         </div>
 
-        {/* ================= RECENT BOOKINGS ================= */}
-
-        <div className="booking-card">
-
-            <div className="card-header">
-
-                <h2>Recent Bookings</h2>
-
-            </div>
-
-            <table className="booking-table">
-
-                <thead>
-
-                    <tr>
-
-                        <th>Booking ID</th>
-
-                        <th>Trip</th>
-
-                        <th>Date</th>
-
-                        <th>Status</th>
-
-                        <th>Action</th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                    {
-                        bookings.map((booking)=>(
-                            <tr key={booking.id}>
-
-                                <td>{booking.id}</td>
-
-                                <td>{booking.route}</td>
-
-                                <td>{booking.date}</td>
-
-                                <td>
-
-                                    <span
-                                        className={`status ${booking.status.toLowerCase()}`}
-                                    >
-                                        {booking.status}
-                                    </span>
-
-                                </td>
-
-                                <td>
-
-                                    <button className="view-btn">
-
-                                        <FaEye />
-
-                                    </button>
-
-                                </td>
-
-                            </tr>
-                        ))
-                    }
-
-                </tbody>
-
-            </table>
-
-        </div>
+       
 
 {/* ================= PAYMENT & SETTINGS ================= */}
 

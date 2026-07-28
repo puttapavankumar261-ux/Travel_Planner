@@ -14,6 +14,7 @@ import {
 
 const UserNavbar = () => {
   const navigate = useNavigate();
+  const [user, setUser] = useState(null);
    const [showNotification, setShowNotification] = useState(false);
   
     const notificationRef = useRef(null);
@@ -21,6 +22,11 @@ const UserNavbar = () => {
     // Example notification count
     const notificationCount = 5;
 
+  useEffect(() => {
+      const loggedUser = JSON.parse(localStorage.getItem("user"));
+      setUser(loggedUser);
+    }, []);
+  
   return (
     <header className="user-navbar">
       {/* Logo */}
@@ -83,7 +89,7 @@ const UserNavbar = () => {
           <FaUserCircle className="profile-icon" />
 
           <div>
-            <h4>Pavan</h4>
+            <h4>{user?.firstName || "User"}</h4>
 
             <span>Traveller</span>
           </div>

@@ -19,6 +19,7 @@ function Registration() {
         const [success, setSuccess] = useState("");
         const [otp, setOtp] = useState("");
         const [timer, setTimer] = useState(60);
+        const [errors, setErrors] = useState({});
 
         const [registerData, setRegisterData] = useState({
           firstName: "",
@@ -35,12 +36,90 @@ function Registration() {
           loginProvider: "LOCAL"
         });
 
-        const handleChange = (e) => {
-          const {name, value} = e.target;
-          setRegisterData(prev => ({...prev,[name]:value}));
+        const validateStep1 = () => {
+
+            let newErrors = {};
+
+            if (!registerData.firstName.trim()) {
+            newErrors.firstName = "First Name is required.";
+            }
+
+            if (!registerData.lastName.trim()) {
+            newErrors.lastName = "Last Name is required.";
+            }
+
+            if (!registerData.email.trim()) {
+            newErrors.email = "Email is required.";
+            } else if (
+            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(registerData.email)
+            ) {
+            newErrors.email = "Enter a valid email address.";
+            }
+
+            if (!registerData.mobileNumber.trim()) {
+            newErrors.mobileNumber = "Mobile Number is required.";
+            } else if (!/^[6-9]\d{9}$/.test(registerData.mobileNumber)) {
+            newErrors.mobileNumber =
+              "Enter a valid 10 digit mobile number.";
+            }
+
+            if (!registerData.dateOfBirth) {
+            newErrors.dateOfBirth = "Date of Birth is required.";
+            }
+
+            if (!registerData.gender) {
+            newErrors.gender = "Gender is required.";
+            }
+
+            if (!registerData.country.trim()) {
+            newErrors.country = "Country is required.";
+            }
+
+            setErrors(newErrors);
+
+            return Object.keys(newErrors).length === 0;
         };
 
+        const validateOtp = () => {
+
+            let newErrors = {};
+
+            if (!otp.trim()) {
+            newErrors.otp = "OTP is required.";
+            } else if (!/^\d{6}$/.test(otp)) {
+            newErrors.otp = "OTP should be 6 digits.";
+            }
+
+            setErrors(newErrors);
+
+            return Object.keys(newErrors).length === 0;
+        };
+
+        // const handleChange = (e) => {
+        //   const {name, value} = e.target;
+        //   setRegisterData(prev => ({...prev,[name]:value}));
+        // };
+
+        const handleChange = (e) => {
+
+          const { name, value } = e.target;
+
+            setRegisterData(prev => ({
+                 ...prev,
+                [name]: value
+            }));
+
+            setErrors(prev => ({
+                  ...prev,
+                [name]: ""
+            }));
+          };
+
         const sendOtp = async () => {
+
+          if (!validateStep1()) {
+              return;
+          }
           setLoading(true);
           setError("");
           try{
@@ -55,6 +134,9 @@ function Registration() {
         };
 
         const verifyOtp = async () => {
+          if (!validateOtp()) {
+              return;
+          }
           setLoading(true);
           try{
             await authService.verifyOtp(registerData.email, otp);
@@ -230,9 +312,15 @@ function Registration() {
                                           value={registerData.firstName}
                                           onChange={handleChange}
                                           placeholder="First Name"
-                                          required
                                         />
                                       </div>
+                                      {errors.firstName && (
+                                            <small style={{ color: "#ef4444" }}>
+                                                {errors.firstName}
+                                            </small>
+                                      )}
+
+                                      
                                     </div>
                                     <div style={{ flex: 1 }}>
                                       <label>Last Name</label>
@@ -247,6 +335,12 @@ function Registration() {
                                           style={{ paddingLeft: '15px' }}
                                         />
                                       </div>
+                                        {errors.lastName && (
+                                            <small style={{ color: "#ef4444" }}>
+                                            {errors.lastName}
+                                            </small>
+                                        )}
+                                      
                                     </div>
                                   </div>
 
@@ -265,20 +359,32 @@ function Registration() {
                                           required
                                         />
                                       </div>
+                                        {errors.email && (
+                                            <small style={{ color: "#ef4444" }}>
+                                            {errors.email}
+                                            </small>
+                                        )}
+                                     
                                     </div>
                                     <div style={{ flex: 1 }}>
                                       <label>Mobile Number</label>
                                       <div className="input-box">
-                                        <i className="bi bi-telephone"></i>
-                                        <input
-                                          type="tel"
-                                          name="mobileNumber"
-                                          value={registerData.mobileNumber}
-                                          onChange={handleChange}
-                                          placeholder="10-digit number"
-                                          required
-                                        />
-                                      </div>
+                                            <i className="bi bi-telephone"></i>
+                                            <input
+                                              type="tel"
+                                              name="mobileNumber"
+                                              value={registerData.mobileNumber}
+                                              onChange={handleChange}
+                                              placeholder="10-digit number"
+                                              required
+                                            />
+                                        </div>
+                                        {errors.mobileNumber && (
+                                            <small style={{ color: "#ef4444" }}>
+                                            {errors.mobileNumber}
+                                            </small>
+                                        )}
+                                     
                                     </div>
                                   </div>
 
@@ -312,7 +418,7 @@ function Registration() {
                                   <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
                                     <div style={{ flex: 1 }}>
                                       <label>Date of Birth</label>
-                                      <div className="input-box">
+                                      {/* <div className="input-box">
                                         <input
                                           type="date"
                                           name="dateOfBirth"
@@ -321,7 +427,33 @@ function Registration() {
                                           required
                                           style={{ paddingLeft: '15px', color: registerData.dateOfBirth ? 'white' : 'rgba(255,255,255,0.5)' }}
                                         />
+                                      </div> */}
+                                      <div className="input-box">
+                                      <input
+                                        type="date"
+                                        name="dateOfBirth"
+                                        value={registerData.dateOfBirth}
+                                        onChange={handleChange}
+                                        style={{
+                                            paddingLeft: "15px",
+                                            color: registerData.dateOfBirth
+                                                ? "white"
+                                                : "rgba(255,255,255,0.5)"
+                                        }}
+                                      />
                                       </div>
+                                          {errors.dateOfBirth && (
+                                              <small
+                                                  style={{
+                                                      color: "#ef4444",
+                                                      display: "block",
+                                                      marginTop: "5px"
+                                                  }}
+                                              >
+                                                  {errors.dateOfBirth}
+                                              </small>
+                                          )}
+
                                     </div>
                                     <div style={{ flex: 1 }}>
                                       <label>Gender</label>
@@ -344,16 +476,21 @@ function Registration() {
                                   <div style={{ marginTop: '10px' }}>
                                       <label>Country</label>
                                       <div className="input-box">
-                                        <i className="bi bi-globe"></i>
-                                        <input
-                                          type="text"
-                                          name="country"
-                                          value={registerData.country}
-                                          onChange={handleChange}
-                                          placeholder="Country"
-                                          required
-                                        />
-                                      </div>
+                                          <i className="bi bi-globe"></i>
+                                          <input
+                                            type="text"
+                                            name="country"
+                                            value={registerData.country}
+                                            onChange={handleChange}
+                                            placeholder="Country"
+                                            required
+                                          />
+                                        </div>
+                                        {errors.country && (
+                                            <small style={{ color: "#ef4444" }}>
+                                            {errors.country}
+                                            </small>
+                                        )}
                                   </div>
 
                                   {/* upload image (Full Width) */}
@@ -392,11 +529,27 @@ function Registration() {
                       <b> {registerData.email}</b>
                       </p>
                       <div className="input-box "> 
-                          <input
+                          {/* <input
                           placeholder="Enter OTP"
                           value={otp}
                           onChange={(e)=>setOtp(e.target.value)}
-                          />
+                          /> */}
+                        <input
+                            placeholder="Enter OTP"
+                            value={otp}
+                            onChange={(e) => {
+                                setOtp(e.target.value);
+                                setErrors((prev) => ({
+                                    ...prev,
+                                    otp: ""
+                                }));
+                            }}
+                        />
+                        {errors.otp && (
+                        <small style={{ color:"#ef4444" }}>
+                        {errors.otp}
+                        </small>
+                        )}
                       </div>
                       <p>
                       OTP expires in <b>{timer}</b> seconds

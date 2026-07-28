@@ -1,5 +1,10 @@
 import "./UpcomingTrips.css";
-import { FaMapMarkerAlt, FaCalendarAlt, FaChevronRight } from "react-icons/fa";
+import {
+  FaMapMarkerAlt,
+  FaCalendarAlt,
+  FaChevronRight,
+} from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 import { useState, useEffect } from "react";
 import tripService from "../../../services/tripService";
@@ -39,7 +44,10 @@ const UpcomingTrips = () => {
           <p>Your next adventures</p>
         </div>
 
-        <button className="view-all-btn">
+        <button
+          className="view-all-btn"
+          onClick={() => navigate("/user/trips")}
+        >
           View All
           <FaChevronRight />
         </button>
@@ -67,12 +75,18 @@ const UpcomingTrips = () => {
                   </span>
                 </div>
               </div>
-            </div>
 
             <div className="upcoming-right">
               <span className="days-left">{calculateDaysLeft(trip.startDate)}</span>
 
-              <button>View</button>
+                <button
+                  onClick={() =>
+                    navigate(`/user/trips/${trip.tripId}`)
+                  }
+                >
+                  View
+                </button>
+              </div>
             </div>
           </div>
         ))}
@@ -80,5 +94,6 @@ const UpcomingTrips = () => {
     </div>
   );
 };
+      
 
 export default UpcomingTrips;
