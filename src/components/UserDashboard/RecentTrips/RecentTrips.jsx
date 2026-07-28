@@ -1,8 +1,30 @@
 import "./RecentTrips.css";
 
+import { useState, useEffect } from "react";
+import tripService from "../../../services/tripService";
 
+const RecentTrips = () => {
+  const [trips, setTrips] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-const RecentTrips = ({ trips = [] }) => {
+  useEffect(() => {
+    const fetchTrips = async () => {
+      try {
+        const response = await tripService.getTrips(0, 5); // Fetch latest 5 trips
+        if (response && response.content) {
+            setTrips(response.content);
+        } else if (Array.isArray(response)) {
+            setTrips(response);
+        }
+      } catch (error) {
+        console.error("Failed to fetch recent trips", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTrips();
+  }, []);
+
   return (
     <div className="recent-trips">
       <div className="section-header">
@@ -18,8 +40,12 @@ const RecentTrips = ({ trips = [] }) => {
       </div>
 
       <div className="trip-list">
-        {trips.map((trip) => (
-          <div className="recent-trip-card" key={trip.tripId}>
+        {loading ? (
+          <p style={{ padding: '20px' }}>Loading trips...</p>
+        ) : trips.length === 0 ? (
+          <p style={{ padding: '20px' }}>No recent trips found.</p>
+        ) : trips.map((trip) => (
+          <div className="recent-trip-card" key={trip.id}>
             <div className="trip-left">
               <div className="trip-icon">
                 <i className="bi bi-geo-alt"></i>
@@ -36,15 +62,15 @@ const RecentTrips = ({ trips = [] }) => {
 
                   <span>
                     <i className="bi bi-wallet2"></i>
-                    ₹{trip.budget?.toLocaleString()}
+                    ₹{trip.budget}
                   </span>
                 </div>
               </div>
             </div>
 
             <div className="trip-right">
-              <span className={`status ${trip.tripStatus.toLowerCase()}`}>
-                {trip.tripStatus}
+              <span className={`status ${(trip.tripStatus || 'PLANNED').toLowerCase()}`}>
+                {trip.tripStatus || 'PLANNED'}
               </span>
 
               <button>View</button>

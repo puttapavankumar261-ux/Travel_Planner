@@ -11,7 +11,10 @@ const getTrips = async (page = 0, size = 10) => {
 // New function for Dashboard
 const getTripsByUser = async (userId) => { 
   const response = await axiosInstance.get(`/api/trips/user/${userId}`);
-
+  return response.data.data;
+};
+const createTrip = async (tripData) => {
+  const response = await axiosInstance.post("/api/create-trip", tripData);
   return response.data.data;
 };
 
@@ -33,9 +36,11 @@ const updateTrip = async (id, tripData) => {
 };
 
 export default {
+
   getTrips,
+  getTripsByUser,
   createTrip,
   getTripById,
   getUserById,
-  updateTrip
+  updateTrip,
 };
