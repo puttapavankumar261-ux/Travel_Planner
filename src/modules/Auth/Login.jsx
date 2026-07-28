@@ -22,46 +22,44 @@ function Login() {
   };
 
   const handleLogin = async (e) => {
-  e.preventDefault();
-  setError("");
+    e.preventDefault();
+    setError("");
 
-  try {
-    const result = await authService.login(loginData);
+    try {
+      const result = await authService.login(loginData);
 
-    const userData = result.data;
+      const userData = result.data;
 
-    // Save JWT
-    localStorage.setItem("token", userData.token);
+      // Save JWT
+      localStorage.setItem("token", userData.token);
 
-    // Save logged-in user
-    localStorage.setItem(
-      "user",
-      JSON.stringify({
-        userId: userData.userId,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        email: userData.email,
-        roleName: userData.roleName,
-      })
-    );
+      // Save logged-in user
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          userId: userData.userId,
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          email: userData.email,
+          roleName: userData.roleName,
+        }),
+      );
 
-    // Redirect based on role
-    if (userData.roleName === "ADMIN") {
-      navigate("/admin/dashboard");
-    } else {
-      navigate("/user/dashboard");
+      // Navigate based on role
+      if (userData.roleName === "ADMIN") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/user/dashboard");
+      }
+    } catch (err) {
+      setError(
+        err.response?.data?.message ||
+          "Login failed. Please check your credentials.",
+      );
+
+      console.error(err);
     }
-
-  } catch (err) {
-    setError(
-      err.response?.data?.message ||
-      "Login failed. Please check your credentials."
-    );
-
-    console.error(err);
-  }
-};
-
+  };
   return (
     <div
       className="login-page"
@@ -286,6 +284,6 @@ function Login() {
       </div>
     </div>
   );
-};
+}
 
 export default Login;

@@ -7,6 +7,8 @@ const getDashboardSummary = async () => {
 
 const getMonthlyExpenseAnalytics = async () => {
   const response = await axiosInstance.get("/api/dashboard/expense/monthly");
+  const response = await axiosInstance.get("/api/dashboard/monthly-expenses");
+
   return response.data.data;
 };
 
