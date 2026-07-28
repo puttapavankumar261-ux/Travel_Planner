@@ -15,7 +15,15 @@ const login = async (loginData) => {
 
     return response.data;
 };
+const sendOtp = async (otpData) => {
+  const response = await axiosInstance.post("/api/otp/send", otpData);
+  return response.data;
+};
 
+const verifyOtp = async (otpData) => {
+  const response = await axiosInstance.post("/api/otp/verify", otpData);
+  return response.data;
+};
 const register = async (registerData) => {
 
     const response = await axiosInstance.post(
@@ -26,7 +34,11 @@ const register = async (registerData) => {
     return response.data;
 };
 
-export default {
-    login,
-    register,
+const authService = {
+  login,
+  register,
+  sendOtp,
+  verifyOtp,
 };
+
+export default authService;

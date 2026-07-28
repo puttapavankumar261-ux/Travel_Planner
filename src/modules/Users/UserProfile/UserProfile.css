@@ -225,8 +225,22 @@ body {
     display: grid;
     grid-template-columns: 1.3fr 1fr;
     gap: 25px;
+    align-items:start;
 }
-
+.personal-card{
+    height: fit-content;   /* only as tall as its content */
+}
+.traveller-card{
+    display: flex;
+    flex-direction: column;
+    height: 455px;
+}
+.traveller-list{
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 8px;
+     min-height: 0;
+}
 .user-profile-container .card-header {
     display: flex;
     justify-content: space-between;
@@ -325,7 +339,12 @@ body {
     transform:translateY(-2px);
 
 }
-
+.traveller-list{
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 8px;
+    min-height: 0;
+}
 /* ===================== Responsive ===================== */
 
 @media (max-width: 992px) {

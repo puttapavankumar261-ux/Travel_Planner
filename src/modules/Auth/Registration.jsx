@@ -25,7 +25,9 @@ function Registration() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
+  const [showOtpSection, setShowOtpSection] = useState(false);
+const [otp, setOtp] = useState("");
+const [registeredEmail, setRegisteredEmail] = useState("");
   const handleChange = (e) => {
     setRegisterData({
       ...registerData,
@@ -43,11 +45,20 @@ function Registration() {
         ...registerData,
         roleId: Number(registerData.roleId)
       };
-      
+
       await authService.register(payload);
+
       
-      // On success, redirect to login
-      navigate("/");
+// Send OTP
+await authService.sendOtp({
+  email: registerData.email,
+  purpose: "REGISTRATION",
+});
+
+// Show OTP section
+setRegisteredEmail(registerData.email);
+setShowOtpSection(true);
+
     } catch (err) {
       // Show backend validation message if available
       if (err.response && err.response.data && err.response.data.message) {
@@ -64,6 +75,29 @@ function Registration() {
       setLoading(false);
     }
   };
+
+  const handleVerifyOtp = async () => {
+  setError(""); 
+  try {
+    await authService.verifyOtp({
+      email: registeredEmail,
+      otp,
+      purpose: "REGISTRATION",
+    });
+
+    alert("Email verified successfully!");
+
+    navigate("/");
+
+  } catch (err) {
+    setError(
+      err.response?.data?.message ||
+      "Invalid or expired OTP."
+    );
+  }
+  };
+
+
 
   return (
     <div
@@ -138,12 +172,24 @@ function Registration() {
           <h2>create account</h2>
           <p className="subtitle">sign up to start planning your trips</p>
 
-          <form onSubmit={handleRegister}>
-            {error && (
-              <div style={{ color: "#ef4444", marginBottom: "15px", fontSize: "14px", padding: '10px', background: 'rgba(239, 68, 68, 0.1)', borderRadius: '8px' }}>
-                {error}
-              </div>
-            )}
+          {!showOtpSection ? (
+
+<form onSubmit={handleRegister}>
+
+  {error && (
+    <div
+      style={{
+        color: "#ef4444",
+        marginBottom: "15px",
+        fontSize: "14px",
+        padding: "10px",
+        background: "rgba(239,68,68,0.1)",
+        borderRadius: "8px",
+      }}
+    >
+      {error}
+    </div>
+  )}
 
             {/* Split Names */}
             <div style={{ display: 'flex', gap: '10px' }}>
@@ -295,11 +341,67 @@ function Registration() {
                     />
                  </div>
             </div>
+ <button
+    type="submit"
+    className="login-btn"
+    style={{ marginTop: "20px" }}
+    disabled={loading}
+  >
+    {loading ? "Registering..." : "Sign Up"}
+  </button>
 
-            <button type="submit" className="login-btn" style={{ marginTop: '20px' }} disabled={loading}>
-              {loading ? 'Registering...' : 'Sign Up'}
-            </button>
-          </form>
+</form>
+
+) : (
+
+<div style={{ textAlign: "center", marginTop: "20px" }}>
+
+    <i
+        className="bi bi-envelope-check-fill"
+        style={{
+            fontSize: "60px",
+            color: "#10B981"
+        }}
+    ></i>
+
+    <h2 style={{ marginTop: "20px" }}>
+        Verify Email
+    </h2>
+
+    <p style={{ color: "#d1d5db" }}>
+        We have sent a verification OTP to
+    </p>
+
+    <h4 style={{ color: "#fff" }}>
+        {registeredEmail}
+    </h4>
+
+    <div
+        className="input-box"
+        style={{ marginTop: "30px" }}
+    >
+        <i className="bi bi-shield-lock"></i>
+
+        <input
+            type="text"
+            placeholder="Enter 6-digit OTP"
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+            maxLength={6}
+        />
+    </div>
+
+    <button
+        className="login-btn"
+        style={{ marginTop: "20px" }}
+        onClick={handleVerifyOtp}
+    >
+        Verify OTP
+    </button>
+
+</div>
+
+)}
 
           <div className="divider" style={{ marginTop: '20px', marginBottom: '20px' }}>
             <span>or sign in with</span>
