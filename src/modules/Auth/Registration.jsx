@@ -60,7 +60,7 @@ function Registration() {
             alert(registerData.email);
             alert(otp);
             await authService.verifyOtp(registerData.email, otp);
-            
+            registerData.accountVerified = true;
             setStep(3);
           }catch(err){
             setError("Invalid OTP.");
@@ -93,10 +93,13 @@ function Registration() {
           try{
             const payload = {
                     ...registerData,
+                    accountVerified: true,
                     roleId: Number(registerData.roleId)
                   };
                   
-                  await authService.register(payload);
+                const res = await authService.register(payload);
+                // console.log(res);
+                // return false;
             //console.log(registerData)
             //await userService.register(registerData);
             navigate("/");
@@ -391,13 +394,13 @@ function Registration() {
                       We have sent an OTP to
                       <b> {registerData.email}</b>
                       </p>
-
-                      <input
-                      placeholder="Enter OTP"
-                      value={otp}
-                      onChange={(e)=>setOtp(e.target.value)}
-                      />
-
+                      <div className="input-box "> 
+                          <input
+                          placeholder="Enter OTP"
+                          value={otp}
+                          onChange={(e)=>setOtp(e.target.value)}
+                          />
+                      </div>
                       <p>
                       OTP expires in <b>{timer}</b> seconds
                       </p>
