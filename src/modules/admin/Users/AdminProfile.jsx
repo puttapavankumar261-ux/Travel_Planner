@@ -11,6 +11,7 @@ import {
   ExternalLink,
   UserPlus,
   Download,
+  Eye, Info
 } from "lucide-react";
 import "./AdminProfile.css";
 import adminlogo from "./images/profileimage.png";
@@ -106,6 +107,32 @@ const password = loggedUser?.password;
 const token = loggedUser?.token;
 const [admin, setAdmin] = useState();
 const [isEditing, setIsEditing] = useState(false);
+// =======================
+// Change Password States
+// =======================
+
+const [showPasswordModal, setShowPasswordModal] = useState(false);
+
+const [otpMethod, setOtpMethod] = useState("EMAIL");
+
+const [otpSent, setOtpSent] = useState(false);
+
+const [otpVerified, setOtpVerified] = useState(false);
+
+const [otp, setOtp] = useState("");
+
+const [loadingOtp, setLoadingOtp] = useState(false);
+
+const [savingPassword, setSavingPassword] = useState(false);
+
+const [showPassword, setShowPassword] = useState(false);
+
+const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+const [passwordData, setPasswordData] = useState({
+    password: "",
+    confirmPassword: ""
+});
 
 
 const handleSave = async () => {
@@ -156,7 +183,166 @@ useEffect(() => {
 
 }, [userId]);
 
+const openPasswordModal = () => {
 
+    setShowPasswordModal(true);
+
+    setOtpMethod("EMAIL");
+
+    setOtp("");
+
+    setOtpSent(false);
+
+    setOtpVerified(false);
+
+    setPasswordData({
+        password: "",
+        confirmPassword: ""
+    });
+
+};
+
+const closePasswordModal = () => {
+
+    setShowPasswordModal(false);
+
+    setOtp("");
+
+    setOtpSent(false);
+
+    setOtpVerified(false);
+
+    setPasswordData({
+        password: "",
+        confirmPassword: ""
+    });
+
+};
+
+const sendOtp = async () => {
+
+    try {
+
+        setLoadingOtp(true);
+
+        // Backend API
+
+        // await userService.sendOtp({
+        //     userId,
+        //     type: otpMethod
+        // });
+
+        await new Promise(resolve => setTimeout(resolve,1200));
+
+        alert("OTP sent successfully.");
+
+        setOtpSent(true);
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        alert("Unable to send OTP.");
+
+    }
+
+    finally{
+
+        setLoadingOtp(false);
+
+    }
+
+};
+
+
+const verifyOtp = async () => {
+
+    try{
+
+        // await userService.verifyOtp({
+        //     userId,
+        //     otp
+        // });
+
+        if(otp==="123456"){
+
+            setOtpVerified(true);
+
+            alert("OTP Verified");
+
+        }
+
+        else{
+
+            alert("Invalid OTP");
+
+        }
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+    }
+
+};
+const savePassword = async () => {
+
+    if(passwordData.password!==passwordData.confirmPassword){
+
+        alert("Passwords do not match");
+
+        return;
+
+    }
+
+    try{
+
+        setSavingPassword(true);
+
+        // await userService.changePassword({
+        //      userId,
+        //      password:passwordData.password
+        // });
+
+        await new Promise(resolve=>setTimeout(resolve,1200));
+
+        alert("Password changed successfully.");
+
+        closePasswordModal();
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        alert("Unable to change password.");
+
+    }
+
+    finally{
+
+        setSavingPassword(false);
+
+    }
+
+};
+
+const togglePassword=()=>{
+
+    setShowPassword(!showPassword);
+
+};
+
+const toggleConfirmPassword=()=>{
+
+    setShowConfirmPassword(!showConfirmPassword);
+
+};
 //  console.log(admin);
 //  return false;
   return (
@@ -460,7 +646,13 @@ useEffect(() => {
 
                                 </div>
 
-                                <button className="outline-btn">
+                                {/* <button className="outline-btn">
+                                Change Password
+                                </button> */}
+                                <button
+                                    className="outline-btn"
+                                    onClick={openPasswordModal}
+                                >
                                 Change Password
                                 </button>
 
@@ -497,6 +689,288 @@ useEffect(() => {
                             </div> */}
 
                     </div>
+
+                    
+
+                    {showPasswordModal && (
+    <div className="password-modal-overlay">
+
+        <div className="password-modal">
+
+            <div className="password-modal-header">
+
+                <h2>Change Password</h2>
+
+                <button
+                    className="close-modal-btn"
+                    onClick={closePasswordModal}
+                > X
+                    {/* <X size={22}/> */}
+                </button>
+
+            </div>
+
+            <div className="password-modal-body">
+
+                {/* Email */}
+
+                <div className="password-form-group">
+
+                    <label>Email Address</label>
+
+                    <input
+                        type="email"
+                        value={admin?.email || ""}
+                        readOnly
+                    />
+
+                </div>
+
+                {/* Mobile */}
+
+                <div className="password-form-group">
+
+                    <label>Mobile Number</label>
+
+                    <input
+                        type="text"
+                        value={admin?.mobileNumber || ""}
+                        readOnly
+                    />
+
+                </div>
+
+                {/* Radio */}
+
+                <div className="otp-method">
+
+                    <label>Send OTP To</label>
+
+                    <div className="otp-options">
+
+                        <label>
+
+                            <input
+                                type="radio"
+                                checked={otpMethod==="EMAIL"}
+                                onChange={()=>{
+                                    setOtpMethod("EMAIL");
+                                }}
+                            />
+
+                            Email
+
+                        </label>
+
+                        <label>
+
+                            <input
+                                type="radio"
+                                checked={otpMethod==="MOBILE"}
+                                onChange={()=>{
+                                    setOtpMethod("MOBILE");
+                                }}
+                            />
+
+                            Mobile
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+                {!otpSent && (
+
+                    <button
+                        className="send-otp-btn"
+                        onClick={sendOtp}
+                        disabled={loadingOtp}
+                    >
+
+                        {
+                            loadingOtp
+                            ?
+                            "Sending..."
+                            :
+                            "Send OTP"
+                        }
+
+                    </button>
+
+                )}
+
+                {otpSent && !otpVerified && (
+
+                    <>
+
+                        <div className="password-form-group">
+
+                            <label>Enter OTP</label>
+
+                            <input
+                                type="text"
+                                maxLength={6}
+                                placeholder="Enter OTP"
+                                value={otp}
+                                onChange={(e)=>setOtp(e.target.value)}
+                            />
+
+                        </div>
+
+                        <button
+                            className="verify-otp-btn"
+                            onClick={verifyOtp}
+                        >
+                            Verify OTP
+                        </button>
+
+                    </>
+
+                )}
+
+                {otpVerified && (
+
+                    <>
+
+                        <div className="password-form-group">
+
+                            <label>New Password</label>
+
+                            <div className="password-input">
+
+                                <input
+
+                                    type={
+                                        showPassword
+                                        ?
+                                        "text"
+                                        :
+                                        "password"
+                                    }
+
+                                    value={passwordData.password}
+
+                                    onChange={(e)=>
+
+                                        setPasswordData({
+
+                                            ...passwordData,
+
+                                            password:e.target.value
+
+                                        })
+
+                                    }
+
+                                />
+
+                                <span
+                                    onClick={togglePassword}
+                                >
+
+                                    {
+                                        showPassword
+                                        ?
+                                        <EyeOff size={18}/>
+                                        :
+                                        <Eye size={18}/>
+                                    }
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div className="password-form-group">
+
+                            <label>Confirm Password</label>
+
+                            <div className="password-input">
+
+                                <input
+
+                                    type={
+                                        showConfirmPassword
+                                        ?
+                                        "text"
+                                        :
+                                        "password"
+                                    }
+
+                                    value={passwordData.confirmPassword}
+
+                                    onChange={(e)=>
+
+                                        setPasswordData({
+
+                                            ...passwordData,
+
+                                            confirmPassword:e.target.value
+
+                                        })
+
+                                    }
+
+                                />
+
+                                <span
+                                    onClick={toggleConfirmPassword}
+                                >
+
+                                    {
+                                        showConfirmPassword
+                                        ?
+                                        <EyeOff size={18}/>
+                                        :
+                                        <Eye size={18}/>
+                                    }
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div className="password-actions">
+
+                            <button
+                                className="cancel-password-btn"
+                                onClick={closePasswordModal}
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                className="save-password-btn"
+                                onClick={savePassword}
+                                disabled={savingPassword}
+                            >
+
+                                {
+                                    savingPassword
+                                    ?
+                                    "Saving..."
+                                    :
+                                    "Save Password"
+                                }
+
+                            </button>
+
+                        </div>
+
+                    </>
+
+                )}
+
+            </div>
+
+        </div>
+
+    </div>
+
+                    )}
 
                 </div>
 
