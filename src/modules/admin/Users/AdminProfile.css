@@ -674,7 +674,11 @@
     /* color: rgb(209, 213, 219); */
     cursor: pointer;
 }
-
+.profile-grid input[readonly] {
+    cursor: not-allowed;
+    background: #2b2b2b;
+    color: #9ca3af;
+}
 /* =====================================================
    CONTACT DETAILS
 ===================================================== */
