@@ -1,28 +1,36 @@
 import "./UpcomingTrips.css";
 import { FaMapMarkerAlt, FaCalendarAlt, FaChevronRight } from "react-icons/fa";
 
-const upcomingTrips = [
-  {
-    id: 1,
-    destination: "Ooty",
-    departure: "15 Aug 2026",
-    daysLeft: "18 Days Left",
-  },
-  {
-    id: 2,
-    destination: "Delhi",
-    departure: "28 Aug 2026",
-    daysLeft: "31 Days Left",
-  },
-  {
-    id: 3,
-    destination: "Jaipur",
-    departure: "10 Sep 2026",
-    daysLeft: "44 Days Left",
-  },
-];
+import { useState, useEffect } from "react";
+import tripService from "../../../services/tripService";
+
+const calculateDaysLeft = (startDate) => {
+  const diffTime = Math.abs(new Date(startDate) - new Date());
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + " Days Left";
+};
 
 const UpcomingTrips = () => {
+  const [trips, setTrips] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTrips = async () => {
+      try {
+        const response = await tripService.getTrips(0, 5); // Fetch latest 5 trips
+        if (response && response.content) {
+            setTrips(response.content.filter(t => new Date(t.startDate) > new Date()));
+        } else if (Array.isArray(response)) {
+            setTrips(response.filter(t => new Date(t.startDate) > new Date()));
+        }
+      } catch (error) {
+        console.error("Failed to fetch upcoming trips", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTrips();
+  }, []);
+
   return (
     <div className="upcoming-trips">
       <div className="section-header">
@@ -38,7 +46,11 @@ const UpcomingTrips = () => {
       </div>
 
       <div className="upcoming-list">
-        {upcomingTrips.map((trip) => (
+        {loading ? (
+          <p style={{ padding: '20px' }}>Loading trips...</p>
+        ) : trips.length === 0 ? (
+          <p style={{ padding: '20px' }}>No upcoming trips found.</p>
+        ) : trips.map((trip) => (
           <div className="upcoming-card" key={trip.id}>
             <div className="upcoming-left">
               <div className="upcoming-icon">
@@ -46,19 +58,19 @@ const UpcomingTrips = () => {
               </div>
 
               <div className="upcoming-info">
-                <h3>{trip.destination}</h3>
+                <h3>{trip.destination || trip.title}</h3>
 
                 <div className="upcoming-meta">
                   <span>
                     <FaCalendarAlt />
-                    {trip.departure}
+                    {trip.startDate}
                   </span>
                 </div>
               </div>
             </div>
 
             <div className="upcoming-right">
-              <span className="days-left">{trip.daysLeft}</span>
+              <span className="days-left">{calculateDaysLeft(trip.startDate)}</span>
 
               <button>View</button>
             </div>

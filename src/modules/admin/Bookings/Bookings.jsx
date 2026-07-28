@@ -62,21 +62,116 @@ const Bookings = () => {
   const [bookingsData, setBookingsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const handleConfirm = async (trip) => {
+    if (!window.confirm(`Are you sure you want to confirm booking TRP-${trip.tripId}?`)) return;
+    try {
+      const formatDate = (d) => {
+        if (!d) return new Date().toISOString().split('T')[0];
+        if (Array.isArray(d)) return `${d[0]}-${String(d[1]).padStart(2, '0')}-${String(d[2]).padStart(2, '0')}`;
+        if (typeof d === 'string' && d.includes('T')) return d.split('T')[0];
+        return d;
+      };
+
+      const payload = {
+        title: trip.title || 'Untitled Trip',
+        source: trip.source || 'User Location',
+        destination: trip.destination || 'Not Specified',
+        startDate: formatDate(trip.startDate),
+        endDate: formatDate(trip.endDate),
+        budget: trip.budget || 10000.0,
+        description: trip.description || 'Confirmed via Admin Panel',
+        travelerName: trip.travelerName || 'Unknown',
+        tripType: trip.tripType || 'TOUR',
+        tripStatus: 'UPCOMING',
+        userId: trip.userId || 1
+      };
+      await tripService.updateTrip(trip.tripId, payload);
+      setBookingsData(prev => prev.map(b => b.id === `TRP-${trip.tripId}` ? {...b, status: 'UPCOMING', raw: {...b.raw, tripStatus: 'UPCOMING'}} : b));
+      if (selectedBooking && selectedBooking.id === `TRP-${trip.tripId}`) {
+          setSelectedBooking(null);
+      }
+      alert("Booking confirmed successfully!");
+    } catch (err) {
+      console.error("Failed to confirm trip", err);
+      let msg = "Failed to confirm booking.";
+      if (err.response && err.response.data) {
+          msg += " Server says: " + JSON.stringify(err.response.data);
+      }
+      alert(msg);
+    }
+  };
+
+  const handleCancel = async (trip) => {
+    if (!window.confirm(`Are you sure you want to CANCEL booking TRP-${trip.tripId}? This action cannot be undone.`)) return;
+    try {
+      const formatDate = (d) => {
+        if (!d) return new Date().toISOString().split('T')[0];
+        if (Array.isArray(d)) return `${d[0]}-${String(d[1]).padStart(2, '0')}-${String(d[2]).padStart(2, '0')}`;
+        if (typeof d === 'string' && d.includes('T')) return d.split('T')[0];
+        return d;
+      };
+
+      const payload = {
+        title: trip.title || 'Untitled Trip',
+        source: trip.source || 'User Location',
+        destination: trip.destination || 'Not Specified',
+        startDate: formatDate(trip.startDate),
+        endDate: formatDate(trip.endDate),
+        budget: trip.budget || 10000.0,
+        description: trip.description || 'Cancelled via Admin Panel',
+        travelerName: trip.travelerName || 'Unknown',
+        tripType: trip.tripType || 'TOUR',
+        tripStatus: 'CANCELLED',
+        userId: trip.userId || 1
+      };
+      await tripService.updateTrip(trip.tripId, payload);
+      setBookingsData(prev => prev.map(b => b.id === `TRP-${trip.tripId}` ? {...b, status: 'CANCELLED', raw: {...b.raw, tripStatus: 'CANCELLED'}} : b));
+      if (selectedBooking && selectedBooking.id === `TRP-${trip.tripId}`) {
+          setSelectedBooking(null);
+      }
+      alert("Booking cancelled successfully.");
+    } catch (err) {
+      console.error("Failed to cancel trip", err);
+      let msg = "Failed to cancel booking.";
+      if (err.response && err.response.data) {
+          msg += " Server says: " + JSON.stringify(err.response.data);
+      }
+      alert(msg);
+    }
+  };
+
   useEffect(() => {
     const fetchBookings = async () => {
       try {
         const tripList = await tripService.getTrips(0, 100);
-        const mappedBookings = (tripList.content || []).map(trip => ({
-          id: `TRP-${trip.tripId}`,
-          customer: trip.userName || "Unknown User",
-          type: trip.tripType || "Tour", // Real backend type or fallback
-          destination: trip.destination || "Not Specified",
-          date: trip.startDate ? new Date(trip.startDate).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) : "TBD",
-          amount: trip.budget ? `₹${trip.budget.toLocaleString()}` : "N/A",
-          status: trip.tripStatus || "Pending",
-          paymentStatus: "Pending", // Backend doesn't have payment status yet
-          raw: trip
-        }));
+        const formatTypeStr = (str) => {
+          if (!str) return "Tour";
+          return str.split(' + ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' + ');
+        };
+
+        const mappedBookings = (tripList.content || []).map(trip => {
+          const actualType = formatTypeStr(trip.tripType);
+
+          let paymentSt = "Pending";
+          if (trip.bookings && trip.bookings.length > 0) {
+              const latestBooking = trip.bookings[trip.bookings.length - 1];
+              paymentSt = latestBooking.bookingStatus === 'CONFIRMED' || latestBooking.bookingStatus === 'COMPLETED' ? 'Paid' : 'Pending';
+          } else {
+              paymentSt = "Unpaid";
+          }
+
+          return {
+            id: `TRP-${trip.tripId}`,
+            customer: trip.travelerName || trip.userName || "Unknown User",
+            type: actualType,
+            destination: trip.destination || "Not Specified",
+            date: trip.startDate ? new Date(trip.startDate).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) : "TBD",
+            amount: trip.budget ? `₹${trip.budget.toLocaleString()}` : "N/A",
+            status: trip.tripStatus || "Pending",
+            paymentStatus: paymentSt,
+            raw: trip
+          };
+        });
         setBookingsData(mappedBookings);
       } catch (error) {
         console.error("Error fetching bookings:", error);
@@ -118,18 +213,27 @@ const Bookings = () => {
   }, [bookingsData]);
 
   const revenueByType = useMemo(() => {
-    let flights = 0, hotels = 0, tours = 0;
+    const formatTypeStr = (str) => {
+      if (!str) return "Tour";
+      return str.split(' + ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' + ');
+    };
+    
+    const revenueMap = {};
     bookingsData.forEach(bkg => {
       const b = bkg.raw.budget || 0;
-      const t = (bkg.raw.tripType || 'Tour').toUpperCase();
-      if (t === 'FLIGHT') flights += b;
-      else if (t === 'HOTEL') hotels += b;
-      else tours += b;
+      const type = formatTypeStr(bkg.type);
+      revenueMap[type] = (revenueMap[type] || 0) + b;
     });
-    const res = [];
-    if (flights > 0) res.push({ name: 'Flights', value: flights, color: '#3B82F6' });
-    if (hotels > 0) res.push({ name: 'Hotels', value: hotels, color: '#10B981' });
-    if (tours > 0) res.push({ name: 'Tours', value: tours, color: '#8B5CF6' });
+    
+    const colors = ['#3B82F6', '#10B981', '#8B5CF6', '#F59E0B', '#EF4444', '#EC4899'];
+    let colorIndex = 0;
+    
+    const res = Object.keys(revenueMap).map(key => ({
+      name: key,
+      value: revenueMap[key],
+      color: colors[colorIndex++ % colors.length]
+    })).filter(item => item.value > 0);
+    
     return res.length > 0 ? res : [{ name: 'No Data', value: 1, color: '#4B5563' }];
   }, [bookingsData]);
 
@@ -224,7 +328,7 @@ const Bookings = () => {
                   <Tooltip formatter={(value) => `₹${value.toLocaleString()}`} contentStyle={{ background: '#171F2E', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }} />
                 </PieChart>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', marginTop: '16px' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '16px', marginTop: '16px' }}>
                 {revenueByType.map(type => (
                   <div key={type.name} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: type.color }}></div>
@@ -287,7 +391,6 @@ const Bookings = () => {
                     <th>Travel Date</th>
                     <th>Amount</th>
                     <th>Status</th>
-                    <th>Payment</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -303,15 +406,25 @@ const Bookings = () => {
                       <td className="text-muted">{bkg.date}</td>
                       <td className="fw-500" style={{color: '#E2E8F0'}}>{bkg.amount}</td>
                       <td>{getStatusBadge(bkg.status)}</td>
-                      <td>{getPaymentBadge(bkg.paymentStatus)}</td>
                       <td>
-                        <button 
-                          className="btn-secondary" 
-                          style={{ padding: '6px 12px', fontSize: '12px', background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '6px', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
-                          onClick={() => setSelectedBooking(bkg)}
-                        >
-                          <Eye size={14} /> View
-                        </button>
+                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                          <button 
+                            className="btn-secondary" 
+                            style={{ padding: '6px 12px', fontSize: '12px', background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '6px', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+                            onClick={() => setSelectedBooking(bkg)}
+                          >
+                            <Eye size={14} /> View
+                          </button>
+                          {bkg.status !== 'CONFIRMED' && bkg.status !== 'UPCOMING' && bkg.status !== 'CANCELLED' && (
+                            <button 
+                              className="btn-primary" 
+                              style={{ padding: '6px 12px', fontSize: '12px', background: '#10B981', border: 'none', borderRadius: '6px', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+                              onClick={() => handleConfirm(bkg.raw)}
+                            >
+                              <CheckCircle size={14} /> Confirm
+                            </button>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -324,12 +437,9 @@ const Bookings = () => {
           </div>
         </div>
 
-        {/* 5. RECENT ACTIVITIES & EXPORT */}
+        {/* 5. RECENT ACTIVITIES */}
         <div className="flex-between" style={{ marginTop: '40px', marginBottom: '20px' }}>
           <h2 style={{ color: 'white', fontSize: '20px' }}>Recent Booking Activities</h2>
-          <button className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', background: '#3B82F6', color: 'white', border: 'none', borderRadius: '10px', cursor: 'pointer' }}>
-            <Download size={18} /> Export Report
-          </button>
         </div>
         <div className="glass-panel" style={{ background: 'rgba(15, 23, 42, 0.6)', borderRadius: '20px', padding: '24px', border: '1px solid rgba(255,255,255,0.1)' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -352,6 +462,8 @@ const Bookings = () => {
         <BookingDetailsModal 
           booking={selectedBooking} 
           onClose={() => setSelectedBooking(null)} 
+          onConfirm={() => handleConfirm(selectedBooking.raw)}
+          onCancel={() => handleCancel(selectedBooking.raw)}
         />
       )}
     </div>

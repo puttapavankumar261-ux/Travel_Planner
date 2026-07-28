@@ -267,12 +267,22 @@ const submitCancellation = async () => {
                     </td>
 
                     <td>
-                      <div className="user-cell">
+                      <div className="user-cell" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <div
                           className="avatar"
                           style={{
-                            background:
-                              "linear-gradient(135deg, #3B82F6, #8B5CF6)",
+                            background: "linear-gradient(135deg, #3B82F6, #8B5CF6)",
+                            width: "32px",
+                            height: "32px",
+                            minWidth: "32px",
+                            fontSize: "14px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderRadius: "50%",
+                            color: "white",
+                            fontWeight: "bold",
+                            flexShrink: 0
                           }}
                         >
                           {trip.userName?.charAt(0)}
@@ -312,6 +322,7 @@ const submitCancellation = async () => {
                                   <button
                                   className="cancel-trip"
                                   onClick={() => handleCancelTrip(trip.tripId)}
+                                  style={{ whiteSpace: "nowrap" }}
                                   >
                                  <i className="bi bi-info-circle"></i>
                                   <span>Cancel Trip</span>
@@ -362,304 +373,138 @@ const submitCancellation = async () => {
             <button className="page-btn">Next</button>
           </div>
         </div> */}
-
-        {showTripModal && selectedTrip && (
-    <div className="trip-modal-overlay">
-
-        <div className="trip-modal">
-
-            <div className="trip-modal-header">
-
-                <h2>
-                    Trip Details
-                </h2>
-
-                <button
-                    className="close-btn"
-                    onClick={closeModal}
-                >
-                    ✕
-                </button>
-
-            </div>
-
-            {/* <div className="trip-details-grid">
-
-                <div className="detail-item">
-                    <label>Trip ID</label>
-                    <p>TRP-{selectedTrip.tripId}</p>
-                </div>
-
-                <div className="detail-item">
-                    <label>User Name</label>
-                    <p>{selectedTrip.userName}</p>
-                </div>
-
-                <div className="detail-item">
-                    <label>Source</label>
-                    <p>{selectedTrip.source}</p>
-                </div>
-
-                <div className="detail-item">
-                    <label>Destination</label>
-                    <p>{selectedTrip.destination}</p>
-                </div>
-
-                <div className="detail-item">
-                    <label>Start Date</label>
-                    <p>{selectedTrip.startDate}</p>
-                </div>
-
-                <div className="detail-item">
-                    <label>End Date</label>
-                    <p>{selectedTrip.endDate}</p>
-                </div>
-
-                <div className="detail-item">
-                    <label>Budget</label>
-                    <p>
-                        ₹{Number(selectedTrip.budget).toLocaleString("en-IN")}
-                    </p>
-                </div>
-
-                <div className="detail-item">
-                    <label>Status</label>
-                    <p>{selectedTrip.tripStatus}</p>
-                </div>
-
-                <div className="detail-item full-width">
-                    <label>Description</label>
-                    <p>{selectedTrip.description}</p>
-                </div>
-
-            </div> */}
-            <div className="trip-modal-body">
-            <div className="trip-details-grid">
-
-    {/* <div className="detail-item">
-        <label>Trip ID</label>
-        <p>{selectedTrip.tripId}</p>
-    </div> */}
-
-    <div className="detail-item">
-        <label>Title</label>
-        <p>{selectedTrip.title}</p>
-    </div>
-
-    <div className="detail-item">
-        <label>Destination</label>
-        <p>{selectedTrip.destination}</p>
-    </div>
-
-    <div className="detail-item full-width">
-        <label>Description</label>
-        <p>{selectedTrip.description}</p>
-    </div>
-
-    <div className="detail-item">
-        <label>Source</label>
-        <p>{selectedTrip.source}</p>
-    </div>
-
-    <div className="detail-item">
-        <label>Destination</label>
-        <p>{selectedTrip.destination}</p>
-    </div>
-
-    <div className="detail-item">
-        <label>Start Date</label>
-        <p>{selectedTrip.startDate}</p>
-    </div>
-
-    <div className="detail-item">
-        <label>End Date</label>
-        <p>{selectedTrip.endDate}</p>
-    </div>
-
-    <div className="detail-item">
-        <label>Budget</label>
-        <p>₹{Number(selectedTrip.budget).toLocaleString()}</p>
-    </div>
-
-    <div className="detail-item">
-        <label>Status</label>
-        <p>{selectedTrip.tripStatus}</p>
-    </div>
-
-    <div className="detail-item">
-        <label>Created At</label>
-        <p>{selectedTrip.createdAt}</p>
-    </div>
-
-    <div className="detail-item">
-        <label>Updated At</label>
-        <p>{selectedTrip.updatedAt}</p>
-    </div>
-
-</div>
-
-<h3 className="section-title">
-    User Information
-</h3>
-
-<div className="trip-details-grid">
-
-    <div className="detail-item">
-        <label>User ID</label>
-        <p>{selectedTrip.userId}</p>
-    </div>
-
-    <div className="detail-item">
-        <label>First Name</label>
-        <p>{selectedTrip.firstName}</p>
-    </div>
-
-    <div className="detail-item">
-        <label>Last Name</label>
-        <p>{selectedTrip.lastName}</p>
-    </div>
-
-    <div className="detail-item">
-        <label>Email</label>
-        <p>{selectedTrip.email}</p>
-    </div>
-
-    <div className="detail-item">
-        <label>Mobile Number</label>
-        <p>{selectedTrip.mobileNumber}</p>
-    </div>
-
-    <div className="detail-item">
-        <label>Role</label>
-        <p>{selectedTrip.roleName}</p>
-    </div>
-
-</div> </div>
-
-            <div className="trip-modal-footer">
-
-                <button
-                    className="close-modal-btn"
-                    onClick={closeModal}
-                >
-                    Close
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
-        )}
-
-
-        {showCancelModal && cancelTrip && (
-
-<div className="trip-modal-overlay">
-
-    <div className="cancel-modal">
-
-        <div className="trip-modal-header">
-
-            <h2>
-                Cancel Trip
-            </h2>
-
-            <button
-                className="close-btn"
-                onClick={closeCancelModal}
-            >
-                ✕
-            </button>
-
-        </div>
-
-        <div className="trip-modal-body">
-
-            <div className="cancel-grid">
-
-                <div className="detail-item">
-                    <label>First Name</label>
-                    <input
-                        type="text"
-                        value={cancelTrip.firstName}
-                        readOnly
-                    />
-                </div>
-
-                <div className="detail-item">
-                    <label>Email</label>
-                    <input
-                        type="text"
-                        value={cancelTrip.email}
-                        readOnly
-                    />
-                </div>
-
-                <div className="detail-item">
-                    <label>Mobile Number</label>
-                    <input
-                        type="text"
-                        value={cancelTrip.mobileNumber}
-                        readOnly
-                    />
-                </div>
-
-                <div className="detail-item">
-                    <label>Destination</label>
-                    <input
-                        type="text"
-                        value={cancelTrip.destination}
-                        readOnly
-                    />
-                </div>
-
-                <div className="detail-item full-width">
-
-                    <label>
-                        Cancellation Reason
-                    </label>
-
-                    <textarea
-                        rows="6"
-                        placeholder="Enter cancellation reason..."
-                        value={cancelReason}
-                        onChange={(e) =>
-                            setCancelReason(e.target.value)
-                        }
-                    />
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div className="trip-modal-footer">
-
-            <button
-                className="secondary-btn"
-                onClick={closeCancelModal}
-            >
-                Close
-            </button>
-
-            <button
-                className="danger-btn"
-                onClick={submitCancellation}
-            >
-                Submit Cancellation
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-)}
         
       </div>
+
+      {showTripModal && selectedTrip && (
+        <div className="trip-modal-overlay">
+          <div className="trip-modal">
+            <div className="trip-modal-header">
+              <h2>Trip Details</h2>
+              <button className="close-btn" onClick={closeModal}>✕</button>
+            </div>
+            <div className="trip-modal-body">
+              <div className="trip-details-grid">
+                <div className="detail-item">
+                  <label>Title</label>
+                  <p>{selectedTrip.title}</p>
+                </div>
+                <div className="detail-item">
+                  <label>Destination</label>
+                  <p>{selectedTrip.destination}</p>
+                </div>
+                <div className="detail-item full-width">
+                  <label>Description</label>
+                  <p>{selectedTrip.description}</p>
+                </div>
+                <div className="detail-item">
+                  <label>Source</label>
+                  <p>{selectedTrip.source}</p>
+                </div>
+                <div className="detail-item">
+                  <label>Destination</label>
+                  <p>{selectedTrip.destination}</p>
+                </div>
+                <div className="detail-item">
+                  <label>Start Date</label>
+                  <p>{selectedTrip.startDate}</p>
+                </div>
+                <div className="detail-item">
+                  <label>End Date</label>
+                  <p>{selectedTrip.endDate}</p>
+                </div>
+                <div className="detail-item">
+                  <label>Budget</label>
+                  <p>₹{Number(selectedTrip.budget).toLocaleString()}</p>
+                </div>
+                <div className="detail-item">
+                  <label>Status</label>
+                  <p>{selectedTrip.tripStatus}</p>
+                </div>
+                <div className="detail-item">
+                  <label>Created At</label>
+                  <p>{selectedTrip.createdAt}</p>
+                </div>
+                <div className="detail-item">
+                  <label>Updated At</label>
+                  <p>{selectedTrip.updatedAt}</p>
+                </div>
+              </div>
+
+              <h3 className="section-title">User Information</h3>
+              <div className="trip-details-grid">
+                <div className="detail-item">
+                  <label>User ID</label>
+                  <p>{selectedTrip.userId}</p>
+                </div>
+                <div className="detail-item">
+                  <label>First Name</label>
+                  <p>{selectedTrip.firstName}</p>
+                </div>
+                <div className="detail-item">
+                  <label>Last Name</label>
+                  <p>{selectedTrip.lastName}</p>
+                </div>
+                <div className="detail-item">
+                  <label>Email</label>
+                  <p>{selectedTrip.email}</p>
+                </div>
+                <div className="detail-item">
+                  <label>Mobile Number</label>
+                  <p>{selectedTrip.mobileNumber}</p>
+                </div>
+                <div className="detail-item">
+                  <label>Role</label>
+                  <p>{selectedTrip.roleName}</p>
+                </div>
+              </div>
+            </div>
+            <div className="trip-modal-footer">
+              <button className="close-modal-btn" onClick={closeModal}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showCancelModal && cancelTrip && (
+        <div className="trip-modal-overlay">
+          <div className="cancel-modal">
+            <div className="trip-modal-header">
+              <h2>Cancel Trip</h2>
+              <button className="close-btn" onClick={closeCancelModal}>✕</button>
+            </div>
+            <div className="trip-modal-body">
+              <div className="cancel-grid">
+                <div className="detail-item">
+                  <label>First Name</label>
+                  <input type="text" value={cancelTrip.firstName} readOnly />
+                </div>
+                <div className="detail-item">
+                  <label>Email</label>
+                  <input type="text" value={cancelTrip.email} readOnly />
+                </div>
+                <div className="detail-item">
+                  <label>Mobile Number</label>
+                  <input type="text" value={cancelTrip.mobileNumber} readOnly />
+                </div>
+                <div className="detail-item">
+                  <label>Destination</label>
+                  <input type="text" value={cancelTrip.destination} readOnly />
+                </div>
+                <div className="detail-item full-width">
+                  <label>Cancellation Reason</label>
+                  <textarea rows="6" placeholder="Enter cancellation reason..." value={cancelReason} onChange={(e) => setCancelReason(e.target.value)} />
+                </div>
+              </div>
+            </div>
+            <div className="trip-modal-footer">
+              <button className="close-modal-btn" onClick={closeCancelModal} style={{ background: "transparent", color: "white", border: "1px solid rgba(255,255,255,0.2)" }}>Close</button>
+              <button className="confirm-cancel-btn" onClick={submitCancellation} style={{ background: "#EF4444", color: "white", padding: "10px 24px", borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: "bold" }}>Confirm Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   </div>
 );
