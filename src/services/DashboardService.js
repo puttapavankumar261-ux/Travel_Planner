@@ -5,14 +5,24 @@ const getDashboardSummary = async () => {
   return response.data.data;
 };
 
+// const getMonthlyExpenseAnalytics = async () => {
+//   const response = await axiosInstance.get("/api/dashboard/monthly-expenses");
+//   return response.data.data;
+// };
+
 const getMonthlyExpenseAnalytics = async () => {
-  const response = await axiosInstance.get("/api/dashboard/monthly-expenses");
+  const response = await axiosInstance.get("/api/dashboard/expense/monthly");
   return response.data.data;
 };
 
-const dashboardService = {
+// const dashboardService = {
+//   getDashboardSummary,
+//   getMonthlyExpenseAnalytics,
+// };
+
+export default  {
   getDashboardSummary,
   getMonthlyExpenseAnalytics,
 };
 
-export default dashboardService;
+// export default dashboardService;
