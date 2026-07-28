@@ -20,7 +20,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AccommodationRequestDto {
 
-    @NotNull(message = "Trip ID is required")
+    // Optional when creating via Trip Wizard - service sets this from the created trip
     private Long tripId;
 
     @NotBlank(message = "Hotel Name is required")
@@ -36,11 +36,9 @@ public class AccommodationRequestDto {
     private String city;
 
     @NotNull(message = "Check In Date is required")
-    @FutureOrPresent(message = "Check In Date cannot be in the past")
     private LocalDate checkInDate;
 
     @NotNull(message = "Check Out Date is required")
-    @FutureOrPresent(message = "Check Out Date cannot be in the past")
     private LocalDate checkOutDate;
 
     @NotBlank(message = "Room Type is required")

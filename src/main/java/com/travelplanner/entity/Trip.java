@@ -62,6 +62,9 @@ public class Trip {
     private String description;
 
     @Column
+    private String travelerName;
+
+    @Column
     private String tripType;
 
     @Enumerated(EnumType.STRING)
@@ -96,4 +99,10 @@ public class Trip {
     
     @OneToMany(mappedBy = "trip")
     private List<Booking> bookings = new ArrayList<>();
+
+    @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Accommodation> accommodations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Transportation> transportations = new ArrayList<>();
 }

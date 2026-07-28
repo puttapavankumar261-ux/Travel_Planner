@@ -25,8 +25,12 @@ public class AccommodationMapper {
         accommodation.setCheckOutDate(dto.getCheckOutDate());
         accommodation.setRoomType(dto.getRoomType());
 
-        // Booking Reference will be generated in Service Layer
-        accommodation.setBookingReference(dto.getBookingReference());
+        // Auto-generate booking reference if not provided
+        String ref = dto.getBookingReference();
+        if (ref == null || ref.isEmpty()) {
+            ref = "ACC-" + System.currentTimeMillis();
+        }
+        accommodation.setBookingReference(ref);
 
         accommodation.setBookingStatus(dto.getBookingStatus());
         accommodation.setBookingAmount(dto.getBookingAmount());

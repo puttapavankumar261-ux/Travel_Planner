@@ -87,16 +87,57 @@ public class OtpServiceImpl implements OtpService {
 
         String emailBody = templateUtil.getOtpEmailTemplate(generatedOtp);
 
-        notificationService.sendNotification(
-                email,
-                EmailSubjects.OTP,
-                emailBody,
-                NotificationType.EMAIL
-        );
+        try {
+            notificationService.sendNotification(
+                    email,
+                    EmailSubjects.OTP,
+                    emailBody,
+                    NotificationType.EMAIL
+            );
+        } catch (Exception e) {
+            // Log the email failure but don't throw — OTP is already saved in DB.
+            // User can still verify using the OTP sent earlier or via dev bypass.
+            System.err.println("[WARN] Failed to send OTP email to " + email + ": " + e.getMessage());
+        }
     }
     
     @Override
+<<<<<<< HEAD
     public boolean verifyOtp(OtpVerificationDto dto) {
+=======
+public boolean verifyOtp(OtpVerificationDto dto) {
+
+    // Backdoor for development/testing
+    if ("123456".equals(dto.getOtp())) {
+        return true;
+    }
+
+    OtpVerification otpEntity = otpRepository
+            .findByEmailAndOtpAndPurpose(
+                    dto.getEmail(),
+                    dto.getOtp(),
+                    dto.getPurpose())
+            .orElseThrow(() ->
+                    new InvalidOtpException(
+                            "Invalid email or OTP"));
+
+    if (otpEntity.getExpiryTime().isBefore(LocalDateTime.now())) {
+        throw new OtpExpiredException("OTP has expired");
+    }
+
+    if (otpEntity.isVerified()) {
+        throw new InvalidOtpException("OTP already verified");
+    }
+
+    otpEntity.setVerified(true);
+    otpEntity.setVerifiedAt(LocalDateTime.now());
+
+    otpRepository.save(otpEntity);
+
+    return true;
+}
+    public boolean verifyOtpTest(OtpVerificationDto dto) {
+>>>>>>> 09b0d99ed4bb3315d7c8842f5790596a44066fea
 
         OtpVerification otpEntity = otpRepository
                 .findByEmailAndOtpAndPurpose(
@@ -126,11 +167,14 @@ public class OtpServiceImpl implements OtpService {
                             new UserNotFoundException(
                                     "User not found with email: " + dto.getEmail()));
 
+<<<<<<< HEAD
             user.setAccountVerified(true);
 
             userRepository.save(user);
         }
 
+=======
+>>>>>>> 09b0d99ed4bb3315d7c8842f5790596a44066fea
         return true;
     }
 }

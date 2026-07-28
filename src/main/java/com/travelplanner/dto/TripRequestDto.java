@@ -29,7 +29,6 @@ public class TripRequestDto {
     private String destination;
 
     @NotNull(message = "Start date is required")
-    @FutureOrPresent(message = "Start date cannot be in the past")
     private LocalDate startDate;
 
     @NotNull(message = "End date is required")
@@ -40,6 +39,8 @@ public class TripRequestDto {
     private Double budget;
 
     private String description;
+
+    private String travelerName;
 
     private String tripType;
 

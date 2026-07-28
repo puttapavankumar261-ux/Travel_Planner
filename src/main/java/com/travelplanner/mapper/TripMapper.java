@@ -6,9 +6,20 @@ import com.travelplanner.dto.TripRequestDto;
 import com.travelplanner.dto.TripResponseDto;
 import com.travelplanner.entity.Trip;
 import com.travelplanner.entity.User;
+import java.util.stream.Collectors;
 
 @Component
 public class TripMapper {
+
+    private final AccommodationMapper accommodationMapper;
+    private final TransportationMapper transportationMapper;
+    private final BookingMapper bookingMapper;
+
+    public TripMapper(AccommodationMapper accommodationMapper, TransportationMapper transportationMapper, BookingMapper bookingMapper) {
+        this.accommodationMapper = accommodationMapper;
+        this.transportationMapper = transportationMapper;
+        this.bookingMapper = bookingMapper;
+    }
 
     public Trip mapToTrip(TripRequestDto dto, User user) {
 
@@ -21,6 +32,7 @@ public class TripMapper {
         trip.setEndDate(dto.getEndDate());
         trip.setBudget(dto.getBudget());
         trip.setDescription(dto.getDescription());
+        trip.setTravelerName(dto.getTravelerName());
         trip.setTripType(dto.getTripType());
         trip.setTripStatus(dto.getTripStatus());
         trip.setUser(user);
@@ -40,6 +52,7 @@ public class TripMapper {
         response.setEndDate(trip.getEndDate());
         response.setBudget(trip.getBudget());
         response.setDescription(trip.getDescription());
+        response.setTravelerName(trip.getTravelerName());
         response.setTripType(trip.getTripType());
         response.setTripStatus(trip.getTripStatus());
 
@@ -52,6 +65,24 @@ public class TripMapper {
 
         response.setCreatedAt(trip.getCreatedAt());
         response.setUpdatedAt(trip.getUpdatedAt());
+
+        if (trip.getAccommodations() != null) {
+            response.setAccommodations(trip.getAccommodations().stream()
+                    .map(accommodationMapper::mapToAccommodationResponse)
+                    .collect(Collectors.toList()));
+        }
+
+        if (trip.getTransportations() != null) {
+            response.setTransportations(trip.getTransportations().stream()
+                    .map(transportationMapper::mapToTransportationResponse)
+                    .collect(Collectors.toList()));
+        }
+
+        if (trip.getBookings() != null) {
+            response.setBookings(trip.getBookings().stream()
+                    .map(bookingMapper::toResponseDto)
+                    .collect(Collectors.toList()));
+        }
 
         return response;
     }

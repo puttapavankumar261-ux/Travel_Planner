@@ -18,4 +18,10 @@ public class CreateTripRequestDto {
     @Valid
     private List<TripCompanionRequestDto> companions;
 
+    @Valid
+    private List<AccommodationRequestDto> accommodations;
+
+    @Valid
+    private List<TransportationRequestDto> transportations;
+
 }
