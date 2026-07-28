@@ -1,0 +1,21 @@
+import axiosInstance from "../utils/axiosInstance";
+
+const addCompanion = async (tripId, companionData) => {
+    const response = await axiosInstance.post(
+        `/api/trips/${tripId}/companions`,
+        companionData
+    );
+    return response.data;
+};
+
+const getCompanions = async (tripId) => {
+    const response = await axiosInstance.get(
+        `/api/trips/${tripId}/companions`
+    );
+    return response.data;
+};
+
+export default {
+    addCompanion,
+    getCompanions
+};

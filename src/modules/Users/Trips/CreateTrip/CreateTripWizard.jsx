@@ -8,17 +8,18 @@ import Step4Review from './Step4Review';
 
 const CreateTripWizard = () => {
   const [step, setStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   
   // Master State for all steps
   const [tripData, setTripData] = useState({
-    // Step 1
     country: '',
     city: '',
     multipleDestinations: false,
     startDate: '',
     endDate: '',
     flexibleDates: false,
+    travelerName: '',
     travelerType: '',
     adults: 1,
     children: 0,
@@ -40,7 +41,7 @@ const CreateTripWizard = () => {
   const validateStep = (currentStep) => {
     switch (currentStep) {
       case 1:
-        return tripData.country !== '';
+        return tripData.country !== '' && tripData.travelerName.trim() !== '';
       case 2:
         return tripData.transportation !== '' && tripData.accommodation !== '';
       case 3:
@@ -122,8 +123,8 @@ const CreateTripWizard = () => {
               Next Step <i className="bi bi-arrow-right"></i>
             </button>
           ) : (
-            <button className="btn-primary" onClick={handleFinish} style={{ background: '#10B981', color: '#fff' }}>
-              Finalize <i className="bi bi-check-circle"></i>
+            <button className="btn-primary" onClick={handleFinish} disabled={isSubmitting} style={{ background: isSubmitting ? '#9CA3AF' : '#10B981', color: '#fff', cursor: isSubmitting ? 'not-allowed' : 'pointer' }}>
+              {isSubmitting ? 'Processing...' : <>Finalize <i className="bi bi-check-circle"></i></>}
             </button>
           )}
         </div>

@@ -26,7 +26,7 @@ const RecentTrips = ({ trips = [] }) => {
               </div>
 
               <div className="trip-info">
-                <h3>{trip.destination}</h3>
+                <h3>{trip.destination || trip.title}</h3>
 
                 <div className="trip-meta">
                   <span>
