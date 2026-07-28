@@ -1,553 +1,429 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-// import "../../assets/styles/Login.css";
 import "../../assets/styles/Login.css";
 import loginBg from "../../assets/images/login-bg.jpg";
 import Logo from "../../components/common/Logo";
 import authService from "../../services/authService";
-import userService from "../../services/userService";
 
 function Registration() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [registerData, setRegisterData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    mobileNumber: "",
+    dateOfBirth: "",
+    gender: "MALE", // Default value for enum
+    country: "",
+    preferredLanguage: "English",
+    preferredCurrency: "USD",
+    roleId: 2, // Default user role
+    loginProvider: "LOCAL",
+  });
+  
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const [showOtpSection, setShowOtpSection] = useState(false);
+const [otp, setOtp] = useState("");
+const [registeredEmail, setRegisteredEmail] = useState("");
+  const handleChange = (e) => {
+    setRegisterData({
+      ...registerData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-        const navigate = useNavigate();
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+    try {
+      // The backend expects these fields formatted properly
+      const payload = {
+        ...registerData,
+        roleId: Number(registerData.roleId)
+      };
 
-        const [showPassword, setShowPassword] = useState(false);
-        const [confirmPassword, setConfirmPassword] = useState("");
-        const [step, setStep] = useState(1);
-        const [loading, setLoading] = useState(false);
-        const [error, setError] = useState("");
-        const [success, setSuccess] = useState("");
-        const [otp, setOtp] = useState("");
-        const [timer, setTimer] = useState(60);
+      await authService.register(payload);
 
-        const [registerData, setRegisterData] = useState({
-          firstName: "",
-          lastName: "",
-          email: "",
-          password: "",
-          mobileNumber: "",
-          dateOfBirth: "",
-          gender: "MALE",
-          country: "",
-          preferredLanguage: "English",
-          preferredCurrency: "USD",
-          roleId: 2,
-          loginProvider: "LOCAL"
-        });
+      
+// Send OTP
+await authService.sendOtp({
+  email: registerData.email,
+  purpose: "REGISTRATION",
+});
 
-        const handleChange = (e) => {
-          const {name, value} = e.target;
-          setRegisterData(prev => ({...prev,[name]:value}));
-        };
+// Show OTP section
+setRegisteredEmail(registerData.email);
+setShowOtpSection(true);
 
-        const sendOtp = async () => {
-          setLoading(true);
-          setError("");
-          try{
-            await authService.sendOtp(registerData.email);
-            setSuccess("OTP sent successfully.");
-            setStep(2);
-          }catch(err){
-            setError("Unable to send OTP.");
-          }finally{
-            setLoading(false);
-          }
-        };
+    } catch (err) {
+      // Show backend validation message if available
+      if (err.response && err.response.data && err.response.data.message) {
+         setError(err.response.data.message);
+      } else if (err.response && err.response.data && typeof err.response.data === 'object') {
+         // Handle Spring Boot validation map
+         const errors = Object.values(err.response.data).join(", ");
+         setError(errors || "Registration failed. Please check your details.");
+      } else {
+         setError("Registration failed. Please check your details.");
+      }
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-        const verifyOtp = async () => {
-          setLoading(true);
-          try{
-            await authService.verifyOtp(registerData.email, otp);
-            registerData.accountVerified = true;
-            setStep(3);
-          }catch(err){
-            setError("Invalid OTP.");
-          }finally{
-            setLoading(false);
-          }
-        };
+  const handleVerifyOtp = async () => {
+  setError(""); 
+  try {
+    await authService.verifyOtp({
+      email: registeredEmail,
+      otp,
+      purpose: "REGISTRATION",
+    });
 
-        const registerUser = async () => {
-          // Password required
-          if (!registerData.password) {
-              setError("Password is required.");
-              return;
-          }
+    alert("Email verified successfully!");
 
-          // Confirm password required
-          if (!confirmPassword) {
-              setError("Please enter Confirm Password.");
-              return;
-          }
-           console.log(registerData.password);
-           console.log(confirmPassword);
+    navigate("/");
 
-          // Password match validation
-          if (registerData.password !== confirmPassword) {
-              setError("Password and Confirm Password do not match.");
-              return;
-          }
-          setLoading(true);
-          try{
-            const payload = {
-                    ...registerData,
-                    accountVerified: true,
-                    roleId: Number(registerData.roleId)
-                  };
-                  
-                const res = await authService.register(payload);
-                // console.log(res);
-                // return false;
-            //console.log(registerData)
-            //await userService.register(registerData);
-            navigate("/");
-          }catch(err){
-            setError(err.response?.data?.message || "Registration failed.");
-          }finally{
-            setLoading(false);
-          }
-        };
-
-          /*
-          Registration.jsx - Part 2
-         
-          */
-          {/* ---------- Timer ----------- */}
-
-          useEffect(() => {
-
-          if(step!==2) return;
-
-          if(timer===0) return;
-
-          const interval=setInterval(()=>{
-              setTimer(prev=>prev-1);
-          },1000);
-
-          return ()=>clearInterval(interval);
-
-          },[step,timer]);
-
-          {/* ---------- Resend OTP -------- */}
-
-          const resendOtp=async()=>{
-
-            setTimer(60);
-
-            await sendOtp();
-
-          };
-
-      return (
+  } catch (err) {
+    setError(
+      err.response?.data?.message ||
+      "Invalid or expired OTP."
+    );
+  }
+  };
 
 
-            <div className="login-page" style={{ backgroundImage: `url(${loginBg})`}}>
 
-              <div className="overlay"></div>
+  return (
+    <div
+      className="login-page"
+      style={{
+        backgroundImage: `url(${loginBg})`,
+      }}
+    >
+      <div className="overlay"></div>
 
-              {/* LEFT SIDE HERO (Same as Login) */}
-              <div className="hero-section">
-                <Logo className="brand-logo" />
-                <h1>
-                  start your journey.
-                  <br />
-                  <span>join us today.</span>
-                </h1>
-                <p className="hero-description">
-                  discover new destinations, plan smart itineraries, track expenses and
-                  organize every detail of your trip — all in one place.
-                </p>
+      {/* LEFT SIDE HERO (Same as Login) */}
+      <div className="hero-section">
+        <Logo className="brand-logo" />
+        <h1>
+          start your journey.
+          <br />
+          <span>join us today.</span>
+        </h1>
+        <p className="hero-description">
+          discover new destinations, plan smart itineraries, track expenses and
+          organize every detail of your trip — all in one place.
+        </p>
 
-                <div className="feature-grid">
-                  <div className="feature-card">
-                    <i className="bi bi-map"></i>
-                    <div>
-                      <h5>destination explorer</h5>
-                      <p>find places to visit</p>
-                    </div>
-                  </div>
-                  <div className="feature-card">
-                    <i className="bi bi-calendar-event"></i>
-                    <div>
-                      <h5>smart itinerary</h5>
-                      <p>plan your schedule</p>
-                    </div>
-                  </div>
-                  <div className="feature-card">
-                    <i className="bi bi-wallet2"></i>
-                    <div>
-                      <h5>budget tracker</h5>
-                      <p>manage your budget</p>
-                    </div>
-                  </div>
-                  <div className="feature-card">
-                    <i className="bi bi-suitcase-lg"></i>
-                    <div>
-                      <h5>trip organizer</h5>
-                      <p>keep everything in sync</p>
-                    </div>
-                  </div>
-                </div>
+        <div className="feature-grid">
+          <div className="feature-card">
+            <i className="bi bi-map"></i>
+            <div>
+              <h5>destination explorer</h5>
+              <p>find places to visit</p>
+            </div>
+          </div>
+          <div className="feature-card">
+            <i className="bi bi-calendar-event"></i>
+            <div>
+              <h5>smart itinerary</h5>
+              <p>plan your schedule</p>
+            </div>
+          </div>
+          <div className="feature-card">
+            <i className="bi bi-wallet2"></i>
+            <div>
+              <h5>budget tracker</h5>
+              <p>manage your budget</p>
+            </div>
+          </div>
+          <div className="feature-card">
+            <i className="bi bi-suitcase-lg"></i>
+            <div>
+              <h5>trip organizer</h5>
+              <p>keep everything in sync</p>
+            </div>
+          </div>
+        </div>
 
-                <div className="quote-card">
-                  <i className="bi bi-quote"></i>
-                  <p>
-                    the journey of a thousand miles
-                    <br />
-                    begins with a single step.
-                  </p>
+        <div className="quote-card">
+          <i className="bi bi-quote"></i>
+          <p>
+            the journey of a thousand miles
+            <br />
+            begins with a single step.
+          </p>
+        </div>
+      </div>
+
+      {/* RIGHT SIDE REGISTRATION */}
+      <div className="login-section">
+        <div className="login-card" style={{ maxWidth: '550px' }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Logo showTagline={false} className="login-card-logo" />
+          </div>
+
+          <h2>create account</h2>
+          <p className="subtitle">sign up to start planning your trips</p>
+
+          {!showOtpSection ? (
+
+<form onSubmit={handleRegister}>
+
+  {error && (
+    <div
+      style={{
+        color: "#ef4444",
+        marginBottom: "15px",
+        fontSize: "14px",
+        padding: "10px",
+        background: "rgba(239,68,68,0.1)",
+        borderRadius: "8px",
+      }}
+    >
+      {error}
+    </div>
+  )}
+
+            {/* Split Names */}
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <div style={{ flex: 1 }}>
+                <label>First Name</label>
+                <div className="input-box">
+                  <i className="bi bi-person"></i>
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={registerData.firstName}
+                    onChange={handleChange}
+                    placeholder="First Name"
+                    required
+                  />
                 </div>
               </div>
-
-              {/* RIGHT SIDE REGISTRATION */}
-              <div className="login-section">
-                <div className="login-card" style={{ maxWidth: '550px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Logo showTagline={false} className="login-card-logo" />
-                  </div>
-
-                  <h2>create account</h2>
-                  <p className="subtitle">sign up to start planning your trips</p>
-
-                  {error && (
-                    <div style={{ color: "#ef4444", marginBottom: "15px", fontSize: "14px", padding: '10px', background: 'rgba(239, 68, 68, 0.1)', borderRadius: '8px' }}>
-                      {error}
-                    </div>
-                  )}
-
-                      {step===1 && (
-                      <>
-                      <div > 
-                                  {/* Split Names */}
-                                  <div style={{ display: 'flex', gap: '10px' }}>
-                                    <div style={{ flex: 1 }}>
-                                      <label>First Name</label>
-                                      <div className="input-box">
-                                        <i className="bi bi-person"></i>
-                                        <input
-                                          type="text"
-                                          name="firstName"
-                                          value={registerData.firstName}
-                                          onChange={handleChange}
-                                          placeholder="First Name"
-                                          required
-                                        />
-                                      </div>
-                                    </div>
-                                    <div style={{ flex: 1 }}>
-                                      <label>Last Name</label>
-                                      <div className="input-box">
-                                        <input
-                                          type="text"
-                                          name="lastName"
-                                          value={registerData.lastName}
-                                          onChange={handleChange}
-                                          placeholder="Last Name"
-                                          required
-                                          style={{ paddingLeft: '15px' }}
-                                        />
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  {/* Email & Phone */}
-                                  <div style={{ gap: '10px', marginTop: '10px' }}>
-                                    <div style={{ flex: 1 }}>
-                                      <label>Email Address</label>
-                                      <div className="input-box">
-                                        <i className="bi bi-envelope"></i>
-                                        <input
-                                          type="email"
-                                          name="email"
-                                          value={registerData.email}
-                                          onChange={handleChange}
-                                          placeholder="Email"
-                                          required
-                                        />
-                                      </div>
-                                    </div>
-                                    <div style={{ flex: 1 }}>
-                                      <label>Mobile Number</label>
-                                      <div className="input-box">
-                                        <i className="bi bi-telephone"></i>
-                                        <input
-                                          type="tel"
-                                          name="mobileNumber"
-                                          value={registerData.mobileNumber}
-                                          onChange={handleChange}
-                                          placeholder="10-digit number"
-                                          required
-                                        />
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  {/* Password (Full Width) */}
-                                  {/* <div style={{ marginTop: '10px' }}>
-                                      <label>Password</label>
-                                      <div className="input-box">
-                                        <i className="bi bi-lock"></i>
-                                        <input
-                                          type={showPassword ? "text" : "password"}
-                                          name="password"
-                                          value={registerData.password}
-                                          onChange={handleChange}
-                                          placeholder="Password"
-                                          required
-                                        />
-                                        <button
-                                          type="button"
-                                          className="eye-btn"
-                                          onClick={() => setShowPassword(!showPassword)}
-                                        >
-                                          <i className={showPassword ? "bi bi-eye-slash" : "bi bi-eye"}></i>
-                                        </button>
-                                      </div>
-                                  </div>
- */}
-
-                                 
-
-                                  {/* DOB & Gender */}
-                                  <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-                                    <div style={{ flex: 1 }}>
-                                      <label>Date of Birth</label>
-                                      <div className="input-box">
-                                        <input
-                                          type="date"
-                                          name="dateOfBirth"
-                                          value={registerData.dateOfBirth}
-                                          onChange={handleChange}
-                                          required
-                                          style={{ paddingLeft: '15px', color: registerData.dateOfBirth ? 'white' : 'rgba(255,255,255,0.5)' }}
-                                        />
-                                      </div>
-                                    </div>
-                                    <div style={{ flex: 1 }}>
-                                      <label>Gender</label>
-                                      <div className="input-box">
-                                        <select 
-                                          name="gender" 
-                                          value={registerData.gender} 
-                                          onChange={handleChange}
-                                          style={{ width: '100%', color: 'white', outline: 'none', paddingLeft: '15px' }}
-                                        >
-                                          <option value="MALE" style={{color: 'black'}}>Male</option>
-                                          <option value="FEMALE" style={{color: 'black'}}>Female</option>
-                                          <option value="OTHER" style={{color: 'black'}}>Other</option>
-                                        </select>
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  {/* Country (Full Width) */}
-                                  <div style={{ marginTop: '10px' }}>
-                                      <label>Country</label>
-                                      <div className="input-box">
-                                        <i className="bi bi-globe"></i>
-                                        <input
-                                          type="text"
-                                          name="country"
-                                          value={registerData.country}
-                                          onChange={handleChange}
-                                          placeholder="Country"
-                                          required
-                                        />
-                                      </div>
-                                  </div>
-
-                                  {/* upload image (Full Width) */}
-                                  <div className="upload-container">
-                                      <label>Upload Image</label>
-                                      <div className="input-box ">
-                                        <i className="bi bi-person-circle"></i>
-                                          <input
-                                            type="file"
-                                            name="imageUpload"
-                                            id="profileImage"
-                                            accept="image/*"
-                                            onChange={handleChange}
-                                            placeholder="Image Upload"
-                                          />
-                                      </div>
-                                  </div>
-
-                      <button
-                      className="login-btn"
-                      onClick={sendOtp}
-                      disabled={loading}
-                      >
-                      {loading?"Sending OTP...":"Continue"}
-                      </button>
-                      </div>
-                      </>
-                      )}
-
-                      {step===2 && (
-                      <>
-                      <h3>Email Verification</h3>
-
-                      <p>
-                      We have sent an OTP to
-                      <b> {registerData.email}</b>
-                      </p>
-                      <div className="input-box "> 
-                          <input
-                          placeholder="Enter OTP"
-                          value={otp}
-                          onChange={(e)=>setOtp(e.target.value)}
-                          />
-                      </div>
-                      <p>
-                      OTP expires in <b>{timer}</b> seconds
-                      </p>
-
-                      <div style={{display:"flex",gap:"10px"}}>
-
-                      <button
-                      className="login-btn"
-                      onClick={verifyOtp}
-                      disabled={loading}
-                      >
-                      {loading?"Verifying...":"Verify OTP"}
-                      </button>
-
-                      <button
-                      className="google-btn"
-                      onClick={sendOtp}
-                      >
-                      Resend OTP
-                      </button>
-
-                      </div>
-
-                      </>
-                      )}
-
-                      {step===3 && (
-                      <>
-                      <h3>Create Password</h3>
-
-                      {/* <div className="input-box">
-                      <input
-                      type={showPassword?"text":"password"}
-                      name="password"
-                      value={registerData.password}
-                      onChange={handleChange}
-                      placeholder="Password"
-                      />
-
-                      <button
-                      type="button"
-                      className="eye-btn"
-                      onClick={()=>setShowPassword(!showPassword)}
-                      >
-                      👁
-                      </button>
-
-                      </div> */}
-
-                        <div className="input-box">
-                            <i className="bi bi-lock"></i>
-
-                            <input
-                                type={showPassword ? "text" : "password"}
-                                name="password"
-                                placeholder="Confirm Password"
-                                value={registerData.password}
-                                onChange={handleChange}
-                                style={{ paddingLeft: "40px" }}
-                            />
-                            {/* <input
-                                          type={showPassword ? "text" : "password"}
-                                          name="password"
-                                          value={registerData.password}
-                                          onChange={(e) => setConfirmPassword(e.target.value)}
-                                          placeholder="Password"
-                                          required
-                                        /> */}
-
-                            <button
-                                type="button"
-                                className="eye-btn"
-                                onClick={() => setShowPassword(!showPassword)}
-                            >
-                                <i className={showPassword ? "bi bi-eye-slash" : "bi bi-eye"}></i>
-                            </button>
-                        </div>
-
-
-                      { /*
-                      Registration.jsx - Part 3
-                      Append this after Part 2 to complete the component.
-                      */ }
-                    <div className="input-box">
-
-                      <input
-                          type={showPassword ? "text" : "password"}
-                          value={confirmPassword}
-                          onChange={(e) => setConfirmPassword(e.target.value)}
-                          placeholder="Confirm Password"
-                      />
-                      {/* <input
-                       name="Confirm_Password"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Confirm Password"
-                      /> */}
-                    </div>
-                     {
-                          confirmPassword &&
-                          registerData.password !== confirmPassword && (
-                              <div
-                                  style={{
-                                      color: "#ef4444",
-                                      marginTop: "8px",
-                                      fontSize: "13px"
-                                  }}
-                              >
-                                  Password and Confirm Password do not match.
-                              </div>
-                          )
-                      }
-
-                      {/* <button
-                      className="login-btn"
-                      onClick={registerUser}
-                      disabled={loading}
-                      >
-                      {loading ? "Creating Account..." : "Create Account"}
-                      </button> */}
-                        <button
-                          className="login-btn"
-                          onClick={registerUser}
-                          disabled={
-                              loading ||
-                              !registerData.password ||
-                              !confirmPassword ||
-                              registerData.password !== confirmPassword
-                          }
-                        > {loading ? "Creating Account..." : "Create Account"}</button>
-
-                      </>
-                      )}
-
-                      <div className="divider" style={{marginTop:"20px"}}>
-                          <span>or</span>
-                      </div>
-
-                        <p className="register">
-                        Already have an account?
-                        <Link to="/"> Login here</Link>
-                        </p>
-
-                  
+              <div style={{ flex: 1 }}>
+                <label>Last Name</label>
+                <div className="input-box">
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={registerData.lastName}
+                    onChange={handleChange}
+                    placeholder="Last Name"
+                    required
+                    style={{ paddingLeft: '15px' }}
+                  />
                 </div>
-
+              </div>
             </div>
 
+            {/* Email & Phone */}
+            <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+               <div style={{ flex: 1 }}>
+                 <label>Email Address</label>
+                 <div className="input-box">
+                   <i className="bi bi-envelope"></i>
+                   <input
+                     type="email"
+                     name="email"
+                     value={registerData.email}
+                     onChange={handleChange}
+                     placeholder="Email"
+                     required
+                   />
+                 </div>
+               </div>
+               <div style={{ flex: 1 }}>
+                 <label>Mobile Number</label>
+                 <div className="input-box">
+                   <i className="bi bi-telephone"></i>
+                   <input
+                     type="tel"
+                     name="mobileNumber"
+                     value={registerData.mobileNumber}
+                     onChange={handleChange}
+                     placeholder="10-digit number"
+                     required
+                   />
+                 </div>
+               </div>
             </div>
-        );
 
-        }
+            {/* Password (Full Width) */}
+            <div style={{ marginTop: '10px' }}>
+                <label>Password</label>
+                <div className="input-box">
+                  <i className="bi bi-lock"></i>
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={registerData.password}
+                    onChange={handleChange}
+                    placeholder="Password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="eye-btn"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    <i className={showPassword ? "bi bi-eye-slash" : "bi bi-eye"}></i>
+                  </button>
+                </div>
+            </div>
 
-        export default Registration;
+            {/* DOB & Gender */}
+            <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+              <div style={{ flex: 1 }}>
+                <label>Date of Birth</label>
+                <div className="input-box">
+                  <input
+                    type="date"
+                    name="dateOfBirth"
+                    value={registerData.dateOfBirth}
+                    onChange={handleChange}
+                    required
+                    style={{ paddingLeft: '15px', color: registerData.dateOfBirth ? 'white' : 'rgba(255,255,255,0.5)' }}
+                  />
+                </div>
+              </div>
+               <div style={{ flex: 1 }}>
+                 <label>Gender</label>
+                 <div className="input-box">
+                   <select 
+                     name="gender" 
+                     value={registerData.gender} 
+                     onChange={handleChange}
+                     style={{ width: '100%', color: 'white', outline: 'none', paddingLeft: '15px' }}
+                   >
+                     <option value="MALE" style={{color: 'black'}}>Male</option>
+                     <option value="FEMALE" style={{color: 'black'}}>Female</option>
+                     <option value="OTHER" style={{color: 'black'}}>Other</option>
+                   </select>
+                 </div>
+               </div>
+            </div>
+
+            {/* Country (Full Width) */}
+            <div style={{ marginTop: '10px' }}>
+                 <label>Country</label>
+                 <div className="input-box">
+                   <i className="bi bi-globe"></i>
+                   <input
+                     type="text"
+                     name="country"
+                     value={registerData.country}
+                     onChange={handleChange}
+                     placeholder="Country"
+                     required
+                   />
+                 </div>
+            </div>
+
+             {/* upload image (Full Width) */}
+            <div className="upload-container">
+                 <label>Upload Image</label>
+                 <div className="input-box ">
+                   <i className="bi bi-person-circle"></i>
+                    <input
+                      type="file"
+                      name="imageUpload"
+                      id="profileImage"
+                      accept="image/*"
+                      onChange={handleChange}
+                      placeholder="Image Upload"
+                    />
+                 </div>
+            </div>
+ <button
+    type="submit"
+    className="login-btn"
+    style={{ marginTop: "20px" }}
+    disabled={loading}
+  >
+    {loading ? "Registering..." : "Sign Up"}
+  </button>
+
+</form>
+
+) : (
+
+<div style={{ textAlign: "center", marginTop: "20px" }}>
+
+    <i
+        className="bi bi-envelope-check-fill"
+        style={{
+            fontSize: "60px",
+            color: "#10B981"
+        }}
+    ></i>
+
+    <h2 style={{ marginTop: "20px" }}>
+        Verify Email
+    </h2>
+
+    <p style={{ color: "#d1d5db" }}>
+        We have sent a verification OTP to
+    </p>
+
+    <h4 style={{ color: "#fff" }}>
+        {registeredEmail}
+    </h4>
+
+    <div
+        className="input-box"
+        style={{ marginTop: "30px" }}
+    >
+        <i className="bi bi-shield-lock"></i>
+
+        <input
+            type="text"
+            placeholder="Enter 6-digit OTP"
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+            maxLength={6}
+        />
+    </div>
+
+    <button
+        className="login-btn"
+        style={{ marginTop: "20px" }}
+        onClick={handleVerifyOtp}
+    >
+        Verify OTP
+    </button>
+
+</div>
+
+)}
+
+          <div className="divider" style={{ marginTop: '20px', marginBottom: '20px' }}>
+            <span>or sign in with</span>
+          </div>
+
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <button className="google-btn" style={{ flex: 1, padding: '12px' }}>
+              <i className="bi bi-google"></i> Google
+            </button>
+            <button className="google-btn" style={{ flex: 1, padding: '12px', background: '#000', color: 'white' }}>
+              <i className="bi bi-apple"></i> Apple
+            </button>
+          </div>
+
+          <p className="register" style={{ marginTop: '20px' }}>
+            already have an account?
+            <Link to="/"> login here</Link>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default Registration;

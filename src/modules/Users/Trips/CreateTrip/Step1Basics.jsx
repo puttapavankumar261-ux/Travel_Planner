@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useState, useEffect } from "react";
 import { Country, State } from 'country-state-city';
 
 const Step1Basics = ({ data, setData }) => {
@@ -17,7 +17,88 @@ const Step1Basics = ({ data, setData }) => {
   const setBudgetRange = (range) => {
     setData({ ...data, budgetRange: range, customBudget: '' });
   };
+// Calculate total count based on traveler type selection
+  const adultsCount = Number(data.adults || (data.travelerType === 'Solo' ? 1 : 1));
+  const childrenCount = Number(data.children || 0);
+  const infantsCount = Number(data.infants || 0);
+  const totalPassengers = adultsCount + childrenCount + infantsCount;
 
+  // Sync companions array whenever traveler counts change
+  useEffect(() => {
+    const currentCompanions = data.companions || [];
+
+    if (totalPassengers !== currentCompanions.length) {
+      const updatedCompanions = Array.from({ length: totalPassengers }, (_, index) => {
+        // Retain existing entry if already filled
+        if (currentCompanions[index]) {
+          return currentCompanions[index];
+        }
+const calculateAge = (dobString) => {
+  if (!dobString) return '';
+  const birthDate = new Date(dobString);
+  const today = new Date();
+  
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+  
+  // Adjust if birthday hasn't occurred yet this year
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  
+  return age > 0 ? age : '';
+};
+        // Primary passenger is ALWAYS the user (SELF)
+        if (index === 0) {
+
+  const loggedUser = JSON.parse(
+    localStorage.getItem("user")
+  );
+  const userAge = loggedUser?.age 
+    ? loggedUser.age 
+    : calculateAge(loggedUser?.dateOfBirth || loggedUser?.dob);
+
+  return {
+    firstName: loggedUser?.firstName || '',
+    lastName: loggedUser?.lastName || '',
+    relationship: 'SELF',
+    gender: loggedUser?.gender || '',
+    age: userAge ,
+    isTripOwner: true
+  };
+
+}
+
+        // Additional companions setup matching TripCompanionRequestDto
+        return {
+          firstName: '',
+          lastName: '',
+          relationship: '',
+          gender: '',
+          age: '',
+          isTripOwner: false
+        };
+      });
+
+      setData((prev) => ({
+        ...prev,
+        companions: updatedCompanions
+      }));
+    }
+  }, [adultsCount, childrenCount, infantsCount, totalPassengers]);
+
+  // Handle updates for companion field values
+  const handleCompanionChange = (index, field, value) => {
+    const updated = [...(data.companions || [])];
+    updated[index] = {
+      ...updated[index],
+      [field]: value
+    };
+    setData({
+      ...data,
+      companions: updated
+    });
+  };
   return (
     <div className="step-content">
       <h3 className="step-title">the basics</h3>
@@ -163,7 +244,165 @@ const Step1Basics = ({ data, setData }) => {
           </div>
         </div>
       )}
+{/* Traveller Details */}
+{data.companions && data.companions.length > 0 && (
+  <div style={{ marginTop: '30px' }}>
 
+    <h4 style={{color:'#d1d5db'}}>
+      Traveller Details
+    </h4>
+
+
+    {data.companions.map((companion, index) => (
+
+      <div 
+        key={index}
+        style={{
+          marginTop:'20px',
+          padding:'20px',
+          border:'1px solid rgba(255,255,255,0.15)',
+          borderRadius:'12px'
+        }}
+      >
+
+        <h5 style={{color:'#fff'}}>
+          Traveller {index + 1}
+          {index === 0 && " (You)"}
+        </h5>
+
+
+        <div className="flex-row">
+
+          <div className="form-group">
+            <label>First Name</label>
+            <input
+              type="text"
+              value={companion.firstName}
+              disabled={index === 0}
+              onChange={(e)=>
+                handleCompanionChange(
+                  index,
+                  "firstName",
+                  e.target.value
+                )
+              }
+            />
+          </div>
+
+
+          <div className="form-group">
+            <label>Last Name</label>
+            <input
+              type="text"
+              value={companion.lastName}
+              disabled={index === 0}
+              onChange={(e)=>
+                handleCompanionChange(
+                  index,
+                  "lastName",
+                  e.target.value
+                )
+              }
+            />
+          </div>
+
+        </div>
+
+
+
+        <div className="flex-row">
+
+          <div className="form-group">
+
+            <label>Gender</label>
+
+            <select
+  value={companion.gender}
+  disabled={index === 0}
+  onChange={(e)=>
+    handleCompanionChange(
+      index,
+      "gender",
+      e.target.value
+    )
+  }
+>
+
+              <option value="">Select</option>
+              <option value="MALE">Male</option>
+              <option value="FEMALE">Female</option>
+              <option value="OTHER">Other</option>
+
+            </select>
+
+          </div>
+
+
+
+          <div className="form-group">
+
+            <label>Age</label>
+
+            <input
+  type="number"
+  value={companion.age}
+  disabled={index === 0}
+  onChange={(e)=>
+    handleCompanionChange(
+      index,
+      "age",
+      e.target.value
+    )
+  }
+/>
+
+          </div>
+
+
+
+          {index !== 0 && (
+
+          <div className="form-group">
+
+            <label>Relationship</label>
+
+            <select
+              value={companion.relationship}
+              onChange={(e)=>
+                handleCompanionChange(
+                  index,
+                  "relationship",
+                  e.target.value
+                )
+              }
+            >
+
+              <option value="">Select</option>
+              <option value="SPOUSE">Spouse</option>
+              <option value="FATHER">Father</option>
+              <option value="MOTHER">Mother</option>
+              <option value="SON">Son</option>
+              <option value="DAUGHTER">Daughter</option>
+              <option value="BROTHER">Brother</option>
+              <option value="SISTER">Sister</option>
+              <option value="FRIEND">Friend</option>
+              <option value="COLLEAGUE">Colleague</option>
+              <option value="RELATIVE">Relative</option>
+
+            </select>
+
+          </div>
+
+          )}
+
+        </div>
+
+      </div>
+
+    ))}
+
+  </div>
+)}
       {/* Budget */}
       <div style={{ marginTop: '20px' }}>
         <label style={{ display: 'block', marginBottom: '15px', color: '#d1d5db', fontSize: '15px' }}>Approximate Budget</label>

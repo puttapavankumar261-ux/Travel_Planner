@@ -3,6 +3,7 @@ import tripService from "../../../services/tripService";
 import userService from "../../../services/userService";
 import userprofileimg from "./images/profileimage.png";
 import "./UserProfile.css";
+import tripCompanionService from "../../../services/tripCompanionService";
 import BackgroundSlider from "../../../components/UserDashboard/BackgroundSlider/BackgroundSlider";
 import UserNavbar from "../../../components/UserDashboard/UserNavbar/UserNavbar";
 
@@ -52,7 +53,7 @@ import {
 
 
 
-        useEffect(() => {
+       
          
 
   const fetchTrips = async () => {
@@ -63,12 +64,51 @@ import {
       console.error("Error fetching trips:", error);
     }
   };
+const fetchTravellers = async () => {
+    try {
 
+        const trips = await tripService.getTripsByUser(user.userId);
+
+        let allCompanions = [];
+
+        for (const trip of trips) {
+
+            const companions =
+                await tripCompanionService.getCompanions(trip.tripId);
+
+            console.log("Companions:", companions);
+
+            if (Array.isArray(companions)) {
+                allCompanions = [
+                    ...allCompanions,
+                    ...companions
+                ];
+            }
+        }
+
+        const uniqueTravellers = allCompanions.filter(
+            (traveller, index, self) =>
+                index === self.findIndex(
+                    t =>
+                        t.firstName === traveller.firstName &&
+                        t.lastName === traveller.lastName &&
+                        t.relationship === traveller.relationship &&
+                        t.age === traveller.age
+                )
+        );
+
+        setTravellers(uniqueTravellers);
+
+    } catch (err) {
+        console.error("Error fetching travellers:", err);
+    }
+};
+useEffect(() => {
   if (user?.userId) {
     fetchTrips();
+    fetchTravellers();
   }
-}, []);
-
+}, [user]);
  const stats = [
   {
     icon: <FaPlaneDeparture />,
@@ -133,15 +173,7 @@ const calculateRewardPoints = () => {
 
   return Math.max(points, 0); // Prevent negative points
 };
-    const [travellers, setTravellers] = useState([
-        {
-            id: user?.userId,
-            name: `${user?.firstName} ${user?.lastName}`,
-            relation: "Self",
-            age: calculateAge(user?.dateOfBirth),
-            gender: user?.gender,
-        },
-    ]);
+    const [travellers, setTravellers] = useState([]);
 
   const rewardPoints = calculateRewardPoints();
 
@@ -499,15 +531,7 @@ const handleUpdateProfile = async () => {
 
                     </h2>
 
-                    <button
-                      className="add-btn"
-                      onClick={() => setShowTravellerForm(true)}
-                    >
-                        <FaPlus />
-
-                        Add Traveller
-
-                    </button>
+                    
 
                 </div>
 
@@ -517,22 +541,22 @@ const handleUpdateProfile = async () => {
                         travellers.map((traveller)=>(
                             <div
                                 className="traveller-row"
-                                key={traveller.id}
+                                key={traveller.companionId}
                             >
 
                                 <div className="traveller-avatar">
 
-                                    {traveller.name.charAt(0)}
+                                    {traveller.firstName?.charAt(0)}
 
                                 </div>
 
                                 <div className="traveller-info">
 
-                                    <h4>{traveller.name}</h4>
+                                    <h4>{traveller.firstName} {traveller.lastName}</h4>
 
                                     <p>
 
-                                        {traveller.relation}
+                                        {traveller.relationship}
 
                                         {" | "}
 
@@ -546,12 +570,7 @@ const handleUpdateProfile = async () => {
 
                                 </div>
 
-                                <button className="edit-traveller">
-
-                                    <FaEdit />
-                                    <span>Edit</span>
-                                </button>
-
+                               
                             </div>
                         ))
                     }

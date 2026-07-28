@@ -13,7 +13,14 @@ const createUser = async (user) => {
 
   return response.data.data;
 };
-
+// Update user profile
+const updateProfile = async (userId, profileData) => {
+  const response = await axiosInstance.put(
+    `/api/users/profile/${userId}`,
+    profileData
+  );
+  return response.data.data;
+};
 const deleteUser = async (userId) => {
     const response = await axiosInstance.delete(`/api/users/${userId}`);
     console.log(response);
@@ -35,6 +42,7 @@ export default {
   getUsers,
   getUserById,
   addUser,
+  updateProfile,
   createUser,
   deleteUser
 };

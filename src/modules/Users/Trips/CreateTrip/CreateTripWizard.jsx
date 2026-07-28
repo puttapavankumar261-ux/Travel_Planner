@@ -5,7 +5,8 @@ import Step1Basics from './Step1Basics';
 import Step2TravelStay from './Step2TravelStay';
 import Step3Details from './Step3Details';
 import Step4Review from './Step4Review';
-
+import tripService from "../../../../services/tripService";
+import tripCompanionService from "../../../../services/tripCompanionService";
 const CreateTripWizard = () => {
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -13,20 +14,21 @@ const CreateTripWizard = () => {
   
   // Master State for all steps
   const [tripData, setTripData] = useState({
+    // Step 1
     country: '',
     city: '',
     multipleDestinations: false,
     startDate: '',
     endDate: '',
     flexibleDates: false,
-    travelerName: '',
     travelerType: '',
     adults: 1,
     children: 0,
     infants: 0,
     budgetRange: '',
     customBudget: '',
-    
+    companions: [], // Tracks main user (SELF) + additional companions
+
     // Step 2
     transportation: '',
     accommodation: '',
@@ -40,8 +42,20 @@ const CreateTripWizard = () => {
 
   const validateStep = (currentStep) => {
     switch (currentStep) {
-      case 1:
-        return tripData.country !== '' && tripData.travelerName.trim() !== '';
+      case 1:{
+        const isCountryValid = tripData.country !== '';
+        
+        // Validate that all additional companions (excluding primary SELF user at index 0) have required details
+        const additionalCompanions = (tripData.companions || []).slice(1);
+        const areCompanionsValid = additionalCompanions.every(
+          (companion) => 
+            companion.firstName?.trim() && 
+            companion.lastName?.trim() && 
+            companion.relationship
+        );
+
+        return isCountryValid && areCompanionsValid;
+      }
       case 2:
         return tripData.transportation !== '' && tripData.accommodation !== '';
       case 3:
@@ -61,10 +75,89 @@ const CreateTripWizard = () => {
     if (step > 1) setStep(step - 1);
   };
 
-  const handleFinish = () => {
-    console.log("Trip Data Submitted:", tripData);
-      navigate('/user/dashboard');
-  };
+ const handleFinish = async () => {
+  setIsSubmitting(true);
+
+  const formattedCompanions = (tripData.companions || []).map((companion) => ({
+    firstName: companion.firstName?.trim() || null,
+    lastName: companion.lastName?.trim() || null,
+    relationship: companion.relationship || 'SELF',
+    gender: companion.gender || null,
+    age: companion.age ? Number(companion.age) : null,
+    isTripOwner: Boolean(companion.isTripOwner)
+  }));
+
+const user = JSON.parse(localStorage.getItem("user"));
+
+const payload = {
+  title: `${tripData.city} Trip`,
+  source: tripData.country,          // Replace with actual source if you have one
+  destination: tripData.city,
+  startDate: tripData.startDate,
+  endDate: tripData.endDate,
+  budget: Number(tripData.customBudget || 1000),
+  description: "",
+  tripType: tripData.travelerType,
+  tripStatus: "PLANNED",
+  userId: user.userId
+};
+
+
+  try {
+const response = await tripService.createTrip(payload);
+
+console.log("Trip Created:", response);
+
+const data = response.data;
+
+console.log("Trip Created:", data);
+
+
+// Get created trip id
+const tripId = data.tripId;
+
+if (!tripId) {
+  throw new Error("Trip ID not received from backend");
+}
+
+
+// Save companions
+for (const companion of formattedCompanions) {
+
+  await tripCompanionService.addCompanion(
+    tripId,
+    companion
+  );
+
+}
+
+
+console.log("Companions saved successfully");
+
+
+navigate('/user/dashboard');
+
+
+  } catch (error) {
+
+    console.error(
+      "Submission Error:",
+      error
+    );
+
+    alert(
+      "Failed to create trip. Please check your network and try again."
+    );
+
+
+  } finally {
+
+    setIsSubmitting(false);
+
+  }
+};
+
+    
 
   const progressWidth = ((step - 1) / 3) * 100;
   const isNextDisabled = !validateStep(step);
@@ -123,8 +216,8 @@ const CreateTripWizard = () => {
               Next Step <i className="bi bi-arrow-right"></i>
             </button>
           ) : (
-            <button className="btn-primary" onClick={handleFinish} disabled={isSubmitting} style={{ background: isSubmitting ? '#9CA3AF' : '#10B981', color: '#fff', cursor: isSubmitting ? 'not-allowed' : 'pointer' }}>
-              {isSubmitting ? 'Processing...' : <>Finalize <i className="bi bi-check-circle"></i></>}
+            <button className="btn-primary" onClick={handleFinish} style={{ background: '#10B981', color: '#fff' }}>
+              Finalize <i className="bi bi-check-circle"></i>
             </button>
           )}
         </div>
