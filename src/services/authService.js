@@ -67,10 +67,21 @@ const verifyOtp = async (email, otp) => {
     return response.data;
 };
 
+const checkEmail = async (email) => {
 
+    const response = await axiosInstance.post(
+        "/api/auth/check-email",
+        {
+            email,
+        }
+    );
+
+    return response.data;
+};
 export default {
     login,
     register,
     sendOtp,
-    verifyOtp
+    verifyOtp,
+    checkEmail
 };

@@ -20,7 +20,7 @@ function Login() {
       [e.target.name]: e.target.value,
     });
   };
-  
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
@@ -42,7 +42,7 @@ function Login() {
           userId: userData.userId,
           firstName: userData.firstName,
           lastName: userData.lastName,
-          email: userData.email, 
+          email: userData.email,
           mobileNumber: userData.mobileNumber,
           gender: userData.gender,
           dateOfBirth: userData.dateOfBirth,
@@ -64,9 +64,6 @@ function Login() {
       );
 
       console.error(err);
-      
-console.log(result);
-console.log(result.data);
     }
   };
   return (
