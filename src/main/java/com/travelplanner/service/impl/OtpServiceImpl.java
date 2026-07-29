@@ -102,42 +102,7 @@ public class OtpServiceImpl implements OtpService {
     }
     
     @Override
-<<<<<<< HEAD
     public boolean verifyOtp(OtpVerificationDto dto) {
-=======
-public boolean verifyOtp(OtpVerificationDto dto) {
-
-    // Backdoor for development/testing
-    if ("123456".equals(dto.getOtp())) {
-        return true;
-    }
-
-    OtpVerification otpEntity = otpRepository
-            .findByEmailAndOtpAndPurpose(
-                    dto.getEmail(),
-                    dto.getOtp(),
-                    dto.getPurpose())
-            .orElseThrow(() ->
-                    new InvalidOtpException(
-                            "Invalid email or OTP"));
-
-    if (otpEntity.getExpiryTime().isBefore(LocalDateTime.now())) {
-        throw new OtpExpiredException("OTP has expired");
-    }
-
-    if (otpEntity.isVerified()) {
-        throw new InvalidOtpException("OTP already verified");
-    }
-
-    otpEntity.setVerified(true);
-    otpEntity.setVerifiedAt(LocalDateTime.now());
-
-    otpRepository.save(otpEntity);
-
-    return true;
-}
-    public boolean verifyOtpTest(OtpVerificationDto dto) {
->>>>>>> 09b0d99ed4bb3315d7c8842f5790596a44066fea
 
         OtpVerification otpEntity = otpRepository
                 .findByEmailAndOtpAndPurpose(
@@ -161,20 +126,16 @@ public boolean verifyOtp(OtpVerificationDto dto) {
         otpRepository.save(otpEntity);
 
         if (dto.getPurpose() == OtpPurpose.REGISTRATION) {
-
-            User user = userRepository.findByEmail(dto.getEmail())
-                    .orElseThrow(() ->
-                            new UserNotFoundException(
-                                    "User not found with email: " + dto.getEmail()));
-
-<<<<<<< HEAD
-            user.setAccountVerified(true);
-
-            userRepository.save(user);
+            // User is not created yet in the frontend wizard flow. 
+            // The registration step will check if the OTP was verified.
+            Optional<User> userOpt = userRepository.findByEmail(dto.getEmail());
+            if (userOpt.isPresent()) {
+                User user = userOpt.get();
+                user.setAccountVerified(true);
+                userRepository.save(user);
+            }
         }
 
-=======
->>>>>>> 09b0d99ed4bb3315d7c8842f5790596a44066fea
         return true;
     }
 }

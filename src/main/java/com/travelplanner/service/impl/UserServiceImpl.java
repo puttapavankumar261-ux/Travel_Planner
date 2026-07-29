@@ -88,22 +88,13 @@ public class UserServiceImpl implements UserService {
         // Encrypt Password
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        // Account should remain unverified until OTP verification
-        user.setAccountVerified(false);
+        // Account should be verified since OTP was verified in previous step
+        user.setAccountVerified(true);
 
         // Save User
         User savedUser = userRepo.save(user);
 
         logger.info("User registered successfully with ID: {}", savedUser.getUserId());
-
-        // Generate OTP
-        OtpRequestDto otpRequest = new OtpRequestDto();
-        otpRequest.setEmail(savedUser.getEmail());
-        otpRequest.setPurpose(OtpPurpose.REGISTRATION);
-
-        otpService.generateAndSendOtp(otpRequest);
-
-        logger.info("Verification OTP sent successfully to {}", savedUser.getEmail());
 
         return userMapper.mapToUserResponse(savedUser);
     }

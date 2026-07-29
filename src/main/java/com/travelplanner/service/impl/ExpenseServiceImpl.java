@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.travelplanner.dto.ExpenseRequestDto;
 import com.travelplanner.dto.ExpenseResponseDto;
+import com.travelplanner.dto.ExpenseCategoryDto;
 import com.travelplanner.entity.Expense;
 import com.travelplanner.entity.Trip;
 import com.travelplanner.exception.ExpenseNotFoundException;
@@ -268,6 +269,19 @@ public class ExpenseServiceImpl implements ExpenseService {
                 tripId, totalExpense);
 
         return totalExpense;
+    }
+
+    @Override
+    public List<ExpenseCategoryDto> getExpenseCategorySummary(Long tripId) {
+
+        logger.info("Fetching expense category summary for trip ID: {}", tripId);
+
+        tripRepo.findById(tripId).orElseThrow(() -> {
+            logger.warn("Trip not found with ID: {}", tripId);
+            return new TripNotFoundException("Trip not found with ID : " + tripId);
+        });
+
+        return expenseRepo.getExpenseCategorySummary(tripId);
     }
 
 }

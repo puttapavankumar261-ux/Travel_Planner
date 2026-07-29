@@ -43,6 +43,8 @@ public class TripResponseDto {
 
     private String userName;
 
+    private String userEmail;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;

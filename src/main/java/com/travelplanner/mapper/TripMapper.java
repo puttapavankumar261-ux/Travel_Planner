@@ -62,6 +62,7 @@ public class TripMapper {
                 trip.getUser().getFirstName() + " " +
                 trip.getUser().getLastName()
         );
+        response.setUserEmail(trip.getUser().getEmail());
 
         response.setCreatedAt(trip.getCreatedAt());
         response.setUpdatedAt(trip.getUpdatedAt());
