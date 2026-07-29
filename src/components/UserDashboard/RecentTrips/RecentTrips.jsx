@@ -1,14 +1,20 @@
 import "./RecentTrips.css";
 import { useNavigate } from "react-router-dom";
 
-const RecentTrips = ({ trips = [] }) => {
+const RecentTrips = ({ trips = [], onViewTrip }) => {
   const navigate = useNavigate();
-
+console.log("Trips:", trips);
   // Show only completed trips
-  const recentTrips = trips.filter(
-    (trip) => trip.tripStatus === "COMPLETED"
-  );
 
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+const recentTrips = trips.filter((trip) => {
+  const endDate = new Date(trip.endDate);
+  endDate.setHours(0, 0, 0, 0);
+  return endDate <= today;
+});
+const displayStatus = "COMPLETED";
   return (
     <div className="recent-trips">
       <div className="section-header">
@@ -51,15 +57,15 @@ const RecentTrips = ({ trips = [] }) => {
               </div>
 
               <div className="trip-right">
-                <span className={`status ${trip.tripStatus.toLowerCase()}`}>
-                  {trip.tripStatus}
+                <span className={`status ${displayStatus.toLowerCase()}`}>
+                   {displayStatus}
                 </span>
 
                 <button
-                  onClick={() => navigate(`/user/trips/${trip.tripId}`)}
-                >
-                  View
-                </button>
+  onClick={() => onViewTrip && onViewTrip(trip)}
+>
+  View
+</button>
               </div>
             </div>
           ))

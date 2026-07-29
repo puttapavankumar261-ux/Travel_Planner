@@ -64,7 +64,12 @@ const Dashboard = () => {
     setSelectedTrip(trip);
   }
 };
+const today = new Date();
+today.setHours(0, 0, 0, 0);
 
+const activeTrips = trips.filter(
+  (trip) => trip.tripStatus !== "CANCELLED"
+);
   const handleCloseModal = () => {
     setSelectedTrip(null);
   };
@@ -82,7 +87,7 @@ const Dashboard = () => {
           <StatCard
             icon={<FaPlaneDeparture />}
             title="Total Trips"
-            value={trips.length}
+            value={activeTrips.length}
             color="#2563eb"
           />
 
@@ -90,14 +95,13 @@ const Dashboard = () => {
             icon={<FaCalendarAlt />}
             title="Upcoming Trips"
             value={
-              trips.filter(
-                (trip) =>
-                  trip.tripStatus === "PLANNED" ||
-                  trip.tripStatus === "CONFIRMED" ||
-                  trip.tripStatus === "UPCOMING" ||
-                  trip.tripStatus === "ONGOING"
-              ).length
-            }
+                        activeTrips.filter((trip) => {
+                        const endDate = new Date(trip.endDate);
+                        endDate.setHours(0, 0, 0, 0);
+
+                        return endDate >= today;
+                      }).length
+                  }
             color="#2563eb"
           />
 
@@ -105,26 +109,31 @@ const Dashboard = () => {
             icon={<FaCheckCircle />}
             title="Completed Trips"
             value={
-              trips.filter((trip) => trip.tripStatus === "COMPLETED").length
-            }
+  activeTrips.filter((trip) => {
+    const endDate = new Date(trip.endDate);
+    endDate.setHours(0, 0, 0, 0);
+
+    return endDate < today;
+  }).length
+}
             color="#2563eb"
           />
 
           <StatCard
             icon={<FaWallet />}
             title="Travel Budget"
-            value={`₹${trips
-              .reduce((sum, trip) => sum + (trip.budget || 0), 0)
-              .toLocaleString()}`}
+            value={`₹${activeTrips
+             .reduce((sum, trip) => sum + (trip.budget || 0), 0)
+             .toLocaleString("en-IN")}`}
             color="#2563eb"
           />
         </div>
 
         <div className="dashboard-grid">
           <RecentTrips
-            trips={trips.filter((trip) => trip.tripStatus === "COMPLETED")}
-            onViewTrip={handleViewTrip}
-          />
+  trips={trips}
+  onViewTrip={handleViewTrip}
+/>
           <UpcomingTrips 
             trips={trips} 
             onViewTrip={handleViewTrip} 

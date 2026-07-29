@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import tripService from "../../../services/tripService";
 import userService from "../../../services/userService";
-import userprofileimg from "./images/profileimage.png";
+import maleProfile from "./images/male.png";
+import femaleProfile from "./images/female.png";
 import "./UserProfile.css";
 import tripCompanionService from "../../../services/tripCompanionService";
 import BackgroundSlider from "../../../components/UserDashboard/BackgroundSlider/BackgroundSlider";
@@ -317,9 +318,15 @@ const handleUpdateProfile = async () => {
           <div className="profile-image">
 
             <img
-              src={userprofileimg}
-              alt="Profile"
-            />
+  src={
+    user?.gender === "MALE"
+      ? maleProfile
+      : user?.gender === "FEMALE"
+      ? femaleProfile
+      : userprofileimg
+  }
+  alt="Profile"
+/>
 
             <button className="camera-btn">
               <FaCamera />
