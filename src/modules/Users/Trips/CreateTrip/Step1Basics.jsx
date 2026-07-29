@@ -94,11 +94,45 @@ const calculateAge = (dobString) => {
       ...updated[index],
       [field]: value
     };
-    setData({
+    
+    let newData = {
       ...data,
       companions: updated
+    };
+    
+    // Sync top Traveler's Name if Traveller 1's name is edited
+    if (index === 0 && (field === 'firstName' || field === 'lastName')) {
+      const fName = field === 'firstName' ? value : (updated[0].firstName || '');
+      const lName = field === 'lastName' ? value : (updated[0].lastName || '');
+      newData.travelerName = `${fName} ${lName}`.trim();
+    }
+    
+    setData(newData);
+  };
+
+  const handleTravelerNameChange = (e) => {
+    const value = e.target.value;
+    
+    const parts = value.trim().split(' ');
+    const firstName = parts[0] || '';
+    const lastName = parts.slice(1).join(' ') || '';
+
+    const updatedCompanions = [...(data.companions || [])];
+    if (updatedCompanions[0]) {
+      updatedCompanions[0] = {
+        ...updatedCompanions[0],
+        firstName,
+        lastName
+      };
+    }
+
+    setData({
+      ...data,
+      travelerName: value,
+      companions: updatedCompanions
     });
   };
+
   return (
     <div className="step-content">
       <h3 className="step-title">the basics</h3>
@@ -111,7 +145,7 @@ const calculateAge = (dobString) => {
             type="text" 
             name="travelerName" 
             value={data.travelerName || ''} 
-            onChange={handleChange} 
+            onChange={handleTravelerNameChange} 
             placeholder="e.g. John Doe"
             style={{ width: '100%', padding: '12px 14px', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '10px', color: 'white', outline: 'none', marginTop: '6px' }}
           />
@@ -278,7 +312,6 @@ const calculateAge = (dobString) => {
             <input
               type="text"
               value={companion.firstName}
-              disabled={index === 0}
               onChange={(e)=>
                 handleCompanionChange(
                   index,
@@ -295,7 +328,6 @@ const calculateAge = (dobString) => {
             <input
               type="text"
               value={companion.lastName}
-              disabled={index === 0}
               onChange={(e)=>
                 handleCompanionChange(
                   index,
@@ -318,7 +350,6 @@ const calculateAge = (dobString) => {
 
             <select
   value={companion.gender}
-  disabled={index === 0}
   onChange={(e)=>
     handleCompanionChange(
       index,
@@ -346,7 +377,6 @@ const calculateAge = (dobString) => {
             <input
   type="number"
   value={companion.age}
-  disabled={index === 0}
   onChange={(e)=>
     handleCompanionChange(
       index,

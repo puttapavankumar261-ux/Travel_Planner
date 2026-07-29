@@ -93,6 +93,8 @@ const Dashboard = () => {
               trips.filter(
                 (trip) =>
                   trip.tripStatus === "PLANNED" ||
+                  trip.tripStatus === "CONFIRMED" ||
+                  trip.tripStatus === "UPCOMING" ||
                   trip.tripStatus === "ONGOING"
               ).length
             }

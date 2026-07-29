@@ -12,6 +12,8 @@ const UpcomingTrips = ({ trips = [], onViewTrip }) => {
   const upcomingTrips = trips.filter(
     (trip) =>
       trip.tripStatus === "PLANNED" ||
+      trip.tripStatus === "CONFIRMED" ||
+      trip.tripStatus === "UPCOMING" ||
       trip.tripStatus === "ONGOING"
   );
 

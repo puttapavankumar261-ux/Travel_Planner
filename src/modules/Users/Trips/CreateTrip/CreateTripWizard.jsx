@@ -40,10 +40,12 @@ const CreateTripWizard = () => {
     foodPreference: ''
   });
 
-  const validateStep = (currentStep) => {
+    const validateStep = (currentStep) => {
     switch (currentStep) {
       case 1:{
         const isCountryValid = tripData.country !== '';
+        const isCityValid = tripData.city !== '';
+        const areDatesValid = tripData.startDate !== '' && tripData.endDate !== '';
         
         // Validate that all additional companions (excluding primary SELF user at index 0) have required details
         const additionalCompanions = (tripData.companions || []).slice(1);
@@ -54,7 +56,7 @@ const CreateTripWizard = () => {
             companion.relationship
         );
 
-        return isCountryValid && areCompanionsValid;
+        return isCountryValid && isCityValid && areDatesValid && areCompanionsValid;
       }
       case 2:
         return tripData.transportation !== '' && tripData.accommodation !== '';
@@ -79,11 +81,11 @@ const CreateTripWizard = () => {
   setIsSubmitting(true);
 
   const formattedCompanions = (tripData.companions || []).map((companion) => ({
-    firstName: companion.firstName?.trim() || null,
-    lastName: companion.lastName?.trim() || null,
+    firstName: companion.firstName?.trim() || 'Traveler',
+    lastName: companion.lastName?.trim() || 'Unknown',
     relationship: companion.relationship || 'SELF',
-    gender: companion.gender || null,
-    age: companion.age ? Number(companion.age) : null,
+    gender: companion.gender || 'OTHER',
+    age: companion.age ? Number(companion.age) : 25, // default age to prevent constraint violations
     isTripOwner: Boolean(companion.isTripOwner)
   }));
 

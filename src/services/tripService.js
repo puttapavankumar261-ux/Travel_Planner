@@ -25,6 +25,12 @@ const getTripById = async (id) => {
   return response.data.data;
 };
 
+// Update trip
+const updateTrip = async (id, tripData) => {
+  const response = await axiosInstance.put(`/api/trips/${id}`, tripData);
+  return response.data;
+};
+
 // Get user by id
 const getUserById = async (userId) => {
   const response = await axiosInstance.get(`/api/users/${userId}`);
@@ -36,5 +42,6 @@ export default {
   createTrip,
   getTripById,
   getTripsByUser,
-  getUserById
+  getUserById,
+  updateTrip
 };
