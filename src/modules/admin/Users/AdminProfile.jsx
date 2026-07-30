@@ -3,6 +3,7 @@ import Navbar from "../../../components/Navbar/Navbar";
 import StatCard from "../../../components/Dashboard/StatCard/StatCard";
 import { Users, Plane, Calendar, IndianRupee } from "lucide-react";
 import userService from "../../../services/userService";
+import authService from "../../../services/authService";
 import {
   Search,
   Mail,
@@ -16,25 +17,7 @@ import {
 import "./AdminProfile.css";
 import adminlogo from "./images/profileimage.png";
 const AdminProfile = () => {
-//   const [profile, setProfile] = useState({
-//     firstName: "Pavan",
-//     lastName: "Kumar",
-//     email: "admin@travelplanner.com",
-//     mobile: "+91 9876543210",
-//     dob: "20 Jan 1998",
-//     gender: "Male",
 
-//     username: "admin",
-//     role: "Super Administrator",
-//     employeeId: "ADM001",
-//     status: "Active",
-
-//     address: "Whitefield",
-//     city: "Bangalore",
-//     state: "Karnataka",
-//     country: "India",
-//     zip: "560066",
-//   });
 
   const permissions = [
     "User Management",
@@ -45,7 +28,7 @@ const AdminProfile = () => {
     "userProfile",
   ];
 
-//   const recentLogins = [
+
 //     {
 //       device: "Windows 11",
 //       browser: "Chrome",
@@ -99,12 +82,16 @@ const AdminProfile = () => {
 const loggedUser = JSON.parse(
     localStorage.getItem("user"),
     localStorage.getItem("password"),
-    localStorage.getItem("token")
+    localStorage.getItem("token"),
+    localStorage.getItem("email")
 );
 
 const userId = loggedUser?.userId;
 const password = loggedUser?.password;
 const token = loggedUser?.token;
+const email1 = loggedUser?.email;
+//alert(email1);
+const email = "hemasri.learning@gmail.com";
 const [admin, setAdmin] = useState();
 const [isEditing, setIsEditing] = useState(false);
 // =======================
@@ -119,9 +106,10 @@ const [otpSent, setOtpSent] = useState(false);
 
 const [otpVerified, setOtpVerified] = useState(false);
 
-const [otp, setOtp] = useState("");
+// const [otp, setOtp] = useState("");
 
 const [loadingOtp, setLoadingOtp] = useState(false);
+const [loading, setLoading] = useState(false);
 
 const [savingPassword, setSavingPassword] = useState(false);
 
@@ -133,8 +121,27 @@ const [passwordData, setPasswordData] = useState({
     password: "",
     confirmPassword: ""
 });
+const [resetOtp, setResetOtp] = useState("");
+// const [error, setError] = useState("");
+const [errors, setErrors] = useState({});
+// const [validationErrors, setValidationErrors] = useState({
+//     password: "",
+//     confirmPassword: "",
+//     otp: ""
+// });
+const validateOtp = () => {
+    let newErrors = {};
 
+    if (!resetOtp.trim()) {
+      newErrors.resetOtp = "OTP is required.";
+    } else if (!/^\d{6}$/.test(resetOtp)) {
+      newErrors.resetOtp = "OTP should be 6 digits.";
+    }
 
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
 const handleSave = async () => {
     try {
         await userService.updateUser(admin.userId, {
@@ -189,65 +196,83 @@ const openPasswordModal = () => {
 
     setOtpMethod("EMAIL");
 
-    setOtp("");
-
     setOtpSent(false);
 
-    setOtpVerified(false);
+    //setOtp("");
+
+    setResetOtp("");
 
     setPasswordData({
         password: "",
         confirmPassword: ""
     });
 
+    setErrors({});
 };
 
 const closePasswordModal = () => {
 
     setShowPasswordModal(false);
 
-    setOtp("");
-
     setOtpSent(false);
 
-    setOtpVerified(false);
+    setOtp("");
+
+    setResetOtp("");
 
     setPasswordData({
         password: "",
         confirmPassword: ""
     });
 
+    setErrors({});
 };
 
-const sendOtp = async () => {
 
-    try {
+
+const sendPasswordOtp = async () => {
+
+    if(passwordData.password===""){
+        setErrors({
+            password:"Password is required."
+        });
+        return;
+    }
+
+    if(passwordData.confirmPassword===""){
+        setErrors({
+            confirmPassword:"Confirm Password is required."
+        });
+        return;
+    }
+
+    if(passwordData.password!==passwordData.confirmPassword){
+
+        setErrors({
+            confirmPassword:"Passwords do not match."
+        });
+
+        return;
+    }
+
+    try{
 
         setLoadingOtp(true);
 
-        // Backend API
-
-        // await userService.sendOtp({
-        //     userId,
-        //     type: otpMethod
-        // });
-
-        await new Promise(resolve => setTimeout(resolve,1200));
+        await authService.sendPasswordOtp(email);
 
         alert("OTP sent successfully.");
 
         setOtpSent(true);
 
     }
-
-    catch(error){
-
-        console.error(error);
-
+    catch(err){
+        setErrors({
+            resetOtp: "Invalid OTP."
+        });
         alert("Unable to send OTP.");
 
     }
-
     finally{
 
         setLoadingOtp(false);
@@ -257,60 +282,56 @@ const sendOtp = async () => {
 };
 
 
-const verifyOtp = async () => {
+const handleResetPassword = async () => {
 
-    try{
+    let validationErrors = {};
 
-        // await userService.verifyOtp({
-        //     userId,
-        //     otp
-        // });
+    if(!resetOtp){
 
-        if(otp==="123456"){
-
-            setOtpVerified(true);
-
-            alert("OTP Verified");
-
-        }
-
-        else{
-
-            alert("Invalid OTP");
-
-        }
+        validationErrors.resetOtp = "OTP is required.";
 
     }
 
-    catch(error){
+    if(passwordData.password===""){
 
-        console.error(error);
+        validationErrors.password="Password is required.";
 
     }
 
-};
-const savePassword = async () => {
+    if(passwordData.confirmPassword===""){
+
+        validationErrors.confirmPassword="Confirm Password is required.";
+
+    }
 
     if(passwordData.password!==passwordData.confirmPassword){
 
-        alert("Passwords do not match");
+        validationErrors.confirmPassword="Passwords do not match.";
+
+    }
+
+    if(Object.keys(validationErrors).length){
+
+        setErrors(validationErrors);
 
         return;
 
     }
-
+    
     try{
+        if (!validateOtp()) {
+            return;
+        }
+        setLoading(true);
+        setErrors({});
 
         setSavingPassword(true);
+        alert(email);
+        alert(resetOtp);
+        alert(passwordData.password);
+        await authService.resetPassword(email,resetOtp, passwordData.password);
 
-        // await userService.changePassword({
-        //      userId,
-        //      password:passwordData.password
-        // });
-
-        await new Promise(resolve=>setTimeout(resolve,1200));
-
-        alert("Password changed successfully.");
+        alert("Password has been reset successfully.");
 
         closePasswordModal();
 
@@ -318,33 +339,22 @@ const savePassword = async () => {
 
     catch(error){
 
-        console.error(error);
+        setErrors({
 
-        alert("Unable to change password.");
+            resetOtp:error?.response?.data?.message || "Invalid OTP."
+
+        });
 
     }
 
     finally{
-
+        setLoading(false);
         setSavingPassword(false);
 
     }
 
 };
 
-const togglePassword=()=>{
-
-    setShowPassword(!showPassword);
-
-};
-
-const toggleConfirmPassword=()=>{
-
-    setShowConfirmPassword(!showConfirmPassword);
-
-};
-//  console.log(admin);
-//  return false;
   return (
     <div className="dashboard-page">
       <Navbar />
@@ -658,35 +668,7 @@ const toggleConfirmPassword=()=>{
 
                             </div>
 
-                            {/* <div className="security-row">
-
-                                <div>
-
-                                <h4>Two Factor Authentication</h4>
-
-                                <p>Disabled</p>
-
-                                </div>
-
-                                <button className="primary-btn">
-                                Enable
-                                </button>
-
-                            </div> */}
-
-                            {/* <div className="security-row">
-
-                        <div>
-
-                        <h4>Account Status</h4>
-
-                        <p className="active-text">
-                            Active
-                        </p>
-
-                        </div>
-
-                            </div> */}
+                      
 
                     </div>
 
@@ -720,7 +702,7 @@ const toggleConfirmPassword=()=>{
 
                     <input
                         type="email"
-                        value={admin?.email || ""}
+                        value={email || ""}
                         readOnly
                     />
 
@@ -778,191 +760,112 @@ const toggleConfirmPassword=()=>{
 
                     </div>
 
+                    <div className="password-form-group">
+
+    <label>New Password</label>
+
+    <input
+        type="password"
+        value={passwordData.password}
+        onChange={(e)=>setPasswordData({
+            ...passwordData,
+            password:e.target.value
+        })}
+    />
+
+   {errors.password && ( <small
+        style={{color: "#ef4444",display: "block",marginTop: "6px",fontSize: "13px"}}>
+        {errors.password}
+        </small>
+    )}
+
+</div>
+
+<div className="password-form-group">
+
+    <label>Confirm Password</label>
+
+    <input
+        type="password"
+        value={passwordData.confirmPassword}
+        onChange={(e)=>setPasswordData({
+            ...passwordData,
+            confirmPassword:e.target.value
+        })}
+    />
+
+    
+    {errors.confirmPassword && ( <small
+        style={{color: "#ef4444",display: "block",marginTop: "6px",fontSize: "13px"}}>
+        {errors.confirmPassword}
+        </small>
+    )}
+
+</div>
+
+{!otpSent && (
+
+<button
+    className="send-otp-btn"
+    onClick={sendPasswordOtp}
+    disabled={loadingOtp}
+>
+{loadingOtp
+?
+"Sending..."
+:
+"Send OTP" }
+
+</button>
+
+)}
+
                 </div>
 
-                {!otpSent && (
+                
 
-                    <button
-                        className="send-otp-btn"
-                        onClick={sendOtp}
-                        disabled={loadingOtp}
-                    >
+                {otpSent && (
 
-                        {
-                            loadingOtp
-                            ?
-                            "Sending..."
-                            :
-                            "Send OTP"
-                        }
+<>
 
-                    </button>
+<div className="password-form-group">
 
-                )}
+<label>Enter OTP</label>
 
-                {otpSent && !otpVerified && (
+<input
+    value={resetOtp}     
+    onChange={(e)=> {setResetOtp(e.target.value);
+        setErrors((prev) => ({
+                                ...prev,
+                                resetOtp: "",
+                                }))
+    }}
+/>
 
-                    <>
+{errors?.resetOtp && (<small
+    style={{color: "#ef4444",display: "block",marginTop: "6px",fontSize: "13px"}}>
+    {errors.resetOtp}
+</small>
+)}
 
-                        <div className="password-form-group">
+</div>
 
-                            <label>Enter OTP</label>
+<button
+    className="save-password-btn"
+    onClick={handleResetPassword}
+    disabled={loading}
+>
+{loading ? "Submitting..." : "Submit"}
 
-                            <input
-                                type="text"
-                                maxLength={6}
-                                placeholder="Enter OTP"
-                                value={otp}
-                                onChange={(e)=>setOtp(e.target.value)}
-                            />
+</button>
 
-                        </div>
+</>
 
-                        <button
-                            className="verify-otp-btn"
-                            onClick={verifyOtp}
-                        >
-                            Verify OTP
-                        </button>
+)}
 
-                    </>
+                
 
-                )}
-
-                {otpVerified && (
-
-                    <>
-
-                        <div className="password-form-group">
-
-                            <label>New Password</label>
-
-                            <div className="password-input">
-
-                                <input
-
-                                    type={
-                                        showPassword
-                                        ?
-                                        "text"
-                                        :
-                                        "password"
-                                    }
-
-                                    value={passwordData.password}
-
-                                    onChange={(e)=>
-
-                                        setPasswordData({
-
-                                            ...passwordData,
-
-                                            password:e.target.value
-
-                                        })
-
-                                    }
-
-                                />
-
-                                <span
-                                    onClick={togglePassword}
-                                >
-
-                                    {
-                                        showPassword
-                                        ?
-                                        <EyeOff size={18}/>
-                                        :
-                                        <Eye size={18}/>
-                                    }
-
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                        <div className="password-form-group">
-
-                            <label>Confirm Password</label>
-
-                            <div className="password-input">
-
-                                <input
-
-                                    type={
-                                        showConfirmPassword
-                                        ?
-                                        "text"
-                                        :
-                                        "password"
-                                    }
-
-                                    value={passwordData.confirmPassword}
-
-                                    onChange={(e)=>
-
-                                        setPasswordData({
-
-                                            ...passwordData,
-
-                                            confirmPassword:e.target.value
-
-                                        })
-
-                                    }
-
-                                />
-
-                                <span
-                                    onClick={toggleConfirmPassword}
-                                >
-
-                                    {
-                                        showConfirmPassword
-                                        ?
-                                        <EyeOff size={18}/>
-                                        :
-                                        <Eye size={18}/>
-                                    }
-
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                        <div className="password-actions">
-
-                            <button
-                                className="cancel-password-btn"
-                                onClick={closePasswordModal}
-                            >
-                                Cancel
-                            </button>
-
-                            <button
-                                className="save-password-btn"
-                                onClick={savePassword}
-                                disabled={savingPassword}
-                            >
-
-                                {
-                                    savingPassword
-                                    ?
-                                    "Saving..."
-                                    :
-                                    "Save Password"
-                                }
-
-                            </button>
-
-                        </div>
-
-                    </>
-
-                )}
+                
 
             </div>
 

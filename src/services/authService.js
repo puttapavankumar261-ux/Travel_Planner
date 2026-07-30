@@ -78,10 +78,37 @@ const checkEmail = async (email) => {
 
     return response.data;
 };
+
+const sendPasswordOtp = async (email) => {
+
+    const response = await axiosInstance.post(
+        "/api/otp/send",
+        {
+            "email" : email,
+            "purpose":"PASSWORD_RESET"
+        }
+    );
+
+    return response.data;
+};
+
+const resetPassword = async(email,otp,newPassword) => {
+
+    const response = await axiosInstance.post("/api/auth/reset-password", 
+        {
+           "email": email,
+            "otp": otp,
+            "newPassword": newPassword,
+        }
+    );
+
+};
 export default {
     login,
     register,
     sendOtp,
     verifyOtp,
-    checkEmail
+    checkEmail,
+    sendPasswordOtp,
+    resetPassword
 };
