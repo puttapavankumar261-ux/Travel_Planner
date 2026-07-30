@@ -100,9 +100,36 @@ public class OtpServiceImpl implements OtpService {
             System.err.println("[WARN] Failed to send OTP email to " + email + ": " + e.getMessage());
         }
     }
+
+    public boolean verifyOtp(OtpVerificationDto dto) {
+
+            OtpVerification otpEntity = otpRepository
+                    .findByEmailAndOtpAndPurpose(
+                            dto.getEmail(),
+                            dto.getOtp(),
+                            dto.getPurpose())
+                    .orElseThrow(() ->
+                            new InvalidOtpException(
+                                    "Invalid email or OTP"));
+
+            if (otpEntity.getExpiryTime().isBefore(LocalDateTime.now())) {
+                throw new OtpExpiredException("OTP has expired");
+            }
+
+            if (otpEntity.isVerified()) {
+                throw new InvalidOtpException("OTP already verified");
+            }
+
+            otpEntity.setVerified(true);
+            otpEntity.setVerifiedAt(LocalDateTime.now());
+
+            otpRepository.save(otpEntity);
+
+        return true;
+    }
     
     @Override
-    public boolean verifyOtp(OtpVerificationDto dto) {
+    public boolean verifyOtpTest(OtpVerificationDto dto) {
 
         OtpVerification otpEntity = otpRepository
                 .findByEmailAndOtpAndPurpose(
