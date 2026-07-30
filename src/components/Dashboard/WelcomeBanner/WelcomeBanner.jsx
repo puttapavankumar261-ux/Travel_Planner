@@ -10,13 +10,19 @@ function WelcomeBanner() {
     year: "numeric",
   };
 
+const loggedUser = JSON.parse(
+    localStorage.getItem("user"),
+    localStorage.getItem("token")
+);
+const firstName = loggedUser?.firstName;
+
   return (
     <section className="welcome-banner glass">
       <div className="welcome-left">
         <div className="wave-icon">👋</div>
 
         <div>
-          <h1>Welcome back, Admin!</h1>
+          <h1>Welcome back, {firstName}!</h1>
 
           <p>Here's what's happening with your Travel Planner today.</p>
         </div>

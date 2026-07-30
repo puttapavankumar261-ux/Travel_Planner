@@ -11,11 +11,15 @@ import UpcomingTrips from "../../../components/Dashboard/UpcomingTrips/UpcomingT
 import { Plane, Calendar, IndianRupee, MapPinned } from "lucide-react";
 
 import dashboardService from "../../../services/dashboardService";
+import tripService from "../../../services/tripService";
 
 import "./Dashboard.css";
 
 function Dashboard() {
+
   const [summary, setSummary] = useState(null);
+  const [trips, setTrips] = useState([]);
+  const [selectedTrip, setSelectedTrip] = useState(null);
 
   useEffect(() => {
     loadDashboardSummary();
@@ -29,6 +33,54 @@ function Dashboard() {
       console.error("Failed to load dashboard summary:", error);
     }
   };
+
+const handleViewTrip = async (trip) => {
+    try {
+        const response = await axiosInstance.get(
+          `/api/trips/${trip.tripId}`
+        );
+      setSelectedTrip(trip);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    setSelectedTrip(trip);
+  }
+};
+
+const handleCloseModal = () => {
+  setSelectedTrip(null);
+};
+
+const fetchTrips = async () => {
+
+    try {
+
+        const tripData = await tripService.getTrips();
+
+        //console.log("Admin Trips Response:", tripData);
+
+        setTrips(tripData.content || []);
+
+    } catch (error) {
+
+        console.error("Error fetching trips:", error);
+
+        setTrips([]);
+
+    }
+};
+
+// const getTrips = async () => {
+
+//     const response = await axiosInstance.get("/api/trips");
+
+//     return response.data.content || [];
+
+// };
+
+useEffect(() => {
+        fetchTrips();      
+  }, []);
+//console.log(trips);
 
   const stats = [
     {
@@ -76,8 +128,10 @@ function Dashboard() {
         </div>
 
         <div className="dashboard-grid">
-          <RecentTrips />
-          <UpcomingTrips />
+         <RecentTrips trips={trips.filter((trip) => trip.tripStatus === "PLANNED")}
+          onViewTrip={handleViewTrip}/>
+          <UpcomingTrips trips={trips.filter((trip) => trip.tripStatus === "UPCOMING")}
+          onViewTrip={handleViewTrip}/>
         </div>
       </div>
     </div>

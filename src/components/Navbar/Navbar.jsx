@@ -20,10 +20,16 @@ function Navbar() {
 
     // optional clear everything
     // localStorage.clear();
-
+    console.clear();
     navigate("/");
 
   };
+
+const loggedUser = JSON.parse(
+    localStorage.getItem("user"),
+    localStorage.getItem("token")
+);
+const firstName = loggedUser?.firstName;
   return (
     <header className="navbar glass">
       <Logo showTagline={false} />
@@ -76,7 +82,7 @@ function Navbar() {
             <nav className="nav-links">
                     <NavLink to="/admin/adminprofile">
 
-            <div>Admin</div>
+            <div>{firstName}</div>
             <small>Administrator</small>
             </NavLink>
             </nav>
