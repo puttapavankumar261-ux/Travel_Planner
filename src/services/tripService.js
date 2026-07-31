@@ -37,11 +37,17 @@ const getUserById = async (userId) => {
   return response.data.data;
 };
 
+const sendEmail = async (request) => {
+      const response = await axiosInstance.post("/api/testEmail", request);
+      return response.data.data;
+}
+
 export default {
   getTrips,
   createTrip,
   getTripById,
   getTripsByUser,
   getUserById,
-  updateTrip
+  updateTrip,
+  sendEmail
 };

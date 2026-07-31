@@ -140,7 +140,18 @@ const submitCancellation = async () => {
         // await tripService.cancelTrip(request);
 
         alert("Trip cancelled successfully.");
+        try{
+            const emailRequest = {
+                to: "hemasri.learning@gmail.com",
+                subject: "TravelPlanner Trip Cancelled",
+                body: "<h1>Trip Cancelled</h1><p>"+cancelReason+"</p>"
+            };
 
+            await tripService.sendEmail(emailRequest);
+      }catch (err){
+        console.error(err);
+        alert("Unable to send email.");
+      }
         closeCancelModal();
 
         loadTrips();
