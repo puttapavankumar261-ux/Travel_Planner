@@ -4,7 +4,7 @@ import java.util.List;
 import com.travelplanner.dto.UpdateProfileRequestDto;
 import com.travelplanner.dto.UserRequestDto;
 import com.travelplanner.dto.UserResponseDto;
-
+import com.travelplanner.dto.ChangePasswordRequestDto;
 
 public interface UserService {
 
@@ -24,5 +24,5 @@ public interface UserService {
     void updatePassword(String email, String newPassword);
     
     boolean existsByEmail(String email);
-
+    void changePassword(Long userId,ChangePasswordRequestDto request);
 }
