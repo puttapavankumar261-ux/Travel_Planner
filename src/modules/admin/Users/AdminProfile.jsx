@@ -91,7 +91,6 @@ const password = loggedUser?.password;
 const token = loggedUser?.token;
 const email1 = loggedUser?.email;
 //alert(email1);
-const email = "hemasri.learning@gmail.com";
 const [admin, setAdmin] = useState();
 const [isEditing, setIsEditing] = useState(false);
 // =======================
@@ -216,7 +215,7 @@ const closePasswordModal = () => {
 
     setOtpSent(false);
 
-    setOtp("");
+    //setOtp("");
 
     setResetOtp("");
 
@@ -702,7 +701,7 @@ const handleResetPassword = async () => {
 
                     <input
                         type="email"
-                        value={email || ""}
+                        value={admin?.email || ""}
                         readOnly
                     />
 
