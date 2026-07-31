@@ -13,7 +13,7 @@ import com.travelplanner.common.constants.ApiMessages;
 import com.travelplanner.dto.UserRequestDto;
 import com.travelplanner.dto.UserResponseDto;
 import com.travelplanner.service.UserService;
-
+import com.travelplanner.dto.ChangePasswordRequestDto;
 import jakarta.validation.Valid;
 
 @RestController
@@ -108,5 +108,19 @@ public ResponseEntity<ApiResponse<UserResponseDto>> updateProfile(
                 		ApiMessages.USER_DELETED,
                         null));
     }
+ // CHANGE PASSWORD
+    @PutMapping("/{userId}/change-password")
+    public ResponseEntity<ApiResponse<String>> changePassword(
+            @PathVariable Long userId,
+            @RequestBody ChangePasswordRequestDto request) {
 
+
+        userService.changePassword(userId, request);
+
+
+        return ResponseEntity.ok(
+                ApiResponseUtil.success(
+                        "Password Updated Successfully",
+                        null));
+    }
 }

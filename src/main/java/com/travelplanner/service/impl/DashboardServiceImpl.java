@@ -172,7 +172,7 @@ public class DashboardServiceImpl implements DashboardService {
         dto.setTotalTrips(tripRepository.count());
 
         dto.setUpcomingTrips(
-                tripRepository.countByTripStatus(TripStatus.PLANNED));
+                tripRepository.countByTripStatus(TripStatus.UPCOMING));
         
         dto.setOngoingTrips(
                 tripRepository.countByTripStatus(TripStatus.ONGOING));

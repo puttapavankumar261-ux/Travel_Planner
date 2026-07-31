@@ -77,9 +77,14 @@ public class SecurityConfig {
                         .requestMatchers("/api/users/profile/**")
                         .hasRole("USER")
                         
+                     // Change password
+                        .requestMatchers("/api/users/*/change-password")
+                        .hasAnyRole("USER", "ADMIN")
+                        
                         // Admin APIs
                         .requestMatchers("/api/users/**")
                         .hasRole("ADMIN")
+                        
                         
 
                         // User + Admin APIs

@@ -3,7 +3,7 @@ package com.travelplanner.service.impl;
 import java.util.List;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
-
+import com.travelplanner.dto.ChangePasswordRequestDto;
 import org.springframework.stereotype.Service;
 import com.travelplanner.dto.UpdateProfileRequestDto;
 import com.travelplanner.dto.UserRequestDto;
@@ -273,5 +273,56 @@ public class UserServiceImpl implements UserService {
 
         return userRepo.existsByEmail(email);
     }
+    @Override
+    public void changePassword(
+            Long userId,
+            ChangePasswordRequestDto request) {
 
+
+        logger.info("Changing password for user ID: {}", userId);
+
+
+        User user = userRepo.findById(userId)
+                .orElseThrow(() ->
+                        new UserNotFoundException(
+                                "User not found with ID : " + userId
+                        )
+                );
+
+
+        if(!passwordEncoder.matches(
+                request.getOldPassword(),
+                user.getPassword()
+        )) {
+
+            throw new RuntimeException(
+                    "Current password incorrect"
+            );
+
+        }
+
+
+        if(!request.getNewPassword()
+                .equals(request.getConfirmPassword())) {
+
+            throw new RuntimeException(
+                    "Password mismatch"
+            );
+
+        }
+
+
+        user.setPassword(
+                passwordEncoder.encode(
+                        request.getNewPassword()
+                )
+        );
+
+
+        userRepo.save(user);
+
+
+        logger.info("Password changed successfully for user ID: {}", userId);
+
+    }
 }
