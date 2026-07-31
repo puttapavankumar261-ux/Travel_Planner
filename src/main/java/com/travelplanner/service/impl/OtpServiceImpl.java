@@ -95,41 +95,12 @@ public class OtpServiceImpl implements OtpService {
                     NotificationType.EMAIL
             );
         } catch (Exception e) {
-            // Log the email failure but don't throw — OTP is already saved in DB.
-            // User can still verify using the OTP sent earlier or via dev bypass.
-            System.err.println("[WARN] Failed to send OTP email to " + email + ": " + e.getMessage());
+           e.printStackTrace();
         }
     }
 
-    public boolean verifyOtp(OtpVerificationDto dto) {
-
-            OtpVerification otpEntity = otpRepository
-                    .findByEmailAndOtpAndPurpose(
-                            dto.getEmail(),
-                            dto.getOtp(),
-                            dto.getPurpose())
-                    .orElseThrow(() ->
-                            new InvalidOtpException(
-                                    "Invalid email or OTP"));
-
-            if (otpEntity.getExpiryTime().isBefore(LocalDateTime.now())) {
-                throw new OtpExpiredException("OTP has expired");
-            }
-
-            if (otpEntity.isVerified()) {
-                throw new InvalidOtpException("OTP already verified");
-            }
-
-            otpEntity.setVerified(true);
-            otpEntity.setVerifiedAt(LocalDateTime.now());
-
-            otpRepository.save(otpEntity);
-
-        return true;
-    }
-    
     @Override
-    public boolean verifyOtpTest(OtpVerificationDto dto) {
+    public boolean verifyOtp(OtpVerificationDto dto) {
 
         OtpVerification otpEntity = otpRepository
                 .findByEmailAndOtpAndPurpose(
@@ -152,15 +123,14 @@ public class OtpServiceImpl implements OtpService {
 
         otpRepository.save(otpEntity);
 
+        // Update user verification status only if the user already exists
         if (dto.getPurpose() == OtpPurpose.REGISTRATION) {
-            // User is not created yet in the frontend wizard flow. 
-            // The registration step will check if the OTP was verified.
-            Optional<User> userOpt = userRepository.findByEmail(dto.getEmail());
-            if (userOpt.isPresent()) {
-                User user = userOpt.get();
-                user.setAccountVerified(true);
-                userRepository.save(user);
-            }
+
+            userRepository.findByEmail(dto.getEmail())
+                    .ifPresent(user -> {
+                        user.setAccountVerified(true);
+                        userRepository.save(user);
+                    });
         }
 
         return true;

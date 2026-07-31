@@ -1,13 +1,13 @@
 package com.travelplanner.dto;
 
-import java.time.LocalDateTime;
-
 import com.travelplanner.enums.NotificationAction;
 import com.travelplanner.enums.NotificationModule;
 import com.travelplanner.enums.NotificationPriority;
 import com.travelplanner.enums.NotificationRecipientType;
 import com.travelplanner.enums.ReferenceType;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,43 +15,43 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class NotificationResponseDto {
+public class NotificationRequestDto {
 
-    public NotificationResponseDto(boolean b, String string) {
-		// TODO Auto-generated constructor stub
-	}
-
-	private Long notificationId;
-
+    @NotBlank(message = "Title is required")
     private String title;
 
+    @NotBlank(message = "Message is required")
     private String message;
 
+    @NotNull(message = "Module is required")
     private NotificationModule module;
 
+    @NotNull(message = "Action is required")
     private NotificationAction action;
 
+    @NotNull(message = "Priority is required")
     private NotificationPriority priority;
 
+    @NotNull(message = "Recipient Type is required")
     private NotificationRecipientType recipientType;
 
+    /**
+     * User who will receive this notification.
+     * Null for ADMIN notifications.
+     */
     private Long recipientUserId;
 
-    private String recipientUserName;
-
+    /**
+     * User who performed the action.
+     */
+    @NotNull(message = "Performed By User is required")
     private Long performedByUserId;
 
-    private String performedByUserName;
-
+    @NotNull(message = "Reference Type is required")
     private ReferenceType referenceType;
 
+    /**
+     * Related entity id (Trip, Payment, Booking...)
+     */
     private Long referenceId;
-
-    private boolean read;
-
-    private LocalDateTime actionTime;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
 }

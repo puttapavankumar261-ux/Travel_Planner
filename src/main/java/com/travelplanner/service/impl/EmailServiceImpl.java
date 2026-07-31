@@ -1,6 +1,7 @@
 package com.travelplanner.service.impl;
 
 import com.travelplanner.dto.EmailRequestDto;
+import org.springframework.beans.factory.annotation.Value;
 import com.travelplanner.exception.EmailSendingException;
 import com.travelplanner.service.EmailService;
 import jakarta.mail.MessagingException;
@@ -14,7 +15,8 @@ import org.springframework.stereotype.Service;
 public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender mailSender;
-
+    @Value("${spring.mail.username}")
+    private String fromEmail;
     public EmailServiceImpl(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
@@ -23,26 +25,43 @@ public class EmailServiceImpl implements EmailService {
     public void sendEmail(EmailRequestDto emailRequest) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom(fromEmail);
             message.setTo(emailRequest.getTo());
             message.setSubject(emailRequest.getSubject());
             message.setText(emailRequest.getBody());
+
             mailSender.send(message);
+
         } catch (Exception e) {
-            throw new EmailSendingException("Failed to send plain text email to " + emailRequest.getTo(), e);
+            throw new EmailSendingException(
+                    "Failed to send plain text email to " + emailRequest.getTo(),
+                    e
+            );
         }
     }
 
     @Override
     public void sendHtmlEmail(EmailRequestDto emailRequest) {
         try {
+
             MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            MimeMessageHelper helper =
+                    new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setFrom(fromEmail);
             helper.setTo(emailRequest.getTo());
             helper.setSubject(emailRequest.getSubject());
             helper.setText(emailRequest.getBody(), true);
+
             mailSender.send(message);
-        } catch (MessagingException e) {
-            throw new EmailSendingException("Failed to send HTML email to " + emailRequest.getTo(), e);
+
+        } catch (Exception e) {
+
+            throw new EmailSendingException(
+                    "Failed to send HTML email to " + emailRequest.getTo(),
+                    e
+            );
         }
     }
 }

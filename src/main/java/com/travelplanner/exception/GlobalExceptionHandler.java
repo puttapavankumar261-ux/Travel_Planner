@@ -265,4 +265,13 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
+    
+    @ExceptionHandler(NotificationNotFoundException.class)
+    public ResponseEntity<ApiResponse<Object>> handleNotificationNotFoundException(
+            NotificationNotFoundException ex) {
+
+        return buildErrorResponse(
+                ex.getMessage(),
+                HttpStatus.NOT_FOUND);
+    }
 }

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.travelplanner.dto.NotificationRequestDto;
 import com.travelplanner.dto.PageResponseDto;
 import com.travelplanner.dto.TripDestinationAnalyticsDto;
 import com.travelplanner.dto.TripRequestDto;
@@ -21,12 +22,18 @@ import com.travelplanner.dto.TripResponseDto;
 import com.travelplanner.dto.TripStatusAnalyticsDto;
 import com.travelplanner.entity.Trip;
 import com.travelplanner.entity.User;
+import com.travelplanner.enums.NotificationAction;
+import com.travelplanner.enums.NotificationModule;
+import com.travelplanner.enums.NotificationPriority;
+import com.travelplanner.enums.NotificationRecipientType;
+import com.travelplanner.enums.ReferenceType;
 import com.travelplanner.enums.TripStatus;
 import com.travelplanner.exception.TripNotFoundException;
 import com.travelplanner.exception.UserNotFoundException;
 import com.travelplanner.mapper.TripMapper;
 import com.travelplanner.repo.TripRepository;
 import com.travelplanner.repo.UserRepository;
+import com.travelplanner.service.NotificationManagementService;
 import com.travelplanner.service.TripService;
 import com.travelplanner.util.PaginationUtil;
 
@@ -35,7 +42,7 @@ public class TripServiceImpl implements TripService {
 
     private static final Logger logger =
             LoggerFactory.getLogger(TripServiceImpl.class);
-
+    private final NotificationManagementService notificationManagementService;
     private final TripRepository tripRepo;
     private final UserRepository userRepo;
     private final TripMapper tripMapper;
@@ -43,11 +50,13 @@ public class TripServiceImpl implements TripService {
     public TripServiceImpl(
             TripRepository tripRepo,
             UserRepository userRepo,
-            TripMapper tripMapper) {
+            TripMapper tripMapper,
+            NotificationManagementService notificationManagementService) {
 
         this.tripRepo = tripRepo;
         this.userRepo = userRepo;
         this.tripMapper = tripMapper;
+        this.notificationManagementService = notificationManagementService;
     }
 
     @Override
@@ -72,6 +81,44 @@ public class TripServiceImpl implements TripService {
 
         logger.info("Trip created successfully with ID: {}",
                 savedTrip.getTripId());
+
+        NotificationRequestDto notification = new NotificationRequestDto();
+
+        notification.setTitle("Trip Created");
+
+        notification.setMessage(
+                "Your trip '" + savedTrip.getTitle() + "' has been created successfully.");
+
+        notification.setModule(NotificationModule.TRIP);
+
+        notification.setAction(NotificationAction.CREATED);
+
+        notification.setPriority(NotificationPriority.MEDIUM);
+
+        notification.setRecipientType(NotificationRecipientType.USER);
+
+        notification.setRecipientUserId(user.getUserId());
+
+        notification.setPerformedByUserId(user.getUserId());
+
+        notification.setReferenceType(ReferenceType.TRIP);
+
+        notification.setReferenceId(savedTrip.getTripId());
+
+        try {
+            notificationManagementService.createNotification(notification);
+
+            logger.info(
+                    "Trip creation notification created for trip ID: {}",
+                    savedTrip.getTripId());
+
+        } catch (Exception ex) {
+
+            logger.error(
+                    "Failed to create trip notification for trip ID: {}",
+                    savedTrip.getTripId(),
+                    ex);
+        }
 
         return tripMapper.mapToTripResponse(savedTrip);
     }
@@ -219,6 +266,44 @@ public class TripServiceImpl implements TripService {
         trip.setUser(user);
 
         Trip updatedTrip = tripRepo.save(trip);
+        
+        NotificationRequestDto notification = new NotificationRequestDto();
+
+        notification.setTitle("Trip Updated");
+
+        notification.setMessage(
+                "Your trip '" + updatedTrip.getTitle() + "' has been updated successfully.");
+
+        notification.setModule(NotificationModule.TRIP);
+
+        notification.setAction(NotificationAction.UPDATED);
+
+        notification.setPriority(NotificationPriority.LOW);
+
+        notification.setRecipientType(NotificationRecipientType.USER);
+
+        notification.setRecipientUserId(user.getUserId());
+
+        notification.setPerformedByUserId(user.getUserId());
+
+        notification.setReferenceType(ReferenceType.TRIP);
+
+        notification.setReferenceId(updatedTrip.getTripId());
+
+        try {
+            notificationManagementService.createNotification(notification);
+
+            logger.info(
+                    "Trip update notification created for trip ID: {}",
+                    updatedTrip.getTripId());
+
+        } catch (Exception ex) {
+
+            logger.error(
+                    "Failed to create trip update notification for trip ID: {}",
+                    updatedTrip.getTripId(),
+                    ex);
+        }
 
         logger.info("Trip updated successfully with ID: {}", tripId);
 
@@ -238,6 +323,46 @@ public class TripServiceImpl implements TripService {
                     return new TripNotFoundException(
                             "Trip not found with ID : " + tripId);
                 });
+
+        NotificationRequestDto notification = new NotificationRequestDto();
+
+        notification.setTitle("Trip Deleted");
+
+        notification.setMessage(
+                "Your trip '" + trip.getTitle() + "' has been deleted successfully.");
+
+        notification.setModule(NotificationModule.TRIP);
+
+        notification.setAction(NotificationAction.DELETED);
+
+        notification.setPriority(NotificationPriority.HIGH);
+
+        notification.setRecipientType(NotificationRecipientType.USER);
+
+        notification.setRecipientUserId(trip.getUser().getUserId());
+
+        notification.setPerformedByUserId(trip.getUser().getUserId());
+
+        notification.setReferenceType(ReferenceType.TRIP);
+
+        notification.setReferenceId(trip.getTripId());
+
+        try {
+            notificationManagementService.createNotification(notification);
+
+            logger.info(
+                    "Trip deletion notification created for trip ID: {}",
+                    trip.getTripId());
+
+        } catch (Exception ex) {
+
+            logger.error(
+                    "Failed to create trip deletion notification for trip ID: {}",
+                    trip.getTripId(),
+                    ex);
+        }
+        logger.info("Trip deletion notification created for trip ID: {}",
+                trip.getTripId());
 
         tripRepo.delete(trip);
 
