@@ -3,6 +3,7 @@ import ProtectedRoute from "../components/auth/ProtectedRoute";
 import Login from "../modules/Auth/Login";
 import Registration from "../modules/Auth/Registration";
 import ForgotPassword from "../modules/Auth/ForgotPassword";
+import ResetPassword from "../modules/Auth/ResetPassword";
 
 import AdminRoutes from "./AdminRoutes";
 import UserRoutes from "./UserRoutes";
@@ -16,6 +17,7 @@ function AppRoutes() {
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Registration />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
+        <Route path="/resetpassword" element={<ResetPassword />} />
 
         <Route
           path="/admin/*"

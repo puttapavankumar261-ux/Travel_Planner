@@ -103,6 +103,18 @@ const resetPassword = async(email,otp,newPassword) => {
     );
 
 };
+
+const forgotPassword = async(email) => {
+
+    const response = await axiosInstance.post("/api/auth/forgot-password", 
+        {
+           "email": email
+           
+        }
+    );
+
+};
+
 export default {
     login,
     register,
@@ -110,5 +122,6 @@ export default {
     verifyOtp,
     checkEmail,
     sendPasswordOtp,
-    resetPassword
+    resetPassword,
+    forgotPassword
 };

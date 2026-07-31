@@ -27,6 +27,7 @@ function ForgotPassword() {
 
       // Call your backend API
       // await authService.forgotPassword({ email });
+      await authService.forgotPassword(email);
 
       // Demo Success Message
       setSuccess(
