@@ -1,28 +1,22 @@
 import "./TripFilters.css";
-import { FaFilter, FaSortAmountDown } from "react-icons/fa";
+import { FaFilter } from "react-icons/fa";
 
-const TripFilters = () => {
+const TripFilters = ({ filter, setFilter }) => {
   return (
     <div className="trip-filters">
       <div className="filter-group">
         <FaFilter className="filter-icon" />
 
-        <select>
-          <option>All Trips</option>
-          <option>Upcoming</option>
-          <option>Completed</option>
-          <option>Cancelled</option>
-        </select>
-      </div>
-
-      <div className="filter-group">
-        <FaSortAmountDown className="filter-icon" />
-
-        <select>
-          <option>Newest First</option>
-          <option>Oldest First</option>
-          <option>Budget</option>
-          <option>Destination</option>
+        <select
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+        >
+          <option value="ALL">All Trips</option>
+          <option value="PLANNED">Planned</option>
+          <option value="UPCOMING">Upcoming</option>
+          <option value="ONGOING">Ongoing</option>
+          <option value="COMPLETED">Completed</option>
+          <option value="CANCELLED">Cancelled</option>
         </select>
       </div>
     </div>
@@ -30,3 +24,4 @@ const TripFilters = () => {
 };
 
 export default TripFilters;
+

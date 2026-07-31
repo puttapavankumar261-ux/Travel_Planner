@@ -59,10 +59,10 @@ const calculateAge = (dobString) => {
     : calculateAge(loggedUser?.dateOfBirth || loggedUser?.dob);
 
   return {
-    firstName: loggedUser?.firstName || '',
-    lastName: loggedUser?.lastName || '',
+    firstName: loggedUser?.firstName ?? '',
+    lastName: loggedUser?.lastName ?? '',
     relationship: 'SELF',
-    gender: loggedUser?.gender || '',
+    gender: loggedUser?.gender ?? '',
     age: userAge ,
     isTripOwner: true
   };

@@ -9,15 +9,9 @@ import { useNavigate } from "react-router-dom";
 const UpcomingTrips = ({ trips = [], onViewTrip }) => {
   const navigate = useNavigate();
 
-  const today = new Date();
-today.setHours(0, 0, 0, 0);
-
-const upcomingTrips = trips.filter((trip) => {
-  const endDate = new Date(trip.endDate);
-  endDate.setHours(0, 0, 0, 0);
-
-  return endDate > today;
-});
+const upcomingTrips = trips.filter(
+  (trip) => trip.tripStatus === "UPCOMING"
+);
 
   const calculateDaysLeft = (startDate) => {
     const today = new Date();

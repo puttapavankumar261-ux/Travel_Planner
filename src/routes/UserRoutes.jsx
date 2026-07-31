@@ -4,7 +4,7 @@ import Dashboard from "../modules/Users/Dashboard/Dashboard";
 
 // Future Imports
 import Trips from "../modules/Users/Trips/Trips";
-import Expenses from "../modules/Users/Expenses/Expenses";
+
 import BookingWizard from "../modules/Users/Bookings/BookingWizard";
 // import Profile from "../modules/user/Profile/Profile";
 
@@ -24,7 +24,7 @@ const UserRoutes = () => {
       
       <Route path="book-trip" element={<BookingWizard />} />
 
-      <Route path="expenses" element={<Expenses />} />
+      
 
       {/* <Route path="bookings" element={<Bookings />} /> */}
 

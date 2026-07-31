@@ -6,15 +6,9 @@ const RecentTrips = ({ trips = [], onViewTrip }) => {
 console.log("Trips:", trips);
   // Show only completed trips
 
-const today = new Date();
-today.setHours(0, 0, 0, 0);
-
-const recentTrips = trips.filter((trip) => {
-  const endDate = new Date(trip.endDate);
-  endDate.setHours(0, 0, 0, 0);
-  return endDate <= today;
-});
-const displayStatus = "COMPLETED";
+const recentTrips = trips.filter(
+  (trip) => trip.tripStatus === "COMPLETED"
+);
   return (
     <div className="recent-trips">
       <div className="section-header">
@@ -57,9 +51,9 @@ const displayStatus = "COMPLETED";
               </div>
 
               <div className="trip-right">
-                <span className={`status ${displayStatus.toLowerCase()}`}>
-                   {displayStatus}
-                </span>
+                <span className={`status ${trip.tripStatus.toLowerCase()}`}>
+  {trip.tripStatus}
+</span>
 
                 <button
   onClick={() => onViewTrip && onViewTrip(trip)}

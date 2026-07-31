@@ -40,6 +40,18 @@ import {
         const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
         const [trips, setTrips] = useState([]);
         const [showEditProfile, setShowEditProfile] = useState(false);
+        const [showPasswordModal, setShowPasswordModal] = useState(false);
+
+        const [passwordData, setPasswordData] = useState({
+                oldPassword: "",
+                newPassword: "",
+                confirmPassword: ""
+        });
+        const [showPasswords, setShowPasswords] = useState({
+    oldPassword: false,
+    newPassword: false,
+    confirmPassword: false
+});
         const [editProfile, setEditProfile] = useState({
         firstName: user?.firstName || "",
         lastName: user?.lastName || "",
@@ -48,8 +60,8 @@ import {
         gender: user?.gender || "",
         dateOfBirth: user?.dateOfBirth || "",
         country: user?.country || "",
-        preferredLanguage: user?.preferredLanguage || "",
-        preferredCurrency: user?.preferredCurrency || "",
+        preferredLanguage: user?.preferredLanguage || "English",
+        preferredCurrency: user?.preferredCurrency || "INR",
     });
 
 
@@ -106,15 +118,11 @@ useEffect(() => {
 }, [user]);
  const stats = [
   {
-    icon: <FaPlaneDeparture />,
-    title: "Upcoming Trips",
-    value: trips.filter(
-      trip =>
-        trip.tripStatus === "PLANNED" ||
-        trip.tripStatus === "ONGOING"
-    ).length,
-    color: "#0077ff",
-  },
+  icon: <FaPlaneDeparture />,
+  title: "Upcoming Trips",
+  value: trips.filter(trip => trip.tripStatus === "UPCOMING").length,
+  color: "#0077ff",
+},
   {
     icon: <FaCheckCircle />,
     title: "Completed Trips",
@@ -180,6 +188,22 @@ const handleProfileChange = (e) => {
     });
 };
 
+const handlePasswordInput = (e) => {
+
+    setPasswordData({
+        ...passwordData,
+        [e.target.name]: e.target.value
+    });
+
+};
+const togglePasswordVisibility = (field) => {
+
+    setShowPasswords({
+        ...showPasswords,
+        [field]: !showPasswords[field]
+    });
+
+};
 const handleUpdateProfile = async () => {
     try {
         const updatedUser = await userService.updateProfile(
@@ -200,7 +224,49 @@ const handleUpdateProfile = async () => {
         alert("Failed to update profile");
     }
 };
+const handleChangePassword = async () => {
 
+    if(passwordData.newPassword !== passwordData.confirmPassword){
+
+        alert("New password and confirm password should match");
+        return;
+
+    }
+
+
+    try {
+
+        await userService.changePassword(
+            user.userId,
+            passwordData
+        );
+
+
+        alert("Password changed successfully");
+
+
+        setPasswordData({
+            oldPassword:"",
+            newPassword:"",
+            confirmPassword:""
+        });
+
+
+        setShowPasswordModal(false);
+
+
+    } catch(error) {
+
+        console.error(error);
+
+        alert(
+            error.response?.data?.message ||
+            "Password change failed"
+        );
+
+    }
+
+};
   return (
     
     <div className="user-profile-page">
@@ -301,7 +367,88 @@ const handleUpdateProfile = async () => {
 
         </div>
     )}
+    {showPasswordModal && (
 
+    <div className="modal-overlay">
+
+        <div className="modal">
+
+            <h2>Change Password</h2>
+
+
+            <div className="password-field">
+
+<input
+    type={showPasswords.oldPassword ? "text" : "password"}
+    name="oldPassword"
+    placeholder="Current Password"
+    value={passwordData.oldPassword}
+    onChange={handlePasswordInput}
+/>
+
+<FaEye
+    className="eye-icon"
+    onClick={() => togglePasswordVisibility("oldPassword")}
+/>
+
+</div>
+
+<div className="password-field">
+
+<input
+    type={showPasswords.newPassword ? "text" : "password"}
+    name="newPassword"
+    placeholder="New Password"
+    value={passwordData.newPassword}
+    onChange={handlePasswordInput}
+/>
+
+<FaEye
+    className="eye-icon"
+    onClick={() => togglePasswordVisibility("newPassword")}
+/>
+
+</div>
+
+
+<div className="password-field">
+
+<input
+    type={showPasswords.confirmPassword ? "text" : "password"}
+    name="confirmPassword"
+    placeholder="Confirm Password"
+    value={passwordData.confirmPassword}
+    onChange={handlePasswordInput}
+/>
+
+<FaEye
+    className="eye-icon"
+    onClick={() => togglePasswordVisibility("confirmPassword")}
+/>
+
+</div>
+
+            <div className="modal-buttons">
+
+                <button onClick={handleChangePassword}>
+                    Save
+                </button>
+
+
+                <button 
+                    onClick={() => setShowPasswordModal(false)}
+                >
+                    Cancel
+                </button>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+)}
 
 <UserNavbar />
 
@@ -652,13 +799,16 @@ const handleUpdateProfile = async () => {
 
                 </div>
 
-                <button className="setting-btn">
+                <button 
+    className="setting-btn"
+    onClick={() => setShowPasswordModal(true)}
+>
 
-                    <FaLock />
+    <FaLock />
 
-                    Change Password
+    Change Password
 
-                </button>
+</button>
 
                 <button className="setting-btn">
 
@@ -668,22 +818,9 @@ const handleUpdateProfile = async () => {
 
                 </button>
 
-                <button className="setting-btn">
+                
 
-                    <FaCog />
-
-                    Privacy Settings
-
-                </button>
-
-                <button className="setting-btn logout">
-
-                    <FaSignOutAlt />
-
-                    Logout
-
-                </button>
-
+                
             </div>
 
         </div>

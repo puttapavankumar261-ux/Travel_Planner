@@ -25,17 +25,7 @@ useEffect(() => {
     fetchTravellers();
   }
 }, [trip]);
-const getTripStatus = (trip) => {
-  const today = new Date();
-  const start = new Date(trip.startDate);
-  const end = new Date(trip.endDate);
-
-  if (today > end) return "COMPLETED";
-  if (today < start) return "PLANNED";
-  return "ONGOING";
-};
-
-const status = getTripStatus(trip);
+const status = trip.tripStatus;
   return (
     <div className="trip-modal-overlay" onClick={onClose}>
       <div className="trip-modal-content" onClick={(e) => e.stopPropagation()}>

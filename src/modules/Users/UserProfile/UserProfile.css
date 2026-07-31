@@ -507,3 +507,29 @@ body {
     color:white;
     font-size:15px;
 }
+.password-field {
+    position: relative;
+    width: 100%;
+}
+
+
+.password-field input {
+    width: 100%;
+    padding-right: 40px;
+}
+
+
+.eye-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #777;
+    font-size: 18px;
+}
+
+
+.eye-icon:hover {
+    color: #0077ff;
+}

@@ -51,10 +51,7 @@ const UserNavbar = () => {
           My Trips
         </NavLink>
 
-        <NavLink to="/user/expenses">
-          <FaWallet />
-          Expenses
-        </NavLink>
+       
       </nav>
 
       {/* Right Section */}

@@ -45,6 +45,19 @@ const updateUser = async (userId, userData) => {
     return response.data.data;
 };
 
+// CHANGE PASSWORD FUNCTION
+const changePassword = async (userId, passwordData) => {
+
+    const response = await axiosInstance.put(
+        `/api/users/${userId}/change-password`,
+        passwordData
+    );
+
+    return response.data;
+};
+
+
+
 export default {
   getUsers,
   getUserById,
@@ -52,5 +65,6 @@ export default {
   updateProfile,
   createUser,
   deleteUser,
-  updateUser
+  updateUser,
+  changePassword
 };

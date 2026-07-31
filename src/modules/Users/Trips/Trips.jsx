@@ -52,12 +52,12 @@ const staticTrips = [
 
   },
   {
-    destination: "Darjeeling",
+    destination: "Himachal Pradesh",
     video: manaliVideo,
 
   },
   {
-    destination: "Agra",
+    destination: "Andhra Pradesh",
     video: goaVideo,
 
   },
@@ -67,40 +67,17 @@ const staticTrips = [
 
   },
   {
-    destination: "Udaipur",
+    destination: "Delhi",
     video: goaVideo,
 
   },
   {
-    destination: "Andaman",
+    destination: "Telangana",
     video: keralaVideo,
 
   },
 ];
-const getTripStatus = (trip) => {
-  const today = new Date();
-  const startDate = new Date(trip.startDate);
-  const endDate = new Date(trip.endDate);
 
-  today.setHours(0, 0, 0, 0);
-  startDate.setHours(0, 0, 0, 0);
-  endDate.setHours(0, 0, 0, 0);
-
-  // Keep cancelled trips from database
-  if (trip.tripStatus === "CANCELLED") {
-    return "CANCELLED";
-  }
-
-  if (endDate < today) {
-    return "COMPLETED";
-  }
-
-  if (startDate <= today && endDate >= today) {
-    return "ONGOING";
-  }
-
-  return "PLANNED";
-};
 
 
 const Trips = () => {
@@ -109,7 +86,7 @@ const Trips = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedTrip, setSelectedTrip] = useState(null);
   const [filter, setFilter] = useState("ALL");
-  const [sortBy, setSortBy] = useState("NEWEST");
+
 
   useEffect(() => {
 
@@ -169,59 +146,47 @@ const Trips = () => {
 
   }, []);
   useEffect(() => {
-    setCurrentPage(1);
-  }, [filter, sortBy]);
+  setCurrentPage(1);
+}, [filter]);
 const filteredTrips = trips.filter((trip) => {
-  const status = getTripStatus(trip);
-
+  
   switch (filter) {
     case "UPCOMING":
-      return status === "PLANNED" || status === "ONGOING";
+      return trip.tripStatus === "UPCOMING";
+
+    case "ONGOING":
+      return trip.tripStatus === "ONGOING";
 
     case "COMPLETED":
-      return status === "COMPLETED";
-
+      return trip.tripStatus === "COMPLETED";
+    case "PLANNED":
+      return trip.tripStatus === "PLANNED";
     case "CANCELLED":
-      return status === "CANCELLED";
+      return trip.tripStatus === "CANCELLED";
 
     default:
       return true;
   }
 });
 
-const sortedTrips = [...filteredTrips].sort((a, b) => {
-  switch (sortBy) {
-    case "NEWEST":
-      return new Date(b.startDate) - new Date(a.startDate);
 
-    case "OLDEST":
-      return new Date(a.startDate) - new Date(b.startDate);
-
-    case "BUDGET":
-      return (
-        Number(b.budget.replace(/[₹,]/g, "")) -
-        Number(a.budget.replace(/[₹,]/g, ""))
-      );
-
-    case "DESTINATION":
-      return a.destination.localeCompare(b.destination);
-
-    default:
-      return 0;
-  }
-});
 
 
 
   const itemsPerPage = 3;
-  const totalPages = Math.ceil(sortedTrips.length / itemsPerPage);
+
 
   // Get current page trips
   const indexOfLastTrip = currentPage * itemsPerPage;
   const indexOfFirstTrip = indexOfLastTrip - itemsPerPage;
+  const totalPages = Math.ceil(filteredTrips.length / itemsPerPage);
+
+const currentTrips = filteredTrips.slice(
+  indexOfFirstTrip,
+  indexOfLastTrip
+);
 
 
-const currentTrips = sortedTrips.slice(indexOfFirstTrip, indexOfLastTrip);
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
@@ -251,8 +216,7 @@ const handleViewDetails = async (tripId) => {
         <TripFilters
   filter={filter}
   setFilter={setFilter}
-  sortBy={sortBy}
-  setSortBy={setSortBy}
+
 />
 
         <div className="trip-grid">
@@ -264,7 +228,7 @@ const handleViewDetails = async (tripId) => {
               startDate={trip.startDate}
               endDate={trip.endDate}
               budget={trip.budget}
-              status={getTripStatus(trip)}
+              status={trip.tripStatus}
               onViewDetails={() => handleViewDetails(trip.tripId)}
             />
           ))}

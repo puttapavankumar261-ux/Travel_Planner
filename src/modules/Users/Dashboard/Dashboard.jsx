@@ -64,11 +64,19 @@ const Dashboard = () => {
     setSelectedTrip(trip);
   }
 };
-const today = new Date();
-today.setHours(0, 0, 0, 0);
+
 
 const activeTrips = trips.filter(
   (trip) => trip.tripStatus !== "CANCELLED"
+);
+
+const upcomingTrips = activeTrips.filter(
+  (trip) =>
+    trip.tripStatus === "UPCOMING"
+);
+
+const completedTrips = activeTrips.filter(
+  (trip) => trip.tripStatus === "COMPLETED"
 );
   const handleCloseModal = () => {
     setSelectedTrip(null);
@@ -92,32 +100,18 @@ const activeTrips = trips.filter(
           />
 
           <StatCard
-            icon={<FaCalendarAlt />}
-            title="Upcoming Trips"
-            value={
-                        activeTrips.filter((trip) => {
-                        const endDate = new Date(trip.endDate);
-                        endDate.setHours(0, 0, 0, 0);
-
-                        return endDate >= today;
-                      }).length
-                  }
-            color="#2563eb"
-          />
+  icon={<FaCalendarAlt />}
+  title="Upcoming Trips"
+  value={upcomingTrips.length}
+  color="#2563eb"
+/>
 
           <StatCard
-            icon={<FaCheckCircle />}
-            title="Completed Trips"
-            value={
-  activeTrips.filter((trip) => {
-    const endDate = new Date(trip.endDate);
-    endDate.setHours(0, 0, 0, 0);
-
-    return endDate < today;
-  }).length
-}
-            color="#2563eb"
-          />
+  icon={<FaCheckCircle />}
+  title="Completed Trips"
+  value={completedTrips.length}
+  color="#2563eb"
+/>
 
           <StatCard
             icon={<FaWallet />}
@@ -130,14 +124,15 @@ const activeTrips = trips.filter(
         </div>
 
         <div className="dashboard-grid">
-          <RecentTrips
-  trips={trips}
+         <RecentTrips
+  trips={completedTrips}
   onViewTrip={handleViewTrip}
 />
-          <UpcomingTrips 
-            trips={trips} 
-            onViewTrip={handleViewTrip} 
-          />
+
+<UpcomingTrips
+   trips={upcomingTrips}
+  onViewTrip={handleViewTrip}
+/>
         </div>
       </div>
 

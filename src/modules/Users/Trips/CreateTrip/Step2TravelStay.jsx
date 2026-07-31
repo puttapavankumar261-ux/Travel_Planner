@@ -1,5 +1,4 @@
-import React from 'react';
-
+import React, { useEffect } from "react";
 const Step2TravelStay = ({ data, setData }) => {
 
   const handleChange = (e) => {
@@ -9,7 +8,35 @@ const Step2TravelStay = ({ data, setData }) => {
       [name]: type === 'checkbox' ? checked : value
     });
   };
+useEffect(() => {
+  setData((prev) => ({
+    ...prev,
 
+    // Flight
+    flightDepartureDate:
+      prev.flightDepartureDate || prev.startDate || "",
+    flightReturnDate:
+      prev.flightReturnDate || prev.endDate || "",
+
+    // Train
+    trainDate:
+      prev.trainDate || prev.startDate || "",
+    trainReturnDate:
+      prev.trainReturnDate || prev.endDate || "",
+
+    // Bus
+    busDate:
+      prev.busDate || prev.startDate || "",
+    busReturnDate:
+      prev.busReturnDate || prev.endDate || "",
+
+    // Car (Self Drive)
+    carTravelDate:
+      prev.carTravelDate || prev.startDate || "",
+    carReturnDate:
+      prev.carReturnDate || prev.endDate || "",
+  }));
+}, [data.startDate, data.endDate]);
   const setTransportation = (mode) => {
     // If clicking the already selected mode, do we deselect? No, just keep it.
     setData({ ...data, transportation: mode });
@@ -74,11 +101,28 @@ const Step2TravelStay = ({ data, setData }) => {
       <div className="flex-row" style={{ marginBottom: '16px' }}>
         <div style={{ flex: 1 }}>
           <label style={labelStyle}>Departure Date</label>
-          <input type="date" name="flightDepartureDate" value={data.flightDepartureDate || ''} onChange={handleChange} style={inputStyle} />
+         <input
+  type="date"
+  name="flightDepartureDate"
+  value={data.flightDepartureDate || ""}
+  readOnly
+/>
         </div>
         <div style={{ flex: 1 }}>
           <label style={labelStyle}>Return Date <span style={{fontSize: '12px', color: '#6B7280'}}>(Optional)</span></label>
-          <input type="date" name="flightReturnDate" value={data.flightReturnDate || ''} onChange={handleChange} style={inputStyle} />
+          <input
+  type="date"
+  name="trainDate"
+  value={data.trainDate || ""}
+  readOnly
+/>
+
+<input
+  type="date"
+  name="trainReturnDate"
+  value={data.trainReturnDate || ""}
+  readOnly
+/>
         </div>
       </div>
 
@@ -199,11 +243,22 @@ const Step2TravelStay = ({ data, setData }) => {
       <div className="flex-row" style={{ marginBottom: '16px' }}>
         <div style={{ flex: 1 }}>
           <label style={labelStyle}>Journey Date</label>
-          <input type="date" name="busDate" value={data.busDate || ''} onChange={handleChange} style={inputStyle} />
+          <input
+  type="date"
+  name="busDate"
+  value={data.busDate || ""}
+  readOnly
+/>
         </div>
         <div style={{ flex: 1 }}>
           <label style={labelStyle}>Return Date <span style={{fontSize: '12px', color: '#6B7280'}}>(Optional)</span></label>
-          <input type="date" name="busReturnDate" value={data.busReturnDate || ''} onChange={handleChange} style={inputStyle} />
+          <input
+  type="date"
+  name="busReturnDate"
+  value={data.busReturnDate || ""}
+  readOnly
+/>
+
         </div>
       </div>
 
@@ -277,11 +332,21 @@ const Step2TravelStay = ({ data, setData }) => {
             <div className="flex-row" style={{ marginBottom: '16px' }}>
               <div style={{ flex: 1 }}>
                 <label style={labelStyle}>Travel Date</label>
-                <input type="date" name="carTravelDate" value={data.carTravelDate || ''} onChange={handleChange} style={inputStyle} />
+                <input
+  type="date"
+  name="carTravelDate"
+  value={data.carTravelDate || ""}
+  readOnly
+/>
               </div>
               <div style={{ flex: 1 }}>
                 <label style={labelStyle}>Return Date <span style={{fontSize: '12px', color: '#6B7280'}}>(Optional)</span></label>
-                <input type="date" name="carReturnDate" value={data.carReturnDate || ''} onChange={handleChange} style={inputStyle} />
+                <input
+  type="date"
+  name="carReturnDate"
+  value={data.carReturnDate || ""}
+  readOnly
+/>
               </div>
             </div>
 
