@@ -33,4 +33,13 @@ public class EmailTestController {
 
         return "Email Sent Successfully";
     }
+
+
+    @PostMapping("/api/testEmail")
+    public String sendTestPostEmail(@RequestBody EmailRequestDto request) {
+        
+        emailService.sendHtmlEmail(request);
+
+        return "Email Sent Successfully";
+    }
 }
