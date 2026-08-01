@@ -1,101 +1,137 @@
 import React, { useMemo, useState, useEffect } from "react";
 import "./NotificationModel.css";
+import authService from "../../../services/authService";
+
 
 
 const NotificationModel = ({ open, onClose }) => {
+const moduleConfig = {
+  AUTH: {
+    icon: "bi-shield-lock-fill",
+    color: "auth",
+  },
+  USER: {
+    icon: "bi-person-fill",
+    color: "user",
+  },
+  TRIP: {
+    icon: "bi-airplane-fill",
+    color: "trip",
+  },
+  ITINERARY: {
+    icon: "bi-map-fill",
+    color: "itinerary",
+  },
+  BOOKING: {
+    icon: "bi-building-fill-check",
+    color: "booking",
+  },
+  PAYMENT: {
+    icon: "bi-credit-card-fill",
+    color: "payment",
+  },
+  EXPENSE: {
+    icon: "bi-wallet2",
+    color: "expense",
+  },
+  COMPANION: {
+    icon: "bi-people-fill",
+    color: "companion",
+  },
+  NOTIFICATION: {
+    icon: "bi-bell-fill",
+    color: "notification",
+  },
+  SYSTEM: {
+    icon: "bi-cpu-fill",
+    color: "system",
+  },
+};
 
-  const notifications = [
-    {
-      id: 1,
-      title: "New User Registered",
-      message:
-        "Rahul Sharma created a new account successfully and completed email verification.",
-      time: "2 mins ago",
-      type: "USER",
-      icon: "bi-person-fill-add",
-      color: "user",
-      unread: true,
-    },  
-    {
-      id: 2,
-      title: "Hotel Reservation",
-      message:
-        "Hotel Taj Palace has been booked successfully for customer Priya Kumar.",
-      time: "5 mins ago",
-      type: "HOTEL",
-      icon: "bi-building-fill-check",
-      color: "hotel",
-      unread: true,
-    },
-    {
-      id: 3,
-      title: "Payment Received",
-      message:
-        "₹8,450 payment received successfully for Goa Holiday Package.",
-      time: "20 mins ago",
-      type: "PAYMENT",
-      icon: "bi-credit-card-fill",
-      color: "payment",
-      unread: false,
-    },
-    // {
-    //   id: 5,
-    //   title: "Booking Cancelled",
-    //   message:
-    //     "Customer cancelled hotel booking. Refund request has been initiated.",
-    //   time: "35 mins ago",
-    //   type: "CANCELLATION",
-    //   icon: "bi-x-circle-fill",
-    //   color: "cancel",
-    //   unread: false,
-    // },
-    // {
-    //   id: 6,
-    //   title: "Destination Added",
-    //   message:
-    //     "New destination 'Andaman Islands' added successfully.",
-    //   time: "1 hour ago",
-    //   type: "DESTINATION",
-    //   icon: "bi-geo-alt-fill",
-    //   color: "destination",
-    //   unread: false,
-    // },
-    {
-      id: 4,
-      title: "Support Ticket",
-      message:
-        "A customer reported a payment issue and created Support Ticket #SP2451.",
-      time: "Yesterday",
-      type: "SUPPORT",
-      icon: "bi-headset",
-      color: "support",
-      unread: false,
-    },
-    {
-      id: 5,
-      title: "New Vendor Added",
-      message:
-        "A new hotel partner 'Grand Ocean Resort' has been added to the system.",
-      time: "3 days ago",
-      type: "VENDOR",
-      icon: "bi-building-add",
-      color: "vendor",
-      unread: false,
-    },
-  ];
+const formatTime = (date) => {
+  if (!date) return "";
 
-  const unreadCount = useMemo(
-    () => notifications.filter((item) => item.unread).length,
-    [notifications]
-  );
+  const now = new Date();
+  const created = new Date(date);
 
-  const [showAll, setShowAll] = useState(false);
+  const diff = Math.floor((now - created) / 1000);
+
+  if (diff < 60) return "Just now";
+
+  if (diff < 3600)
+    return `${Math.floor(diff / 60)} mins ago`;
+
+  if (diff < 86400)
+    return `${Math.floor(diff / 3600)} hrs ago`;
+
+  if (diff < 172800)
+    return "Yesterday";
+
+  return created.toLocaleDateString();
+};
+
+
+      const [notifications, setNotifications] = useState([]);
+      const [loading, setLoading] = useState(false);
+        const [showAll, setShowAll] = useState(false);
+
+      const loggedUser = JSON.parse(localStorage.getItem("user"));
+      const userId = loggedUser?.userId;
+
+      const loadNotifications = async () => {
+        try {
+          setLoading(true);
+
+          const response = await authService.getNotificationsByUser();
+
+          //setNotifications(response);
+
+          const notificationList = (response.data || response).map((item) => ({
+            ...item,
+
+            unread: !item.isRead,
+
+            icon:
+              moduleConfig[item.module]?.icon ||
+              "bi-bell-fill",
+
+            color:
+              moduleConfig[item.module]?.color ||
+              "notification",
+
+            time: formatTime(item.createdAt),
+
+            type: item.module,
+          }));
+
+        setNotifications(notificationList);
+
+        } catch (error) {
+          console.error("Failed to load notifications", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+  // const unreadCount = useMemo(
+  //   () => notifications.filter((item) => item.unread).length,
+  //   [notifications]
+  // );
+
+const unreadCount = useMemo(
+  () => notifications.filter((item) => !item.isRead).length,
+  [notifications]
+);
+
+
 
   useEffect(() => {
-    if (!open) {
-      setShowAll(false);
-    }
-  }, [open]);
+  if (open) {
+    loadNotifications();
+  } else {
+    setShowAll(false);
+  }
+}, [open]);
 
   if (!open) return null;
 
@@ -153,7 +189,7 @@ const NotificationModel = ({ open, onClose }) => {
         {displayedNotifications.map((item) => (
 
           <div
-            key={item.id}
+            key={item.notificationId}
             className={`notification-card ${item.unread ? "unread" : ""}`}
           >
 
@@ -180,7 +216,7 @@ const NotificationModel = ({ open, onClose }) => {
               <div className="notification-bottom">
 
                 <span className={`notification-tag ${item.color}`}>
-                  {item.type}
+                  {item.module}
                 </span>
 
                 {item.unread && (

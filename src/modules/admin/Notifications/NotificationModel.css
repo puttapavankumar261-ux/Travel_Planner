@@ -520,6 +520,36 @@
 
 }
 
+/* .notification-dropdown .notification-icon.auth {
+  background: rgba(59, 130, 246, 0.15);
+  color: #4f8cff;
+}
+
+.notification-dropdown .notification-tag.auth {
+  background: rgba(59, 130, 246, 0.15);
+  color: #4f8cff;
+} */
+
+.notification-dropdown .notification-icon.auth {
+    background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+}
+
+.notification-dropdown .notification-tag.auth {
+    background: rgba(59, 130, 246, 0.15);
+    color: #60A5FA;
+    border: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+.notification-dropdown .notification-icon.booking {
+    background: linear-gradient(135deg, #10B981, #047857);
+}
+
+.notification-dropdown .notification-tag.booking {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34D399;
+    border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
 .notification-dropdown .notification-icon.refund { background: linear-gradient(135deg,#22C55E,#15803D); }
 .notification-dropdown .notification-icon.cancel { background: linear-gradient(135deg,#EF4444,#B91C1C); }
 .notification-dropdown .notification-icon.destination { background: linear-gradient(135deg,#06B6D4,#0891B2); }

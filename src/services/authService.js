@@ -115,6 +115,12 @@ const forgotPassword = async(email) => {
 
 };
 
+const getNotificationsByUser = async () => {
+  const response = await axiosInstance.get('/api/notification-management/admin');
+  return response.data.data;
+};
+
+
 export default {
     login,
     register,
@@ -123,5 +129,6 @@ export default {
     checkEmail,
     sendPasswordOtp,
     resetPassword,
-    forgotPassword
+    forgotPassword,
+    getNotificationsByUser
 };
