@@ -94,7 +94,8 @@ public class SecurityConfig {
                                 "/api/dashboard/**",
                                 "/api/expenses/**",
                                 "/api/accommodations/**",
-                                "/api/testEmail/**")
+                                "/api/testEmail/**",
+                                "/api/notifications/send/**")
                         .hasAnyRole("USER", "ADMIN")
 
                         .anyRequest()
