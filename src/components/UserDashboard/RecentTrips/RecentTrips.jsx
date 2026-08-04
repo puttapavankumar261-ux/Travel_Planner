@@ -3,12 +3,10 @@ import { useNavigate } from "react-router-dom";
 
 const RecentTrips = ({ trips = [], onViewTrip }) => {
   const navigate = useNavigate();
-console.log("Trips:", trips);
+  console.log("Trips:", trips);
   // Show only completed trips
 
-const recentTrips = trips.filter(
-  (trip) => trip.tripStatus === "COMPLETED"
-);
+  const recentTrips = trips.filter((trip) => trip.tripStatus === "COMPLETED");
   return (
     <div className="recent-trips">
       <div className="section-header">
@@ -16,8 +14,6 @@ const recentTrips = trips.filter(
           <h2>Recent Trips</h2>
           <p>Your latest completed trips</p>
         </div>
-
-        
       </div>
 
       <div className="trip-list">
@@ -43,8 +39,8 @@ const recentTrips = trips.filter(
                     </span>
 
                     <span>
-                      <i className="bi bi-wallet2"></i>
-                      ₹{trip.budget?.toLocaleString()}
+                      <i className="bi bi-wallet2"></i>₹
+                      {trip.budget?.toLocaleString()}
                     </span>
                   </div>
                 </div>
@@ -52,14 +48,12 @@ const recentTrips = trips.filter(
 
               <div className="trip-right">
                 <span className={`status ${trip.tripStatus.toLowerCase()}`}>
-  {trip.tripStatus}
-</span>
+                  {trip.tripStatus}
+                </span>
 
-                <button
-  onClick={() => onViewTrip && onViewTrip(trip)}
->
-  View
-</button>
+                <button onClick={() => onViewTrip && onViewTrip(trip)}>
+                  View
+                </button>
               </div>
             </div>
           ))

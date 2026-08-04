@@ -325,7 +325,16 @@
     font-weight: 600;
     color: #4da3ff;
 }
+.disabled-btn {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: #6b7280 !important;
+    border-color: #6b7280 !important;
+}
 
+.disabled-btn:hover {
+    transform: none;
+}
 
 /****************** model popup *******************/
 

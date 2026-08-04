@@ -42,12 +42,18 @@ const sendEmail = async (request) => {
       return response.data.data;
 }
 
+const cancelTrip = async (tripId, cancelData) => {
+    const response = await axiosInstance.put( `/api/trips/${tripId}/cancel`, cancelData);
+    return response.data.data;
+};
+
 export default {
-  getTrips,
-  createTrip,
-  getTripById,
-  getTripsByUser,
-  getUserById,
-  updateTrip,
-  sendEmail
+    getTrips,
+    createTrip,
+    getTripById,
+    getTripsByUser,
+    getUserById,
+    updateTrip,
+    cancelTrip,
+    sendEmail
 };

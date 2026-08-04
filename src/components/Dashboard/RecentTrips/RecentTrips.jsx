@@ -31,13 +31,12 @@ import { useNavigate } from "react-router-dom";
 // ];
 
 const RecentTrips = ({ trips, onViewTrip }) => {
-
-//console.log("Recent Trips:", trips);
-const formatter = new Intl.DateTimeFormat("en-GB", {
-  day: "2-digit",
-  month: "short",
-  year: "2-digit",
-});
+  //console.log("Recent Trips:", trips);
+  const formatter = new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "2-digit",
+  });
   return (
     <div className="recent-trips">
       <div className="section-header">
@@ -53,9 +52,7 @@ const formatter = new Intl.DateTimeFormat("en-GB", {
       </div>
 
       <div className="trip-list">
-         {
-                trips.map((trip)=>(
-              
+        {trips.map((trip) => (
           <div className="recent-trip-card" key={trip.tripId}>
             <div className="trip-left">
               <div className="trip-icon">
@@ -64,8 +61,10 @@ const formatter = new Intl.DateTimeFormat("en-GB", {
 
               <div className="trip-info">
                 <h6>{trip.title}</h6>
-                <p>{trip.source} → {trip.destination} : {formatter.format(new Date(trip.startDate))}</p>
-                
+                <p>
+                  {trip.source} → {trip.destination} :{" "}
+                  {formatter.format(new Date(trip.startDate))}
+                </p>
 
                 {/* <div className="trip-meta">
                   <span>
@@ -82,7 +81,7 @@ const formatter = new Intl.DateTimeFormat("en-GB", {
             </div>
 
             <div className="trip-right">
-              <button onClick={()=>onViewTrip(trip)}>View</button>
+              <button onClick={() => onViewTrip(trip)}>View</button>
             </div>
           </div>
         ))}
