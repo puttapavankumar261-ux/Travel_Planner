@@ -35,6 +35,12 @@ public class TripMapper {
         trip.setTravelerName(dto.getTravelerName());
         trip.setTripType(dto.getTripType());
         trip.setTripStatus(dto.getTripStatus());
+        
+        trip.setCancellationReason(null);
+        trip.setCancelledAt(null);
+        trip.setCancelledBy(null);
+        trip.setCancelledByRole(null);
+        
         trip.setUser(user);
 
         return trip;
@@ -55,6 +61,16 @@ public class TripMapper {
         response.setTravelerName(trip.getTravelerName());
         response.setTripType(trip.getTripType());
         response.setTripStatus(trip.getTripStatus());
+        
+        response.setCancellationReason(trip.getCancellationReason());
+        response.setCancelledAt(trip.getCancelledAt());
+        if (trip.getCancelledBy() != null) {
+
+            response.setCancelledBy(
+                    trip.getCancelledBy().getUserId());
+
+        }
+        response.setCancelledByRole(trip.getCancelledByRole());
 
         response.setUserId(trip.getUser().getUserId());
 

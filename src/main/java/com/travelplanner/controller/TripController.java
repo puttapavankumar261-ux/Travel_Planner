@@ -12,6 +12,7 @@ import com.travelplanner.common.ApiResponseUtil;
 import com.travelplanner.common.constants.ApiMessages;
 import com.travelplanner.common.constants.PaginationConstants;
 import com.travelplanner.dto.PageResponseDto;
+import com.travelplanner.dto.TripCancellationRequestDto;
 import com.travelplanner.dto.TripRequestDto;
 import com.travelplanner.dto.TripResponseDto;
 import com.travelplanner.enums.TripStatus;
@@ -151,6 +152,22 @@ public class TripController {
         return ResponseEntity.ok(
                 ApiResponseUtil.success(
                         ApiMessages.TRIP_UPDATED,
+                        response));
+    }
+    
+    @PutMapping("/{tripId}/cancel")
+    public ResponseEntity<ApiResponse<TripResponseDto>> cancelTrip(
+
+            @PathVariable Long tripId,
+
+            @Valid @RequestBody TripCancellationRequestDto request) {
+
+        TripResponseDto response =
+                tripService.cancelTrip(tripId, request);
+
+        return ResponseEntity.ok(
+                ApiResponseUtil.success(
+                        "Trip cancelled successfully.",
                         response));
     }
 

@@ -49,32 +49,42 @@ public class NotificationManagementServiceImpl implements NotificationManagement
 						"Notification not found with ID : " + notificationId));
 	}
 	@Override
-	public NotificationResponseDto createNotification(
-	        String title,
-	        String message,
-	        NotificationModule module,
-	        NotificationAction action,
-	        NotificationPriority priority,
-	        NotificationRecipientType recipientType,
-	        Long recipientUserId,
-	        Long performedByUserId,
-	        ReferenceType referenceType,
-	        Long referenceId) {
+	public NotificationResponseDto createNotification(NotificationRequestDto requestDto) {
 
-	    NotificationRequestDto requestDto = new NotificationRequestDto();
+	    logger.info("Creating notification: {}", requestDto.getTitle());
 
-	    requestDto.setTitle(title);
-	    requestDto.setMessage(message);
-	    requestDto.setModule(module);
-	    requestDto.setAction(action);
-	    requestDto.setPriority(priority);
-	    requestDto.setRecipientType(recipientType);
-	    requestDto.setRecipientUserId(recipientUserId);
-	    requestDto.setPerformedByUserId(performedByUserId);
-	    requestDto.setReferenceType(referenceType);
-	    requestDto.setReferenceId(referenceId);
+	    User performedBy = getUser(requestDto.getPerformedByUserId());
 
-	    return createNotification(requestDto);
+	    User recipientUser = null;
+
+	    if (requestDto.getRecipientUserId() != null) {
+	        recipientUser = getUser(requestDto.getRecipientUserId());
+	    }
+
+	    Notification notification = new Notification();
+
+	    notification.setTitle(requestDto.getTitle());
+	    notification.setMessage(requestDto.getMessage());
+
+	    notification.setModule(requestDto.getModule());
+	    notification.setAction(requestDto.getAction());
+
+	    notification.setPriority(requestDto.getPriority());
+	    notification.setRecipientType(requestDto.getRecipientType());
+
+	    notification.setRecipientUser(recipientUser);
+	    notification.setPerformedBy(performedBy);
+
+	    notification.setReferenceType(requestDto.getReferenceType());
+	    notification.setReferenceId(requestDto.getReferenceId());
+
+	    Notification savedNotification =
+	            notificationRepository.save(notification);
+
+	    logger.info("Notification saved successfully. ID: {}",
+	            savedNotification.getNotificationId());
+
+	    return notificationMapper.toResponseDto(savedNotification);
 	}
 
 	@Override

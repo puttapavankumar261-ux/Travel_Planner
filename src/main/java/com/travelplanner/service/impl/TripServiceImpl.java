@@ -2,6 +2,7 @@ package com.travelplanner.service.impl;
 
 import org.slf4j.Logger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.domain.Specification;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import com.travelplanner.dto.NotificationRequestDto;
 import com.travelplanner.dto.PageResponseDto;
+import com.travelplanner.dto.TripCancellationRequestDto;
 import com.travelplanner.dto.TripDestinationAnalyticsDto;
 import com.travelplanner.dto.TripRequestDto;
 import com.travelplanner.dto.TripResponseDto;
@@ -33,6 +35,7 @@ import com.travelplanner.exception.UserNotFoundException;
 import com.travelplanner.mapper.TripMapper;
 import com.travelplanner.repo.TripRepository;
 import com.travelplanner.repo.UserRepository;
+import com.travelplanner.service.EmailService;
 import com.travelplanner.service.NotificationManagementService;
 import com.travelplanner.service.TripService;
 import com.travelplanner.util.PaginationUtil;
@@ -46,17 +49,20 @@ public class TripServiceImpl implements TripService {
     private final TripRepository tripRepo;
     private final UserRepository userRepo;
     private final TripMapper tripMapper;
-
+    private final EmailService emailService;
+    
     public TripServiceImpl(
             TripRepository tripRepo,
             UserRepository userRepo,
             TripMapper tripMapper,
-            NotificationManagementService notificationManagementService) {
+            NotificationManagementService notificationManagementService,
+            EmailService emailService) {
 
         this.tripRepo = tripRepo;
         this.userRepo = userRepo;
         this.tripMapper = tripMapper;
         this.notificationManagementService = notificationManagementService;
+        this.emailService = emailService;
     }
 
     @Override
@@ -82,42 +88,79 @@ public class TripServiceImpl implements TripService {
         logger.info("Trip created successfully with ID: {}",
                 savedTrip.getTripId());
 
-        NotificationRequestDto notification = new NotificationRequestDto();
-
-        notification.setTitle("Trip Created");
-
-        notification.setMessage(
-                "Your trip '" + savedTrip.getTitle() + "' has been created successfully.");
-
-        notification.setModule(NotificationModule.TRIP);
-
-        notification.setAction(NotificationAction.CREATED);
-
-        notification.setPriority(NotificationPriority.MEDIUM);
-
-        notification.setRecipientType(NotificationRecipientType.USER);
-
-        notification.setRecipientUserId(user.getUserId());
-
-        notification.setPerformedByUserId(user.getUserId());
-
-        notification.setReferenceType(ReferenceType.TRIP);
-
-        notification.setReferenceId(savedTrip.getTripId());
-
         try {
-            notificationManagementService.createNotification(notification);
 
-            logger.info(
-                    "Trip creation notification created for trip ID: {}",
-                    savedTrip.getTripId());
+            logger.info("===== CREATING USER NOTIFICATION =====");
+
+            NotificationRequestDto userNotification = new NotificationRequestDto();
+
+            userNotification.setTitle("Trip Created");
+
+            userNotification.setMessage(
+                    "Your trip '" + savedTrip.getTitle()
+                            + "' has been created successfully.");
+
+            userNotification.setModule(NotificationModule.TRIP);
+
+            userNotification.setAction(NotificationAction.CREATED);
+
+            userNotification.setPriority(NotificationPriority.MEDIUM);
+
+            userNotification.setRecipientType(NotificationRecipientType.USER);
+
+            userNotification.setRecipientUserId(user.getUserId());
+
+            userNotification.setPerformedByUserId(user.getUserId());
+
+            userNotification.setReferenceType(ReferenceType.TRIP);
+
+            userNotification.setReferenceId(savedTrip.getTripId());
+
+            notificationManagementService.createNotification(userNotification);
+
+            logger.info("User notification created successfully.");
+
+
+            logger.info("===== CREATING ADMIN NOTIFICATION =====");
+
+            NotificationRequestDto adminNotification = new NotificationRequestDto();
+
+            adminNotification.setTitle("New Trip Created");
+
+            adminNotification.setMessage(
+                    user.getFirstName() + " "
+                            + user.getLastName()
+                            + " created a new trip '"
+                            + savedTrip.getTitle() + "'.");
+
+            adminNotification.setModule(NotificationModule.TRIP);
+
+            adminNotification.setAction(NotificationAction.CREATED);
+
+            adminNotification.setPriority(NotificationPriority.MEDIUM);
+
+            adminNotification.setRecipientType(NotificationRecipientType.ADMIN);
+
+            // Global notification for admins
+            adminNotification.setRecipientUserId(null);
+
+            adminNotification.setPerformedByUserId(user.getUserId());
+
+            adminNotification.setReferenceType(ReferenceType.TRIP);
+
+            adminNotification.setReferenceId(savedTrip.getTripId());
+
+            notificationManagementService.createNotification(adminNotification);
+
+            logger.info("Admin notification created successfully.");
 
         } catch (Exception ex) {
 
             logger.error(
-                    "Failed to create trip notification for trip ID: {}",
+                    "Failed to create notification(s) for Trip ID : {}",
                     savedTrip.getTripId(),
                     ex);
+
         }
 
         return tripMapper.mapToTripResponse(savedTrip);
@@ -369,6 +412,140 @@ public class TripServiceImpl implements TripService {
         logger.info("Trip deleted successfully with ID: {}", tripId);
     }
 
+    @Override
+    public TripResponseDto cancelTrip(
+            Long tripId,
+            TripCancellationRequestDto request) {
+
+        logger.info("Cancelling trip ID: {}", tripId);
+
+        Trip trip = tripRepo.findById(tripId)
+                .orElseThrow(() ->
+                        new TripNotFoundException(
+                                "Trip not found with ID : " + tripId));
+
+        if (trip.getTripStatus() == TripStatus.CANCELLED) {
+            throw new IllegalStateException("Trip is already cancelled.");
+        }
+
+        User cancelledBy = userRepo.findById(request.getCancelledByUserId())
+                .orElseThrow(() ->
+                        new UserNotFoundException(
+                                "User not found with ID : "
+                                        + request.getCancelledByUserId()));
+
+        trip.setTripStatus(TripStatus.CANCELLED);
+
+        trip.setCancellationReason(request.getReason());
+
+        trip.setCancelledAt(LocalDateTime.now());
+
+        trip.setCancelledBy(cancelledBy);
+
+        trip.setCancelledByRole(request.getCancelledByRole());
+
+        Trip cancelledTrip = tripRepo.save(trip);
+        
+        try {
+            emailService.sendTripCancellationEmail(
+                    cancelledTrip,
+                    request.getReason());
+
+            logger.info("Trip cancellation email sent successfully.");
+
+        } catch (Exception ex) {
+
+            logger.error("Failed to send trip cancellation email.", ex);
+        }
+     // ================= USER NOTIFICATION =================
+
+        try {
+
+            NotificationRequestDto userNotification = new NotificationRequestDto();
+
+            userNotification.setTitle("Trip Cancelled");
+
+            userNotification.setMessage(
+                    "Your trip '" + cancelledTrip.getTitle()
+                    + "' has been cancelled successfully."
+                    + " Reason: " + request.getReason());
+
+            userNotification.setModule(NotificationModule.TRIP);
+
+            userNotification.setAction(NotificationAction.CANCELLED);
+
+            userNotification.setPriority(NotificationPriority.HIGH);
+
+            userNotification.setRecipientType(NotificationRecipientType.USER);
+
+            userNotification.setRecipientUserId(cancelledTrip.getUser().getUserId());
+
+            userNotification.setPerformedByUserId(cancelledBy.getUserId());
+
+            userNotification.setReferenceType(ReferenceType.TRIP);
+
+            userNotification.setReferenceId(cancelledTrip.getTripId());
+
+            notificationManagementService.createNotification(userNotification);
+
+            logger.info("User cancellation notification created.");
+
+        } catch (Exception ex) {
+
+            logger.error("Failed to create user cancellation notification.", ex);
+
+        }
+
+        // ================= ADMIN NOTIFICATION =================
+
+        try {
+
+            NotificationRequestDto adminNotification = new NotificationRequestDto();
+
+            adminNotification.setTitle("Trip Cancelled");
+
+            adminNotification.setMessage(
+
+                    cancelledBy.getFirstName() + " "
+                    + cancelledBy.getLastName()
+                    + " cancelled trip '"
+                    + cancelledTrip.getTitle()
+                    + "'."
+
+                    + " Reason: "
+                    + request.getReason());
+
+            adminNotification.setModule(NotificationModule.TRIP);
+
+            adminNotification.setAction(NotificationAction.CANCELLED);
+
+            adminNotification.setPriority(NotificationPriority.HIGH);
+
+            adminNotification.setRecipientType(NotificationRecipientType.ADMIN);
+
+            adminNotification.setRecipientUserId(null);
+
+            adminNotification.setPerformedByUserId(cancelledBy.getUserId());
+
+            adminNotification.setReferenceType(ReferenceType.TRIP);
+
+            adminNotification.setReferenceId(cancelledTrip.getTripId());
+
+            notificationManagementService.createNotification(adminNotification);
+
+            logger.info("Admin cancellation notification created.");
+
+        } catch (Exception ex) {
+
+            logger.error("Failed to create admin cancellation notification.", ex);
+
+        }
+
+        logger.info("Trip cancelled successfully.");
+
+        return tripMapper.mapToTripResponse(cancelledTrip);
+    }
+    
 	@Override
 	public List<TripStatusAnalyticsDto> getTripStatusAnalytics() {
 		// TODO Auto-generated method stub

@@ -4,11 +4,7 @@ import java.util.List;
 
 import com.travelplanner.dto.NotificationRequestDto;
 import com.travelplanner.dto.NotificationResponseDto;
-import com.travelplanner.enums.NotificationAction;
 import com.travelplanner.enums.NotificationModule;
-import com.travelplanner.enums.NotificationPriority;
-import com.travelplanner.enums.NotificationRecipientType;
-import com.travelplanner.enums.ReferenceType;
 
 public interface NotificationManagementService {
 
@@ -16,17 +12,7 @@ public interface NotificationManagementService {
      * Create a new notification.
      */
     NotificationResponseDto createNotification(NotificationRequestDto requestDto);
-    NotificationResponseDto createNotification(
-            String title,
-            String message,
-            NotificationModule module,
-            NotificationAction action,
-            NotificationPriority priority,
-            NotificationRecipientType recipientType,
-            Long recipientUserId,
-            Long performedByUserId,
-            ReferenceType referenceType,
-            Long referenceId);
+
     /**
      * Get all notifications for a user.
      */

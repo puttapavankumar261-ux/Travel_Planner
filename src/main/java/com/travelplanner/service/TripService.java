@@ -3,6 +3,7 @@ package com.travelplanner.service;
 import java.util.List;
 
 import com.travelplanner.dto.PageResponseDto;
+import com.travelplanner.dto.TripCancellationRequestDto;
 import com.travelplanner.dto.TripDestinationAnalyticsDto;
 import com.travelplanner.dto.TripRequestDto;
 import com.travelplanner.dto.TripResponseDto;
@@ -39,4 +40,7 @@ public interface TripService {
 
     void deleteTrip(Long tripId);
 
+    TripResponseDto cancelTrip(
+            Long tripId,
+            TripCancellationRequestDto request);
 }

@@ -54,4 +54,12 @@ public class TripResponseDto {
     private List<TransportationResponseDto> transportations;
 
     private List<BookingResponseDto> bookings;
+    
+    private String cancellationReason;
+
+    private LocalDateTime cancelledAt;
+
+    private Long cancelledBy;
+
+    private String cancelledByRole;
 }
